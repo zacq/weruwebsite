@@ -157,7 +157,7 @@ export default function RateCardForm() {
                     <input
                       type="tel"
                       placeholder="Phone Number *"
-                      className={`form-input ${errors.phone ? "error" : ""}`}
+                      className={`form-input-light ${errors.phone ? "error" : ""}`}
                       value={form.phone}
                       onChange={(e) => set("phone", e.target.value)}
                     />
@@ -169,7 +169,7 @@ export default function RateCardForm() {
                     <input
                       type="email"
                       placeholder="Email Address *"
-                      className={`form-input ${errors.email ? "error" : ""}`}
+                      className={`form-input-light ${errors.email ? "error" : ""}`}
                       value={form.email}
                       onChange={(e) => set("email", e.target.value)}
                     />
@@ -192,9 +192,9 @@ export default function RateCardForm() {
                           onClick={() => set("adType", opt.value)}
                           className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all"
                           style={{
-                            background: active ? "#f97d00" : "#F5F5F5",
-                            border: `1.5px solid ${active ? "#f97d00" : "#DDDDDD"}`,
-                            color: active ? "#fff" : "#333333",
+                            background: active ? "#f97d00" : "rgba(249,125,0,0.08)",
+                            border: "1.5px solid #f97d00",
+                            color: active ? "#ffffff" : "#f97d00",
                           }}
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.97 }}
@@ -227,7 +227,7 @@ export default function RateCardForm() {
                 <div>
                   <textarea
                     placeholder="Tell us about your campaign goals... (optional)"
-                    className="form-input resize-none"
+                    className="form-input-light resize-none"
                     rows={4}
                     value={form.message}
                     onChange={(e) => set("message", e.target.value)}

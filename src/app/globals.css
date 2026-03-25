@@ -157,7 +157,7 @@ select.form-input option { background: #1a0a00; color: #fff; }
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.form-input-light::placeholder { color: #999999; }
+.form-input-light::placeholder { color: #666666; }
 .form-input-light:focus {
   border-color: #f97d00;
   box-shadow: 0 0 0 3px rgba(249,125,0,0.12);
