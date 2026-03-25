@@ -15,15 +15,21 @@ export default function ViewerCaptureModal() {
     const alreadySeen = localStorage.getItem("weru_viewer_seen");
     if (alreadySeen) return;
 
-    const onScroll = () => {
-      const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      if (scrolled >= 40) {
-        setOpen(true);
-        window.removeEventListener("scroll", onScroll);
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    // Fire once when the headlines ticker scrolls into view
+    const target = document.getElementById("headlines");
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setOpen(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
   }, []);
 
   const dismiss = () => {

@@ -15,6 +15,7 @@ const items = [...headlines, ...headlines];
 export default function HeadlineTicker() {
   return (
     <div
+      id="headlines"
       className="w-full overflow-hidden py-2.5"
       style={{ background: "#1A1A1A" }}
     >

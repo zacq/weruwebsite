@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const tvShows = [
@@ -73,18 +73,26 @@ export default function ShowsCarousel() {
   const prev = () => setCurrent((c) => (c - 1 + count) % count);
   const next = () => setCurrent((c) => (c + 1) % count);
 
+  // Autoplay — advance every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((c) => (c + 1) % count);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [count]);
+
   const show = tvShows[current];
 
   return (
     <section
       className="w-full relative overflow-hidden"
-      style={{ background: show.bg, minHeight: "clamp(380px, 55vw, 560px)" }}
+      style={{ background: show.bg, height: "calc(100dvh - 64px)", minHeight: "420px" }}
     >
       <AnimatePresence mode="wait">
         <motion.div
           key={show.id}
           className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 px-6 sm:px-10 md:px-16 pt-16 pb-14 sm:pt-20 max-w-5xl mx-auto h-full"
-          style={{ minHeight: "clamp(380px, 55vw, 560px)" }}
+          style={{ height: "calc(100dvh - 64px)", minHeight: "420px" }}
           initial={{ opacity: 0, x: 60 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -60 }}
