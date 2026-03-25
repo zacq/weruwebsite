@@ -18,11 +18,11 @@ const partners = [
 function LogoChip({ partner }: { partner: (typeof partners)[0] }) {
   return (
     <div
-      className="shrink-0 mx-4 px-6 py-3 rounded-xl flex items-center gap-2 transition-all duration-200 cursor-default"
+      className="shrink-0 mx-2 sm:mx-4 px-4 sm:px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-200 cursor-default"
       style={{
         background: "rgba(255,255,255,0.06)",
         border: "1px solid rgba(255,255,255,0.10)",
-        minWidth: "130px",
+        minWidth: "100px",
       }}
     >
       <div

@@ -182,7 +182,7 @@ export default function RateCardForm() {
                 {/* Ad type selector */}
                 <div>
                   <p className="text-xs mb-2 font-semibold" style={{ color: "#555555" }}>Type of Ad *</p>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2 sm:gap-3">
                     {AD_TYPE_OPTIONS.map((opt) => {
                       const active = form.adType === opt.value;
                       return (
@@ -190,7 +190,7 @@ export default function RateCardForm() {
                           key={opt.value}
                           type="button"
                           onClick={() => set("adType", opt.value)}
-                          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all"
                           style={{
                             background: active ? "#f97d00" : "rgba(249,125,0,0.08)",
                             border: "1.5px solid #f97d00",

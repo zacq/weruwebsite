@@ -80,22 +80,25 @@ function Stars({ count }: { count: number }) {
 function ReviewCard({ review }: { review: (typeof reviews)[0] }) {
   return (
     <div
-      className="shrink-0 w-72 glass rounded-2xl p-5 mx-2"
-      style={{ border: "1px solid rgba(255,255,255,0.12)" }}
+      className="shrink-0 glass rounded-2xl p-4 sm:p-5 mx-2"
+      style={{
+        width: "clamp(240px, 70vw, 288px)",
+        border: "1px solid rgba(255,255,255,0.12)",
+      }}
     >
       <Stars count={review.rating} />
-      <p className="text-white/75 text-sm leading-relaxed mt-3 mb-4 line-clamp-4">
+      <p className="text-white/75 text-xs sm:text-sm leading-relaxed mt-3 mb-4 line-clamp-4">
         &ldquo;{review.text}&rdquo;
       </p>
       <div className="flex items-center gap-3">
         <div
           className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-          style={{ background: "#f97d00", color: "#fff" }}
+          style={{ background: "#f97d00", color: "#fff", minWidth: "36px" }}
         >
           {review.avatar}
         </div>
-        <div>
-          <p className="text-white font-semibold text-sm">{review.name}</p>
+        <div className="min-w-0">
+          <p className="text-white font-semibold text-sm truncate">{review.name}</p>
           <p className="text-white/40 text-[10px]">Google Review</p>
         </div>
       </div>
@@ -107,28 +110,28 @@ export default function ReviewsCarousel() {
   const doubled = [...reviews, ...reviews];
 
   return (
-    <section className="py-12 overflow-hidden" style={{ background: "#111111" }}>
+    <section className="py-10 sm:py-12 overflow-hidden" style={{ background: "#111111" }}>
       {/* Header */}
       <motion.div
-        className="text-center mb-8 px-4"
+        className="text-center mb-6 sm:mb-8 px-4"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-white font-extrabold text-2xl sm:text-3xl">
+        <h2 className="text-white font-extrabold text-xl sm:text-2xl md:text-3xl">
           What Our Viewers Say
         </h2>
         <div className="flex items-center justify-center gap-1 mt-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i} className="text-xl" style={{ color: "#FACC15" }}>★</span>
+            <span key={i} className="text-lg sm:text-xl" style={{ color: "#FACC15" }}>★</span>
           ))}
-          <span className="text-white/50 text-sm ml-2">4.9 / 5 on Google</span>
+          <span className="text-white/50 text-xs sm:text-sm ml-2">4.9 / 5 on Google</span>
         </div>
       </motion.div>
 
       {/* Auto-scrolling track */}
-      <div className="relative flex gap-0 overflow-hidden">
+      <div className="relative flex overflow-hidden">
         <div className="scroll-left flex">
           {doubled.map((r, i) => (
             <ReviewCard key={`${r.id}-${i}`} review={r} />

@@ -30,10 +30,10 @@ const radioShows = [
     host: "Munene Wa Kagwi",
     time: "",
     description:
-      "Join Munene Wa Kagwi for insights, motivation, and advice to make your hustle smarter and more efficient in today's fast-paced world.",
+      "Join Munene Wa Kagwi for insights, motivation, and advice to make your hustle smarter and more efficient.",
     features: [
       "Tune in for financial insights that really make a difference",
-      "Engage with discussions that motivate and inspire your entrepreneurial journey",
+      "Engage with discussions that motivate your entrepreneurial journey",
       "Discover strategies to elevate your career and improve your financial literacy",
     ],
     initials: "MK",
@@ -47,7 +47,7 @@ const radioShows = [
     host: "MC Tash",
     time: "",
     description:
-      "Join MC Tash for an energetic afternoon filled with the latest music and trends, keeping you entertained and engaged.",
+      "Join MC Tash for an energetic afternoon filled with the latest music and trends.",
     features: [
       "Experience the latest hits and genre explorations",
       "Live interactions with callers and listeners",
@@ -82,7 +82,7 @@ export default function RadioSection() {
     <section id="radio" className="w-full" style={{ background: "#f97d00" }}>
 
       {/* ── Live Radio Player ─────────────────── */}
-      <div className="px-4 py-8">
+      <div className="px-4 py-6 sm:py-8">
         <div className="max-w-2xl mx-auto">
           <motion.div
             className="rounded-2xl overflow-hidden"
@@ -96,16 +96,17 @@ export default function RadioSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="flex items-center gap-5 px-5 py-4">
+            <div className="flex items-center gap-3 sm:gap-5 px-4 sm:px-5 py-4">
               {/* Play button */}
               <motion.button
                 onClick={togglePlay}
-                className="shrink-0 w-14 h-14 rounded-full flex items-center justify-center text-white text-xl"
+                className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-white text-xl"
                 style={{
                   background: playing ? "#C8102E" : "#f97d00",
                   boxShadow: playing
                     ? "0 0 24px rgba(200,16,46,0.55)"
                     : "0 0 24px rgba(249,125,0,0.55)",
+                  minWidth: "48px",
                 }}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.93 }}
@@ -114,11 +115,11 @@ export default function RadioSection() {
                 {playing ? "⏸" : "▶"}
               </motion.button>
 
-              {/* Info + equalizer */}
+              {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span
-                    className="text-[10px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded"
+                    className="text-[10px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded shrink-0"
                     style={{ background: "#C8102E", color: "#fff" }}
                   >
                     {playing ? "PLAYING" : "READY"}
@@ -128,7 +129,7 @@ export default function RadioSection() {
                 <p className="text-white/45 text-xs">Weru FM Radio Station</p>
               </div>
 
-              {/* Equalizer animation */}
+              {/* Equalizer */}
               <div className="shrink-0 flex items-end gap-0.5 h-7">
                 {[...Array(6)].map((_, i) => (
                   <div
@@ -143,7 +144,7 @@ export default function RadioSection() {
               </div>
             </div>
 
-            {/* Waveform bar (decorative) */}
+            {/* Waveform bar */}
             <div
               className="h-1 w-full"
               style={{ background: "linear-gradient(90deg, #f97d00, #C8102E, #f97d00)" }}
@@ -163,38 +164,42 @@ export default function RadioSection() {
         </div>
 
         {/* Show slider */}
-        <div className="relative" style={{ background: show.bg, minHeight: "340px" }}>
+        <div
+          className="relative overflow-hidden"
+          style={{ background: show.bg, minHeight: "clamp(320px, 50vw, 480px)" }}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={show.id}
-              className="flex flex-col md:flex-row items-center gap-6 px-8 py-10 max-w-4xl mx-auto"
+              className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 px-8 sm:px-12 py-8 sm:py-10 max-w-4xl mx-auto"
+              style={{ minHeight: "clamp(320px, 50vw, 480px)" }}
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -60 }}
               transition={{ duration: 0.4 }}
             >
               {/* Text */}
-              <div className="flex-1">
+              <div className="flex-1 text-center sm:text-left">
                 <p className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">
                   WERU-FM Radio Station
                 </p>
-                <h3 className="text-white font-extrabold text-3xl sm:text-4xl leading-tight">
+                <h3 className="text-white font-extrabold text-2xl sm:text-3xl md:text-4xl leading-tight">
                   {show.name}
                 </h3>
                 {show.subtitle && (
-                  <h4 className="text-white font-extrabold text-2xl sm:text-3xl leading-tight">
+                  <h4 className="text-white font-extrabold text-xl sm:text-2xl md:text-3xl leading-tight">
                     {show.subtitle}
                   </h4>
                 )}
-                <p className="text-white/70 text-sm mt-3 max-w-sm leading-relaxed">
+                <p className="text-white/70 text-xs sm:text-sm mt-2 sm:mt-3 max-w-sm mx-auto sm:mx-0 leading-relaxed line-clamp-3 sm:line-clamp-none">
                   {show.description}
                 </p>
                 {show.time && (
                   <p className="text-white/50 text-xs mt-2 font-medium">🕐 {show.time}</p>
                 )}
 
-                {/* Feature list */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+                {/* Feature list — hidden on very small screens */}
+                <div className="hidden sm:grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
                   {show.features.map((f, i) => (
                     <div key={i}>
                       <p className="text-white/40 text-[10px] font-bold mb-0.5">0{i + 1}</p>
@@ -205,10 +210,13 @@ export default function RadioSection() {
               </div>
 
               {/* Host avatar */}
-              <div className="shrink-0">
+              <div className="shrink-0 order-first sm:order-last">
                 <div
-                  className="w-36 h-36 sm:w-44 sm:h-44 rounded-full flex items-center justify-center text-4xl font-black"
+                  className="rounded-full flex items-center justify-center font-black"
                   style={{
+                    width: "clamp(90px, 20vw, 176px)",
+                    height: "clamp(90px, 20vw, 176px)",
+                    fontSize: "clamp(1.25rem, 4vw, 2.5rem)",
                     background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(0,0,0,0.4))`,
                     border: `3px solid ${show.accent}`,
                     boxShadow: `0 0 36px ${show.accent}55`,
@@ -225,29 +233,30 @@ export default function RadioSection() {
           {/* Nav arrows */}
           <button
             onClick={() => setCurrentShow((c) => (c - 1 + radioShows.length) % radioShows.length)}
-            className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/15 transition-all text-xl"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-16 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all text-2xl"
             aria-label="Previous show"
           >
             ‹
           </button>
           <button
             onClick={() => setCurrentShow((c) => (c + 1) % radioShows.length)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/15 transition-all text-xl"
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-16 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all text-2xl"
             aria-label="Next show"
           >
             ›
           </button>
 
           {/* Dots */}
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 items-center">
             {radioShows.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentShow(i)}
                 className="rounded-full transition-all duration-200"
                 style={{
-                  width: i === currentShow ? "20px" : "8px",
-                  height: "8px",
+                  width: i === currentShow ? "20px" : "10px",
+                  height: "10px",
+                  minWidth: "10px",
                   background: i === currentShow ? "#fff" : "rgba(255,255,255,0.35)",
                 }}
                 aria-label={`Show ${i + 1}`}

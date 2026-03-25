@@ -76,52 +76,56 @@ export default function ShowsCarousel() {
   const show = tvShows[current];
 
   return (
-    <section className="w-full relative overflow-hidden" style={{ background: show.bg, minHeight: "520px" }}>
+    <section
+      className="w-full relative overflow-hidden"
+      style={{ background: show.bg, minHeight: "clamp(380px, 55vw, 560px)" }}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={show.id}
-          className="flex flex-col md:flex-row items-center gap-8 px-8 md:px-16 pt-20 pb-14 max-w-5xl mx-auto min-h-[520px]"
-          initial={{ opacity: 0, x: 80 }}
+          className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 px-6 sm:px-10 md:px-16 pt-16 pb-14 sm:pt-20 max-w-5xl mx-auto h-full"
+          style={{ minHeight: "clamp(380px, 55vw, 560px)" }}
+          initial={{ opacity: 0, x: 60 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -80 }}
-          transition={{ duration: 0.45, ease: "easeInOut" }}
+          exit={{ opacity: 0, x: -60 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
         >
           {/* ── Text side ─────────────────────────────── */}
-          <div className="flex-1 z-10">
+          <div className="flex-1 z-10 text-center sm:text-left">
             {/* Weru TV badge */}
-            <div className="flex items-center gap-1.5 mb-5">
-              <span className="text-base font-black text-white/70">
+            <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-3 sm:mb-5">
+              <span className="text-sm font-black text-white/70">
                 w<span style={{ color: "#FACC15" }}>e</span>ru
               </span>
               <sup className="text-[10px] font-bold" style={{ color: "#f97d00" }}>TV</sup>
             </div>
 
-            <p className="text-white/60 text-sm font-semibold mb-1 tracking-wide">
+            <p className="text-white/60 text-xs sm:text-sm font-semibold mb-1 tracking-wide">
               {show.presenter}
             </p>
             <h2
-              className="text-4xl sm:text-5xl font-extrabold leading-tight mb-2"
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-1 sm:mb-2"
               style={{ color: show.accent }}
             >
               {show.showName}
             </h2>
             {show.subtitle && (
-              <p className="text-white font-bold text-lg mb-4">{show.subtitle}</p>
+              <p className="text-white font-bold text-base sm:text-lg mb-2 sm:mb-4">{show.subtitle}</p>
             )}
-            <p className="text-white/60 text-sm leading-relaxed max-w-md mb-7">
+            <p className="text-white/60 text-xs sm:text-sm leading-relaxed max-w-md mx-auto sm:mx-0 mb-4 sm:mb-7 line-clamp-3 sm:line-clamp-none">
               {show.description}
             </p>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3 justify-center sm:justify-start">
               <span
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold"
                 style={{ background: "rgba(255,255,255,0.12)", color: "#fff" }}
               >
                 🕐 {show.time}
               </span>
               <a
                 href="#rate-card"
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 hover:opacity-85"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 hover:opacity-85"
                 style={{ background: show.accent, color: "#000" }}
               >
                 Sponsor This Show →
@@ -129,14 +133,17 @@ export default function ShowsCarousel() {
             </div>
           </div>
 
-          {/* ── Presenter avatar ───────────────────────── */}
-          <div className="shrink-0 flex items-center justify-center">
+          {/* ── Presenter avatar ─────────────────────── */}
+          <div className="shrink-0 flex items-center justify-center order-first sm:order-last">
             <motion.div
-              className="w-52 h-52 sm:w-64 sm:h-64 rounded-full flex items-center justify-center text-6xl font-black select-none"
+              className="rounded-full flex items-center justify-center font-black select-none"
               style={{
+                width: "clamp(100px, 25vw, 240px)",
+                height: "clamp(100px, 25vw, 240px)",
+                fontSize: "clamp(1.5rem, 5vw, 4rem)",
                 background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.20), rgba(0,0,0,0.45))`,
-                border: `4px solid ${show.accent}`,
-                boxShadow: `0 0 60px ${show.accent}55, inset 0 0 40px rgba(0,0,0,0.3)`,
+                border: `3px solid ${show.accent}`,
+                boxShadow: `0 0 40px ${show.accent}55`,
                 color: show.accent,
               }}
               initial={{ scale: 0.85, opacity: 0 }}
@@ -149,44 +156,45 @@ export default function ShowsCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* ── Nav arrows ─────────────────────────────── */}
+      {/* ── Nav arrows — larger touch targets ──────── */}
       <button
         onClick={prev}
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/15 transition-all text-2xl"
+        className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-16 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all text-2xl"
         aria-label="Previous show"
       >
         ‹
       </button>
       <button
         onClick={next}
-        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/15 transition-all text-2xl"
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-16 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all text-2xl"
         aria-label="Next show"
       >
         ›
       </button>
 
       {/* ── Dots ───────────────────────────────────── */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 items-center">
         {tvShows.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
             className="rounded-full transition-all duration-250"
             style={{
-              width: i === current ? "24px" : "8px",
-              height: "8px",
-              background: i === current ? "#fff" : "rgba(255,255,255,0.30)",
+              width: i === current ? "24px" : "10px",
+              height: "10px",
+              background: i === current ? "#fff" : "rgba(255,255,255,0.35)",
+              minWidth: "10px",
             }}
             aria-label={`Show ${i + 1}`}
           />
         ))}
       </div>
 
-      {/* Background glow effect */}
+      {/* Background accent glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at 80% 50%, ${show.accent}15 0%, transparent 65%)`,
+          background: `radial-gradient(ellipse at 80% 50%, ${show.accent}12 0%, transparent 65%)`,
         }}
       />
     </section>
