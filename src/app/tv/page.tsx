@@ -16,7 +16,7 @@ export default function TVPage() {
       <LiveStream />
 
       {/* TV Shows */}
-      <ShowsCarousel title="Our TV Presenters and Shows" />
+      <ShowsCarousel />
 
       {/* Latest Videos */}
       <VideoGrid />

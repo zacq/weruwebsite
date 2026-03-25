@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-import HeadlineTicker from "@/components/sections/HeadlineTicker";
 import FloatingCTA from "@/components/ui/FloatingCTA";
 import ViewerCaptureModal from "@/components/ui/ViewerCaptureModal";
 
@@ -29,7 +28,6 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className="min-h-full flex flex-col">
         <Navbar />
-        <HeadlineTicker />
         <main className="flex-1">{children}</main>
         <FloatingCTA />
         <ViewerCaptureModal />

@@ -75,7 +75,7 @@ export default function RateCardForm() {
     <section
       id="rate-card"
       className="px-4 py-16"
-      style={{ background: "linear-gradient(180deg, #111111 0%, #1a0800 100%)" }}
+      style={{ background: "#FFFFFF" }}
     >
       <div className="max-w-2xl mx-auto">
         {/* Header */}
@@ -89,24 +89,29 @@ export default function RateCardForm() {
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase mb-4"
             style={{
-              background: "rgba(249,125,0,0.15)",
-              border: "1px solid rgba(249,125,0,0.35)",
+              background: "rgba(249,125,0,0.12)",
+              border: "1.5px solid rgba(249,125,0,0.50)",
               color: "#f97d00",
             }}
           >
             📋 Rate Card Enquiry
           </span>
-          <h2 className="text-white font-extrabold text-3xl sm:text-4xl">
+          <h2 className="font-extrabold text-3xl sm:text-4xl" style={{ color: "#111111" }}>
             Book Your Advertising Slot
           </h2>
-          <p className="text-white/50 text-sm mt-3 max-w-md mx-auto">
+          <p className="text-sm mt-3 max-w-md mx-auto" style={{ color: "#666666" }}>
             Fill in your details and our team will send you a full rate card and availability within 24 hours.
           </p>
         </motion.div>
 
         {/* Card */}
         <motion.div
-          className="glass-strong rounded-3xl p-6 sm:p-8"
+          className="rounded-3xl p-6 sm:p-8"
+          style={{
+            background: "#FFFFFF",
+            boxShadow: "0 4px 48px rgba(0,0,0,0.10), 0 1px 0 rgba(0,0,0,0.04)",
+            border: "1.5px solid #EBEBEB",
+          }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -127,7 +132,7 @@ export default function RateCardForm() {
                     <input
                       type="text"
                       placeholder="Your Name *"
-                      className={`form-input ${errors.name ? "error" : ""}`}
+                      className={`form-input-light ${errors.name ? "error" : ""}`}
                       value={form.name}
                       onChange={(e) => set("name", e.target.value)}
                     />
@@ -139,7 +144,7 @@ export default function RateCardForm() {
                     <input
                       type="text"
                       placeholder="Company Name"
-                      className="form-input"
+                      className="form-input-light"
                       value={form.company}
                       onChange={(e) => set("company", e.target.value)}
                     />
@@ -176,7 +181,7 @@ export default function RateCardForm() {
 
                 {/* Ad type selector */}
                 <div>
-                  <p className="text-white/50 text-xs mb-2 font-medium">Type of Ad *</p>
+                  <p className="text-xs mb-2 font-semibold" style={{ color: "#555555" }}>Type of Ad *</p>
                   <div className="flex gap-3">
                     {AD_TYPE_OPTIONS.map((opt) => {
                       const active = form.adType === opt.value;
@@ -187,9 +192,9 @@ export default function RateCardForm() {
                           onClick={() => set("adType", opt.value)}
                           className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all"
                           style={{
-                            background: active ? "#f97d00" : "rgba(255,255,255,0.07)",
-                            border: `1px solid ${active ? "#f97d00" : "rgba(255,255,255,0.15)"}`,
-                            color: "#fff",
+                            background: active ? "#f97d00" : "#F5F5F5",
+                            border: `1.5px solid ${active ? "#f97d00" : "#DDDDDD"}`,
+                            color: active ? "#fff" : "#333333",
                           }}
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.97 }}
@@ -207,7 +212,7 @@ export default function RateCardForm() {
                 {/* Budget */}
                 <div>
                   <select
-                    className="form-input"
+                    className="form-input-light"
                     value={form.budget}
                     onChange={(e) => set("budget", e.target.value)}
                   >
@@ -244,7 +249,7 @@ export default function RateCardForm() {
                   {loading ? "Sending Enquiry..." : "📋 Request Rate Card"}
                 </motion.button>
 
-                <p className="text-white/30 text-[11px] text-center">
+                <p className="text-[11px] text-center" style={{ color: "#AAAAAA" }}>
                   We respond within 24 hours · No spam · Your data is safe
                 </p>
               </motion.form>
@@ -257,8 +262,8 @@ export default function RateCardForm() {
                 transition={{ type: "spring", stiffness: 280, damping: 22 }}
               >
                 <div className="text-6xl mb-4">🎉</div>
-                <h3 className="text-white font-extrabold text-2xl mb-2">Enquiry Received!</h3>
-                <p className="text-white/60 text-sm max-w-sm mx-auto leading-relaxed">
+                <h3 className="font-extrabold text-2xl mb-2" style={{ color: "#111111" }}>Enquiry Received!</h3>
+                <p className="text-sm max-w-sm mx-auto leading-relaxed" style={{ color: "#666666" }}>
                   Thank you <strong style={{ color: "#f97d00" }}>{form.name}</strong>! Our advertising team
                   will send your rate card and get in touch within 24 hours.
                 </p>
