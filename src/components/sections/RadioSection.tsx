@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const RADIO_STREAM_URL = "https://stream.werudigital.co.ke/radio"; // replace with real stream
@@ -75,6 +75,14 @@ export default function RadioSection() {
     }
     setPlaying(!playing);
   };
+
+  // Autoplay — advance every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentShow((c) => (c + 1) % radioShows.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const show = radioShows[currentShow];
 
