@@ -2,10 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 
 const footerLinks = [
-  { label: "HOME",  href: "/" },
-  { label: "TV",    href: "/tv" },
-  { label: "RADIO", href: "/radio" },
-  { label: "BLOG",  href: "/blog" },
+  { label: "Home",        href: "/" },
+  { label: "TV",          href: "/tv" },
+  { label: "Radio",       href: "/radio" },
+  { label: "Politics",    href: "/politics" },
+  { label: "Sports",      href: "/sports" },
+  { label: "Technology",  href: "/technology" },
+  { label: "Agriculture", href: "/agriculture" },
+  { label: "Weather",     href: "/weather" },
 ];
 
 const socials = [
@@ -121,7 +125,11 @@ export default function Footer() {
           style={{ borderTop: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.40)" }}
         >
           <span>© {new Date().getFullYear()} Weru Digital. All rights reserved.</span>
-          <span>werudigital.co.ke</span>
+          <div className="flex items-center gap-4">
+            <a href="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</a>
+            <a href="/terms" className="hover:text-white/60 transition-colors">Terms of Service</a>
+            <span>werudigital.co.ke</span>
+          </div>
         </div>
       </div>
     </footer>

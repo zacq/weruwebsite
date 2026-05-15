@@ -7,3 +7,20 @@ LIVE RADIO
 LIVE TV
 Our TV Presenters and Shows
 On Air Now "
+
+move the LIVE RADIO, LIVE TV buttons to the menu bar, on the rhs, where the social icons are placed. the social icons are already in the footer.so, that is enough.
+make the couresel that is bellow the removes section to take up the hero section.so that is comes directly bellow the menu bar.  
+the couresel is small. increse its width.
+move the streaming headlines bellow the courousel.
+change the design of the streaming healines. it looks old and un appealing. 
+maybe you can make each headline couresel on its own so that a viewer can understand. (speed may remain the same).
+
+
+the live radio icon and the courousel bellow it that shows radio programs, should be move directly above "💼 Grow Your Brand" section.
+
+i need the section behind the "Book Your Advertising Slot" to be white. pure white.
+#FFFFFF
+this is the bcoz the contact collection form need to be very well illuminated for all groups of people.
+when you change the background color of this section. ensure that you adjust the font on the form in that section to remain readable aganist the white background. also, change the color of this section across the website
+
+

@@ -149,7 +149,7 @@ export default function NewsGrid({ articles = sampleArticles }: { articles?: Art
           transition={{ duration: 0.45 }}
         >
           <div className="w-1 h-7 rounded-full" style={{ background: "#111111" }} />
-          <h2 className="text-white font-extrabold text-xl sm:text-2xl uppercase tracking-wide">
+          <h2 className="text-white font-extrabold text-xl sm:text-2xl tracking-tight">
             Latest Headlines
           </h2>
         </motion.div>

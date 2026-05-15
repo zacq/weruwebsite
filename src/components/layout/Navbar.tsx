@@ -7,10 +7,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 const navLinks = [
-  { label: "HOME",  href: "/" },
-  { label: "TV",    href: "/tv" },
-  { label: "RADIO", href: "/radio" },
-  { label: "BLOG",  href: "/blog" },
+  { label: "Home",        href: "/" },
+  { label: "TV",          href: "/tv" },
+  { label: "Radio",       href: "/radio" },
+  { label: "Politics",    href: "/politics" },
+  { label: "Sports",      href: "/sports" },
+  { label: "Technology",  href: "/technology" },
+  { label: "Agriculture", href: "/agriculture" },
+  { label: "Weather",     href: "/weather" },
 ];
 
 export default function Navbar() {
@@ -85,7 +89,7 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="px-3 py-1.5 text-xs font-bold tracking-widest rounded transition-colors duration-150"
+                    className="px-3 py-1.5 text-xs font-bold tracking-wide rounded transition-colors duration-150"
                     style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.70)" }}
                   >
                     {link.label}

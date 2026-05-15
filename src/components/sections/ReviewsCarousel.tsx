@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const reviews = [
@@ -61,15 +62,22 @@ const reviews = [
   },
 ];
 
+// Per absolute-offset: how each ring of the orb looks
+const ORB: Record<number, { scale: number; opacity: number; rotateY: number; x: number }> = {
+  0: { scale: 1.00, opacity: 1.00, rotateY:  0,  x:    0 },
+  1: { scale: 0.82, opacity: 0.78, rotateY: 30,  x:  268 },
+  2: { scale: 0.64, opacity: 0.48, rotateY: 52,  x:  496 },
+  3: { scale: 0.48, opacity: 0.18, rotateY: 64,  x:  690 },
+};
+
+const CARD_W = 280;
+const CARD_H = 220; // approx rendered height
+
 function Stars({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span
-          key={i}
-          className="text-sm"
-          style={{ color: i < count ? "#FACC15" : "rgba(255,255,255,0.2)" }}
-        >
+        <span key={i} className="text-sm" style={{ color: i < count ? "#FACC15" : "rgba(255,255,255,0.18)" }}>
           ★
         </span>
       ))}
@@ -77,43 +85,21 @@ function Stars({ count }: { count: number }) {
   );
 }
 
-function ReviewCard({ review }: { review: (typeof reviews)[0] }) {
-  return (
-    <div
-      className="shrink-0 glass rounded-2xl p-4 sm:p-5 mx-2"
-      style={{
-        width: "clamp(240px, 70vw, 288px)",
-        border: "1px solid rgba(255,255,255,0.12)",
-      }}
-    >
-      <Stars count={review.rating} />
-      <p className="text-white/75 text-xs sm:text-sm leading-relaxed mt-3 mb-4 line-clamp-4">
-        &ldquo;{review.text}&rdquo;
-      </p>
-      <div className="flex items-center gap-3">
-        <div
-          className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-          style={{ background: "#f97d00", color: "#fff", minWidth: "36px" }}
-        >
-          {review.avatar}
-        </div>
-        <div className="min-w-0">
-          <p className="text-white font-semibold text-sm truncate">{review.name}</p>
-          <p className="text-white/40 text-[10px]">Google Review</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function ReviewsCarousel() {
-  const doubled = [...reviews, ...reviews];
+  const [current, setCurrent] = useState(0);
+  const n = reviews.length;
+
+  useEffect(() => {
+    const t = setInterval(() => setCurrent((c) => (c + 1) % n), 4200);
+    return () => clearInterval(t);
+  }, [n]);
 
   return (
-    <section className="py-10 sm:py-12 overflow-hidden" style={{ background: "#111111" }}>
+    <section className="py-10 sm:py-14 overflow-hidden" style={{ background: "#111111" }}>
+
       {/* Header */}
       <motion.div
-        className="text-center mb-6 sm:mb-8 px-4"
+        className="text-center mb-8 px-4"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -130,13 +116,81 @@ export default function ReviewsCarousel() {
         </div>
       </motion.div>
 
-      {/* Auto-scrolling track */}
-      <div className="relative flex overflow-hidden">
-        <div className="scroll-left flex">
-          {doubled.map((r, i) => (
-            <ReviewCard key={`${r.id}-${i}`} review={r} />
-          ))}
-        </div>
+      {/* 3-D orb track */}
+      <div
+        className="relative w-full"
+        style={{ height: CARD_H + 40, perspective: "1100px" }}
+      >
+        {reviews.map((review, i) => {
+          // Shortest-path offset from center, wrapping around
+          let offset = i - current;
+          if (offset > n / 2)  offset -= n;
+          if (offset < -n / 2) offset += n;
+
+          const absOff = Math.abs(offset);
+          const orb = ORB[absOff] ?? ORB[3];
+          const sign = offset >= 0 ? 1 : -1;
+          const visible = absOff <= 3;
+
+          return (
+            <motion.div
+              key={review.id}
+              onClick={() => absOff > 0 && setCurrent(i)}
+              animate={{
+                x: orb.x * sign,
+                rotateY: -orb.rotateY * sign,
+                scale: orb.scale,
+                opacity: visible ? orb.opacity : 0,
+              }}
+              transition={{ type: "spring", stiffness: 200, damping: 28, mass: 0.9 }}
+              className="absolute glass rounded-2xl p-5"
+              style={{
+                width: CARD_W,
+                left: "50%",
+                top: "50%",
+                marginLeft: -CARD_W / 2,
+                marginTop: -(CARD_H / 2),
+                zIndex: visible ? 10 - absOff * 2 : 0,
+                cursor: absOff > 0 ? "pointer" : "default",
+                pointerEvents: visible ? "auto" : "none",
+                border: "1px solid rgba(255,255,255,0.10)",
+              }}
+            >
+              <Stars count={review.rating} />
+              <p className="text-white/75 text-xs sm:text-sm leading-relaxed mt-3 mb-4 line-clamp-4">
+                &ldquo;{review.text}&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                  style={{ background: "#f97d00", color: "#fff", minWidth: 36 }}
+                >
+                  {review.avatar}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-white font-semibold text-sm truncate">{review.name}</p>
+                  <p className="text-white/40 text-[10px]">Google Review</p>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Dot indicators */}
+      <div className="flex justify-center gap-2 mt-8">
+        {reviews.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className="rounded-full transition-all duration-300"
+            style={{
+              width: i === current ? 20 : 6,
+              height: 6,
+              background: i === current ? "#f97d00" : "rgba(255,255,255,0.20)",
+            }}
+          />
+        ))}
       </div>
     </section>
   );

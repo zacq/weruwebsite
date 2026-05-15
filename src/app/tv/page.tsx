@@ -1,4 +1,5 @@
 import LiveStream from "@/components/sections/LiveStream";
+import TVScheduleSection from "@/components/sections/TVScheduleSection";
 import ShowsCarousel from "@/components/sections/ShowsCarousel";
 import VideoGrid from "@/components/sections/VideoGrid";
 import RateCardForm from "@/components/sections/RateCardForm";
@@ -14,6 +15,9 @@ export default function TVPage() {
     <>
       {/* Live stream hero */}
       <LiveStream />
+
+      {/* Full program schedule */}
+      <TVScheduleSection />
 
       {/* TV Shows */}
       <ShowsCarousel />

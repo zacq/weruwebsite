@@ -1,7 +1,7 @@
-import ShowsCarousel from "@/components/sections/ShowsCarousel";
+import HeroSection from "@/components/sections/HeroSection";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
-import LiveStream from "@/components/sections/LiveStream";
 import VideoGrid from "@/components/sections/VideoGrid";
+import TVProgramLineup from "@/components/sections/TVProgramLineup";
 import RadioSection from "@/components/sections/RadioSection";
 import AdvertiseSection from "@/components/sections/AdvertiseSection";
 import NewsGrid from "@/components/sections/NewsGrid";
@@ -13,34 +13,34 @@ import Footer from "@/components/layout/Footer";
 export default function HomePage() {
   return (
     <>
-      {/* 1. Hero — Shows Carousel (directly below navbar) */}
-      <ShowsCarousel />
+      {/* 1. Hero — Live TV player (left) + headline carousel (right) */}
+      <HeroSection />
 
-      {/* 2. Headlines Ticker (below hero carousel) */}
+      {/* 2. Scrolling headlines ticker */}
       <HeadlineTicker />
 
-      {/* 3. Live TV Embed */}
-      <LiveStream />
-
-      {/* 4. Latest Videos Grid */}
+      {/* 3. Latest Videos grid + View All on YouTube button */}
       <VideoGrid />
 
-      {/* 5. Radio Section — moved above Advertise per PRD */}
+      {/* 4. TV Programs Lineup — day-tabbed schedule with notifications */}
+      <TVProgramLineup />
+
+      {/* 5. Live Radio player + radio schedule */}
       <RadioSection />
 
-      {/* 6. Advertise With Us */}
+      {/* 6. Grow Your Brand / Advertise section */}
       <AdvertiseSection />
 
-      {/* 7. Latest Headlines / News */}
+      {/* 7. Latest Headlines news grid */}
       <NewsGrid />
 
-      {/* 8. Google Reviews Carousel (social proof) */}
+      {/* 8. Google Reviews carousel */}
       <ReviewsCarousel />
 
-      {/* 9. Partners & Advertisers Strip */}
+      {/* 9. Partners & Advertisers strip */}
       <PartnersCarousel />
 
-      {/* 10. Rate Card Enquiry Form (primary lead capture) */}
+      {/* 10. Rate Card enquiry form */}
       <RateCardForm />
 
       {/* Footer */}

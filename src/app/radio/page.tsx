@@ -1,4 +1,5 @@
 import RadioSection from "@/components/sections/RadioSection";
+import RadioScheduleSection from "@/components/sections/RadioScheduleSection";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
 
@@ -11,6 +12,9 @@ export default function RadioPage() {
   return (
     <>
       <RadioSection />
+
+      {/* Full radio program schedule */}
+      <RadioScheduleSection />
 
       {/* Advertise on radio CTA */}
       <div className="px-4 py-12 text-center" style={{ background: "#111111" }}>
