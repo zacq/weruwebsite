@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { tvSchedule, type DaySchedule } from "@/data/tvSchedule";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 type Day = DaySchedule["day"];
 
@@ -30,13 +31,20 @@ function parseHour(time: string): number {
   return hour;
 }
 
-function getCurrentWindowStart(programs: { time: string }[], isToday: boolean): number {
-  if (!isToday) return 0;
+function getOnAirIndex(programs: { time: string }[], isToday: boolean): number {
+  if (!isToday) return -1;
   const now = new Date().getHours() + new Date().getMinutes() / 60;
-  let idx = 0;
+  let idx = -1;
   for (let i = 0; i < programs.length; i++) {
     if (parseHour(programs[i].time) <= now) idx = i;
   }
+  return idx;
+}
+
+function getCurrentWindowStart(programs: { time: string }[], isToday: boolean): number {
+  if (!isToday) return 0;
+  const onAir = getOnAirIndex(programs, isToday);
+  const idx = onAir < 0 ? 0 : onAir;
   return Math.min(idx, Math.max(0, programs.length - 4));
 }
 
@@ -65,10 +73,13 @@ export default function TVProgramLineup() {
   const [notified, setNotified] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
 
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const rowCount = isMobile ? 3 : 4;
   const schedule = tvSchedule.find((d) => d.day === selectedDay);
   const programs = schedule?.programs ?? [];
-  const visible = programs.slice(windowStart, windowStart + 4);
-  const canNext = windowStart + 4 < programs.length;
+  const onAirAbsIdx = getOnAirIndex(programs, selectedDay === todayName());
+  const visible = programs.slice(windowStart, windowStart + rowCount);
+  const canNext = windowStart + rowCount < programs.length;
   const canPrev = windowStart > 0;
 
   // Re-init window when day changes
@@ -80,7 +91,7 @@ export default function TVProgramLineup() {
   // Auto-advance every 5 seconds
   useEffect(() => {
     if (!canNext) return;
-    const t = setTimeout(() => setWindowStart((w) => Math.min(w + 1, programs.length - 4)), 5000);
+    const t = setTimeout(() => setWindowStart((w) => Math.min(w + 1, programs.length - rowCount)), 5000);
     return () => clearTimeout(t);
   }, [windowStart, canNext, programs.length]);
 
@@ -173,17 +184,16 @@ export default function TVProgramLineup() {
               {visible.map((program, i) => {
                 const isNotified = notified.has(program.id);
                 const tagColor = TAG_COLORS[program.tag] ?? "#f97d00";
+                const absIdx = windowStart + i;
+                const isOnAir = absIdx === onAirAbsIdx;
                 return (
                   <motion.div
                     key={program.id}
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.04, duration: 0.25 }}
-                    className="flex items-center gap-4 px-4 py-4 rounded-xl transition-colors duration-150"
-                    style={{
-                      borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                      background: i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.02)",
-                    }}
+                    className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-colors duration-150 mb-1 ${isOnAir ? "glass-orange" : "glass-sm"}`}
+                    style={{ borderRadius: 12 }}
                   >
                     {/* Time */}
                     <span className="shrink-0 w-20 text-xs font-bold tabular-nums" style={{ color: "#f97d00" }}>
@@ -207,7 +217,7 @@ export default function TVProgramLineup() {
                     {/* Bell */}
                     <button
                       onClick={() => handleNotify(program.id, program.name)}
-                      className="shrink-0 p-1.5 rounded-lg transition-all duration-150 hover:bg-white/8"
+                      className="shrink-0 w-11 h-11 flex items-center justify-center rounded-lg transition-all duration-150 hover:bg-white/8"
                       aria-label={isNotified ? "Remove notification" : "Set notification"}
                     >
                       <BellIcon filled={isNotified} />
@@ -221,11 +231,11 @@ export default function TVProgramLineup() {
           {/* Progress dots */}
           <div className="flex justify-center gap-1.5 mt-5">
             {programs.map((_, i) => {
-              const isInWindow = i >= windowStart && i < windowStart + 4;
+              const isInWindow = i >= windowStart && i < windowStart + rowCount;
               return (
                 <button
                   key={i}
-                  onClick={() => setWindowStart(Math.min(Math.max(0, i), programs.length - 4))}
+                  onClick={() => setWindowStart(Math.min(Math.max(0, i), programs.length - rowCount))}
                   className="rounded-full transition-all duration-300"
                   style={{
                     width: isInWindow ? 20 : 6,

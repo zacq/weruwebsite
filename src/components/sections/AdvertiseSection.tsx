@@ -164,11 +164,11 @@ export default function AdvertiseSection() {
           </motion.div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {stats.map((s, i) => (
               <motion.div
                 key={s.label}
-                className="glass-sm rounded-2xl p-5 text-center"
+                className="glass rounded-2xl p-5 text-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -184,12 +184,12 @@ export default function AdvertiseSection() {
             ))}
           </div>
 
-          {/* Platforms — asymmetric 5-col */}
-          <div className="grid sm:grid-cols-5 gap-5 mb-12">
+          {/* Platforms */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
 
             {/* TV card — featured, with embedded ad strip */}
             <motion.div
-              className="sm:col-span-3 glass rounded-2xl p-5 flex flex-row gap-4"
+              className="md:col-span-2 glass-orange rounded-2xl p-5 flex flex-row gap-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -222,12 +222,12 @@ export default function AdvertiseSection() {
               <MiniAdStrip />
             </motion.div>
 
-            {/* Radio + Digital — stacked in 2 cols */}
-            <div className="sm:col-span-2 flex flex-col gap-5">
+            {/* Radio + Digital */}
+            <div className="flex flex-col gap-5">
               {platforms.slice(1).map((p, i) => (
                 <motion.div
                   key={p.name}
-                  className="glass-sm rounded-2xl p-5 flex-1"
+                  className="glass-orange rounded-2xl p-5 flex-1"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}

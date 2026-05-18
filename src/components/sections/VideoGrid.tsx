@@ -32,7 +32,7 @@ function VideoCard({ video, index }: { video: Video; index: number }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="block group"
+      className="block group glass overflow-hidden rounded-xl"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -117,7 +117,7 @@ export default function VideoGrid({ videos = placeholderVideos }: { videos?: Vid
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {videos.map((v, i) => (
             <VideoCard key={v.id} video={v} index={i} />
           ))}

@@ -56,16 +56,12 @@ export default function Navbar() {
           transition={{ duration: 0.28, ease: "easeInOut" }}
         >
           <div
-            className="w-full px-4 h-14 flex items-center justify-between gap-4 transition-all duration-300"
+            className="glass-strong w-full px-4 h-14 flex items-center justify-between gap-4 transition-all duration-300"
             style={{
-              background: atTop
-                ? "rgba(0, 0, 0, 0.25)"
-                : "rgba(0, 0, 0, 0.70)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-              borderBottom: atTop
-                ? "1px solid rgba(255,255,255,0.08)"
-                : "1px solid rgba(255,255,255,0.12)",
+              borderRadius: 0,
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
             }}
           >
             {/* ── Logo ───────────────────────────────────── */}
@@ -161,7 +157,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
     <div className="md:hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="flex flex-col gap-1 p-1.5"
+        className="flex flex-col gap-1 w-12 h-12 items-center justify-center"
         aria-label="Toggle menu"
       >
         {[0, 1, 2].map((i) => (
@@ -183,11 +179,12 @@ function MobileMenu({ pathname }: { pathname: string }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="absolute top-14 left-0 right-0 px-4 py-3 flex flex-col gap-2"
+            className="glass-strong absolute top-14 left-0 right-0 px-4 py-3 flex flex-col gap-2"
             style={{
-              background: "rgba(0,0,0,0.85)",
-              backdropFilter: "blur(20px)",
-              borderBottom: "1px solid rgba(255,255,255,0.10)",
+              borderRadius: 0,
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
             }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -201,7 +198,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="py-2 text-sm font-bold border-b border-white/8 last:border-0"
+                  className="py-3 text-lg font-bold border-b border-white/8 last:border-0"
                   style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.75)" }}
                 >
                   {link.label}

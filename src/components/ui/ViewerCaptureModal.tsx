@@ -87,7 +87,7 @@ export default function ViewerCaptureModal() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-sm glass-strong rounded-2xl p-6 relative"
+              className="w-full max-w-sm md:max-w-sm glass-strong rounded-none md:rounded-2xl p-6 relative fixed inset-0 md:inset-auto md:relative overflow-y-auto"
               initial={{ scale: 0.85, y: 30 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.85, y: 30 }}
@@ -96,7 +96,7 @@ export default function ViewerCaptureModal() {
             >
               <button
                 onClick={dismiss}
-                className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-all text-sm"
+                className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-all text-sm"
               >
                 ✕
               </button>

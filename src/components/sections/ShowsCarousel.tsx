@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const tvShows = [
   {
@@ -69,30 +70,45 @@ const tvShows = [
 export default function ShowsCarousel() {
   const [current, setCurrent] = useState(0);
   const count = tvShows.length;
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const touchStartX = useRef(0);
 
   const prev = () => setCurrent((c) => (c - 1 + count) % count);
   const next = () => setCurrent((c) => (c + 1) % count);
 
-  // Autoplay — advance every 5 seconds
+  // Autoplay only on desktop
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((c) => (c + 1) % count);
-    }, 5000);
+    if (isMobile) return;
+    const timer = setInterval(() => setCurrent((c) => (c + 1) % count), 5000);
     return () => clearInterval(timer);
-  }, [count]);
+  }, [count, isMobile]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (delta > 50) next();
+    else if (delta < -50) prev();
+  };
 
   const show = tvShows[current];
 
   return (
     <section
       className="w-full relative overflow-hidden"
-      style={{ background: show.bg, height: "calc(100dvh - 64px)", minHeight: "420px" }}
+      style={{
+        background: show.bg,
+        height: isMobile ? "60vh" : "calc(100dvh - 64px)",
+        minHeight: "420px",
+      }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <AnimatePresence mode="wait">
         <motion.div
           key={show.id}
           className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 px-6 sm:px-10 md:px-16 pt-16 pb-14 sm:pt-20 max-w-5xl mx-auto h-full"
-          style={{ height: "calc(100dvh - 64px)", minHeight: "420px" }}
           initial={{ opacity: 0, x: 60 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -60 }}
@@ -126,8 +142,7 @@ export default function ShowsCarousel() {
 
             <div className="flex flex-wrap gap-2 sm:gap-3 justify-center sm:justify-start">
               <span
-                className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold"
-                style={{ background: "rgba(255,255,255,0.12)", color: "#fff" }}
+                className="glass-sm inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold text-white"
               >
                 🕐 {show.time}
               </span>
@@ -164,7 +179,7 @@ export default function ShowsCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* ── Nav arrows — larger touch targets ──────── */}
+      {/* ── Nav arrows ──────────────────────────────── */}
       <button
         onClick={prev}
         className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-16 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all text-2xl"
@@ -180,7 +195,7 @@ export default function ShowsCarousel() {
         ›
       </button>
 
-      {/* ── Dots ───────────────────────────────────── */}
+      {/* ── Dots ────────────────────────────────────── */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 items-center">
         {tvShows.map((_, i) => (
           <button

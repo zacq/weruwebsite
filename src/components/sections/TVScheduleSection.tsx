@@ -169,18 +169,11 @@ export default function TVScheduleSection() {
                   animate={{ opacity: isPast ? 0.45 : 1, y: 0, scale: 1 }}
                   transition={{ delay: i * 0.05, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className="relative rounded-2xl p-5 flex flex-col gap-3 cursor-default"
+                  className={`relative rounded-2xl p-5 flex flex-col gap-3 cursor-default ${isCurrentlyAiring ? "glass-orange" : isPast ? "glass-sm" : "glass"}`}
                   style={{
-                    background: isCurrentlyAiring
-                      ? "rgba(249,125,0,0.08)"
-                      : "rgba(255,255,255,0.04)",
-                    border: isCurrentlyAiring
-                      ? "1px solid rgba(249,125,0,0.35)"
-                      : "1px solid rgba(255,255,255,0.07)",
                     boxShadow: isCurrentlyAiring
                       ? `0 0 32px rgba(249,125,0,0.12), 0 4px 20px rgba(0,0,0,0.4)`
                       : "0 4px 20px rgba(0,0,0,0.3)",
-                    transition: "box-shadow 0.2s, border-color 0.2s, transform 0.2s",
                   }}
                 >
                   {/* On-air badge */}

@@ -5,6 +5,9 @@ import VideoGrid from "@/components/sections/VideoGrid";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
 
+export const dynamic    = "force-static";
+export const revalidate = 3600;
+
 export const metadata = {
   title: "Weru TV — Live Television",
   description: "Watch Weru TV live stream and browse the latest TV shows and videos.",

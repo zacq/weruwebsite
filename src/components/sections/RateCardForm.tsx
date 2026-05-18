@@ -238,7 +238,7 @@ export default function RateCardForm() {
                 <motion.button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 rounded-2xl text-white font-extrabold text-base mt-1"
+                  className="w-full md:w-auto px-8 py-4 rounded-2xl text-white font-extrabold text-base mt-1"
                   style={{
                     background: loading ? "rgba(249,125,0,0.6)" : "#f97d00",
                     boxShadow: "0 0 24px rgba(249,125,0,0.4)",

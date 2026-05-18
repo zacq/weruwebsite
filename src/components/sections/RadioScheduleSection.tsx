@@ -169,14 +169,8 @@ export default function RadioScheduleSection() {
                   animate={{ opacity: isPast ? 0.40 : 1, y: 0, scale: 1 }}
                   transition={{ delay: i * 0.05, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   whileHover={{ y: -3, scale: 1.015 }}
-                  className="relative rounded-2xl p-5 flex flex-col gap-2"
+                  className={`relative rounded-2xl p-5 flex flex-col gap-2 ${isOnAir ? "glass-orange" : isPast ? "glass-sm" : "glass"}`}
                   style={{
-                    background: isOnAir
-                      ? "rgba(249,125,0,0.08)"
-                      : "rgba(255,255,255,0.04)",
-                    border: isOnAir
-                      ? "1px solid rgba(249,125,0,0.35)"
-                      : "1px solid rgba(255,255,255,0.07)",
                     boxShadow: isOnAir
                       ? "0 0 28px rgba(249,125,0,0.12), 0 4px 20px rgba(0,0,0,0.4)"
                       : "0 4px 16px rgba(0,0,0,0.25)",

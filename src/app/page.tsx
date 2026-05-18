@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/sections/HeroSection";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
 import VideoGrid from "@/components/sections/VideoGrid";
@@ -5,10 +6,18 @@ import TVProgramLineup from "@/components/sections/TVProgramLineup";
 import RadioSection from "@/components/sections/RadioSection";
 import AdvertiseSection from "@/components/sections/AdvertiseSection";
 import NewsGrid from "@/components/sections/NewsGrid";
-import ReviewsCarousel from "@/components/sections/ReviewsCarousel";
-import PartnersCarousel from "@/components/sections/PartnersCarousel";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
+
+const ReviewsCarousel = dynamic(
+  () => import("@/components/sections/ReviewsCarousel"),
+  { loading: () => <div className="skeleton h-64 mx-4 my-10 rounded-2xl" /> }
+);
+
+const PartnersCarousel = dynamic(
+  () => import("@/components/sections/PartnersCarousel"),
+  { loading: () => <div className="skeleton h-24 mx-4 my-6 rounded-2xl" /> }
+);
 
 export default function HomePage() {
   return (

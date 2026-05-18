@@ -73,6 +73,7 @@ export default function RadioSection() {
   const togglePlay = () => {
     if (!audioRef.current) {
       audioRef.current = new Audio(RADIO_STREAM_URL);
+      audioRef.current.preload = "none";
     }
     if (playing) {
       audioRef.current.pause();
@@ -109,12 +110,8 @@ export default function RadioSection() {
       <div className="px-4 pt-10 pb-6">
         <div className="max-w-2xl mx-auto">
           <motion.div
-            className="rounded-2xl overflow-hidden"
-            style={{
-              background: "#111111",
-              border: "1px solid rgba(255,255,255,0.08)",
-              boxShadow: "0 12px 48px rgba(0,0,0,0.5)",
-            }}
+            className="glass rounded-2xl overflow-hidden"
+            style={{ background: "#111111" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -123,7 +120,7 @@ export default function RadioSection() {
             <div className="flex items-center gap-3 sm:gap-5 px-4 sm:px-5 py-4">
               <motion.button
                 onClick={togglePlay}
-                className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-white text-xl"
+                className="shrink-0 w-14 h-14 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white text-xl"
                 style={{
                   background: playing ? "#C8102E" : "#f97d00",
                   boxShadow: playing
@@ -245,12 +242,7 @@ export default function RadioSection() {
                     initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.06, duration: 0.3 }}
-                    className="relative rounded-2xl p-5 flex flex-col gap-2"
-                    style={{
-                      background: "rgba(0,0,0,0.30)",
-                      border: "1px solid rgba(255,255,255,0.12)",
-                      backdropFilter: "blur(12px)",
-                    }}
+                    className="glass-sm relative rounded-2xl p-5 flex flex-col gap-2"
                   >
                     {/* On-air / Up next badge */}
                     <div className="flex items-center gap-2 mb-1">

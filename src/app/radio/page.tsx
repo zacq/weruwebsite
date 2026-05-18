@@ -3,6 +3,9 @@ import RadioScheduleSection from "@/components/sections/RadioScheduleSection";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
 
+export const dynamic    = "force-static";
+export const revalidate = 3600;
+
 export const metadata = {
   title: "Weru FM Radio — Live Radio Stream",
   description: "Listen to Weru FM live radio stream and explore our exciting lineup of daily programs.",

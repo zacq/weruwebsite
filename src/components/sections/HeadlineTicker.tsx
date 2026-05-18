@@ -31,8 +31,8 @@ export default function HeadlineTicker() {
           >
             {/* Category badge */}
             <span
-              className="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-full shrink-0"
-              style={{ background: h.color, color: "#fff" }}
+              className={`text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 shrink-0 ${h.category === "BREAKING" ? "glass-red" : "glass-sm rounded-full"}`}
+              style={{ color: h.category === "BREAKING" ? "#fff" : h.color }}
             >
               {h.category}
             </span>

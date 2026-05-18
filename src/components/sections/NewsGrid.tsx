@@ -66,8 +66,7 @@ const sampleArticles: Article[] = [
 function ArticleCard({ article, index }: { article: Article; index: number }) {
   return (
     <motion.article
-      className="group relative overflow-hidden rounded-2xl cursor-pointer"
-      style={{ background: "#0A0A0A" }}
+      className="group relative glass overflow-hidden rounded-2xl cursor-pointer"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -155,7 +154,7 @@ export default function NewsGrid({ articles = sampleArticles }: { articles?: Art
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {articles.map((a, i) => (
             <ArticleCard key={a.id} article={a} index={i} />
           ))}

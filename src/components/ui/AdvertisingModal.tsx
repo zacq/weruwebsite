@@ -100,12 +100,9 @@ export default function AdvertisingModal({ isOpen, title, onClose }: Props) {
           {/* Panel */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
-              className="w-full max-w-lg rounded-2xl overflow-y-auto"
+              className="glass-strong w-full max-w-lg rounded-none md:rounded-2xl overflow-y-auto fixed inset-0 md:inset-auto md:relative md:max-h-[90dvh]"
               style={{
                 background: "#161616",
-                border: "1px solid rgba(255,255,255,0.10)",
-                boxShadow: "0 24px 80px rgba(0,0,0,0.7)",
-                maxHeight: "90dvh",
               }}
               initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -129,7 +126,7 @@ export default function AdvertisingModal({ isOpen, title, onClose }: Props) {
                 </div>
                 <button
                   onClick={handleClose}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all text-sm"
+                  className="w-11 h-11 rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all text-sm"
                 >
                   ✕
                 </button>

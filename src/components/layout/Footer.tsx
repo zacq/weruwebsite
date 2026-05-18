@@ -26,7 +26,7 @@ export default function Footer() {
   return (
     <footer style={{ background: FOOTER_BG, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
       <div className="max-w-6xl mx-auto px-4 py-10">
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-8">
 
           {/* Brand */}
           <div className="text-center md:text-left">
@@ -106,7 +106,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-150 hover:bg-[#f97d00] hover:text-white hover:border-[#f97d00]"
+                  className="w-11 h-11 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-150 hover:bg-[#f97d00] hover:text-white hover:border-[#f97d00]"
                   style={{
                     background: "rgba(255,255,255,0.10)",
                     color: "rgba(255,255,255,0.70)",
