@@ -118,7 +118,6 @@ export default function HeroSection() {
   }, [progress]);
 
   const headline = headlines[current];
-  const subHeadlines = headlines.filter((h) => h.id !== headline.id).slice(0, 3);
 
   const embedSrc = `https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=1&rel=0`;
 
@@ -258,25 +257,6 @@ export default function HeroSection() {
             </motion.div>
           </AnimatePresence>
 
-          {/* 3 sub-headline pills */}
-          <div className="flex flex-col gap-2 mt-3">
-            {subHeadlines.map((h) => (
-              <motion.button
-                key={h.id}
-                onClick={() => { setCurrent(headlines.findIndex((x) => x.id === h.id)); setProgress(0); }}
-                className="glass-sm rounded-xl px-3 py-2.5 text-left transition-all duration-150"
-                whileHover={{ x: 4 }}
-              >
-                <span
-                  className="text-[9px] font-extrabold tracking-widest uppercase mr-2"
-                  style={{ color: h.categoryColor }}
-                >
-                  {h.category}
-                </span>
-                <span className="text-white/70 text-xs leading-snug">{h.headline}</span>
-              </motion.button>
-            ))}
-          </div>
         </div>
       </div>
     </section>
