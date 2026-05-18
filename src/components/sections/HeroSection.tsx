@@ -6,23 +6,23 @@ import { motion, AnimatePresence } from "framer-motion";
 const YOUTUBE_CHANNEL_ID = "UCxxxxxxxxxxxxxxxxxxxxxx";
 
 const headlines = [
-  { category: "BREAKING", text: "Several Injured After 14-Seater Matatu Flips on Haile Selassie Avenue" },
-  { category: "POLITICS", text: "Wetangula Warns MPs: Life After Parliament Is Not What You Expect" },
-  { category: "BUSINESS", text: "Ruto Launches Ksh36,000 Funding Initiative for 90,000 Kenyan Youth" },
-  { category: "NEWS", text: "Government to Preserve All Raila Odinga Tributes in National Archives" },
+  { category: "BREAKING",    text: "Several Injured After 14-Seater Matatu Flips on Haile Selassie Avenue" },
+  { category: "POLITICS",    text: "Wetangula Warns MPs: Life After Parliament Is Not What You Expect" },
+  { category: "BUSINESS",    text: "Ruto Launches Ksh36,000 Funding Initiative for 90,000 Kenyan Youth" },
+  { category: "NEWS",        text: "Government to Preserve All Raila Odinga Tributes in National Archives" },
   { category: "DEVELOPMENT", text: "KETRACO Energises New 132kV Power Line to End Outages in Homa Bay" },
-  { category: "HEALTH", text: "Truphena Muthoni Plans Next Conservation Milestone After Guinness Record" },
-  { category: "POLITICS", text: "Gachagua Threatens Nationwide Protests Over Alleged Systematic Oppression" },
-  { category: "BUSINESS", text: "Nairobi Records 15.4% Rise in Small Business Registrations This Quarter" },
+  { category: "HEALTH",      text: "Truphena Muthoni Plans Next Conservation Milestone After Guinness Record" },
+  { category: "POLITICS",    text: "Gachagua Threatens Nationwide Protests Over Alleged Systematic Oppression" },
+  { category: "BUSINESS",    text: "Nairobi Records 15.4% Rise in Small Business Registrations This Quarter" },
 ];
 
 const categoryColors: Record<string, string> = {
-  BREAKING: "#C8102E",
-  POLITICS: "#1565C0",
-  BUSINESS: "#2E7D32",
-  NEWS: "#C8102E",
+  BREAKING:    "#C8102E",
+  POLITICS:    "#1565C0",
+  BUSINESS:    "#2E7D32",
+  NEWS:        "#C8102E",
   DEVELOPMENT: "#E65100",
-  HEALTH: "#00695C",
+  HEALTH:      "#00695C",
 };
 
 export default function HeroSection() {
@@ -61,7 +61,7 @@ export default function HeroSection() {
             <span className="text-white/40 text-xs">Weru TV — Streaming Now</span>
           </div>
 
-          {/* 16:9 player — padding-bottom trick keeps ratio at any width */}
+          {/* 16:9 player */}
           <div
             className="relative w-full rounded-xl overflow-hidden"
             style={{
@@ -87,9 +87,7 @@ export default function HeroSection() {
               <span className="text-sm font-black text-white">
                 w<span style={{ color: "#FACC15" }}>e</span>ru
               </span>
-              <sup className="text-[9px] font-bold" style={{ color: "#f97d00" }}>
-                TV
-              </sup>
+              <sup className="text-[9px] font-bold" style={{ color: "#f97d00" }}>TV</sup>
             </div>
             <a
               href="#rate-card"
@@ -103,21 +101,16 @@ export default function HeroSection() {
       </div>
 
       {/* ── Right: Headline Carousel ──────────────────────── */}
-      <div
-        className="w-full md:w-1/2 flex flex-col justify-center p-4 sm:p-6 md:p-10"
-      >
-        {/* Aligned wrapper — mirrors the left column's inner max-width container */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center p-4 sm:p-6 md:p-10">
         <div className="w-full" style={{ maxWidth: "640px" }}>
-          {/* Spacer row — same height as the live badge row on the left */}
+
+          {/* Spacer — matches live badge row height */}
           <div style={{ height: "28px" }} />
 
-          {/* Animated headline — sits at the same vertical start as the player */}
+          {/* Aspect-ratio container — same 56.25% as the player */}
           <div
             className="relative w-full flex flex-col justify-center rounded-xl"
-            style={{
-              /* Match the player's aspect ratio so the headline block is the same height */
-              paddingBottom: "56.25%",
-            }}
+            style={{ paddingBottom: "56.25%" }}
           >
             <div className="absolute inset-0 flex flex-col justify-center">
               <AnimatePresence mode="wait">
@@ -145,7 +138,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Spacer row — same height as the player footer row on the left */}
+          {/* Spacer — matches player footer row height */}
           <div style={{ height: "28px" }} />
         </div>
       </div>
