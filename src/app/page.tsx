@@ -1,23 +1,48 @@
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/sections/HeroSection";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
-import VideoGrid from "@/components/sections/VideoGrid";
-import TVProgramLineup from "@/components/sections/TVProgramLineup";
-import RadioSection from "@/components/sections/RadioSection";
-import AdvertiseSection from "@/components/sections/AdvertiseSection";
-import NewsGrid from "@/components/sections/NewsGrid";
-import RateCardForm from "@/components/sections/RateCardForm";
-import Footer from "@/components/layout/Footer";
+
+const VideoGrid = dynamic(
+  () => import("@/components/sections/VideoGrid"),
+  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
+const TVProgramLineup = dynamic(
+  () => import("@/components/sections/TVProgramLineup"),
+  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
+const RadioSection = dynamic(
+  () => import("@/components/sections/RadioSection"),
+  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
+const AdvertiseSection = dynamic(
+  () => import("@/components/sections/AdvertiseSection"),
+  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
+const NewsGrid = dynamic(
+  () => import("@/components/sections/NewsGrid"),
+  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
 
 const ReviewsCarousel = dynamic(
   () => import("@/components/sections/ReviewsCarousel"),
-  { loading: () => <div className="skeleton h-64 mx-4 my-10 rounded-2xl" /> }
+  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
 const PartnersCarousel = dynamic(
   () => import("@/components/sections/PartnersCarousel"),
-  { loading: () => <div className="skeleton h-24 mx-4 my-6 rounded-2xl" /> }
+  { loading: () => <div className="h-24 mx-4 my-6 rounded-2xl bg-black/20" /> }
 );
+
+const RateCardForm = dynamic(
+  () => import("@/components/sections/RateCardForm"),
+  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
+const Footer = dynamic(() => import("@/components/layout/Footer"));
 
 export default function HomePage() {
   return (

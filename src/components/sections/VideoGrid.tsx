@@ -49,6 +49,8 @@ function VideoCard({ video, index }: { video: Video; index: number }) {
           <img
             src={video.thumbnail}
             alt={video.title}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (

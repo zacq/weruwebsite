@@ -86,6 +86,8 @@ function ArticleCard({ article, index }: { article: Article; index: number }) {
           <img
             src={article.image}
             alt={article.title}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-400"
           />
         ) : (

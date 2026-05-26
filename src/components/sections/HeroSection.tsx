@@ -103,15 +103,15 @@ export default function HeroSection() {
   const [isHovered, setIsHovered] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 100 ticks × 40 ms = 4 s auto-advance
+  // 40 ticks × 100 ms = 4 s auto-advance
   useEffect(() => {
     if (isHovered) return;
-    const id = setInterval(() => setProgress((p) => (p >= 99 ? 100 : p + 1)), 40);
+    const id = setInterval(() => setProgress((p) => (p >= 39 ? 40 : p + 1)), 100);
     return () => clearInterval(id);
   }, [isHovered]);
 
   useEffect(() => {
-    if (progress >= 100) {
+    if (progress >= 40) {
       setCurrent((c) => (c + 1) % headlines.length);
       setProgress(0);
     }
@@ -252,7 +252,7 @@ export default function HeroSection() {
 
               {/* Progress bar */}
               <div className="hero-progress">
-                <div className="hero-progress-fill" style={{ width: `${progress}%` }} />
+                <div className="hero-progress-fill" style={{ width: `${progress * 2.5}%` }} />
               </div>
             </motion.div>
           </AnimatePresence>
