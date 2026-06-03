@@ -14,7 +14,7 @@ const footerLinks = [
 
 const socials = [
   { label: "Facebook", href: "https://facebook.com/werutv",  icon: "f"  },
-  { label: "YouTube",  href: "https://youtube.com/@werutv",  icon: "▶"  },
+  { label: "YouTube",  href: "https://youtube.com/@werutvfm3411",  icon: "▶"  },
   { label: "X",        href: "https://x.com/werutv",         icon: "𝕏"  },
   { label: "TikTok",   href: "https://tiktok.com/@werutv",   icon: "♪"  },
 ];

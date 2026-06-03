@@ -9,7 +9,7 @@ interface LiveStreamProps {
 }
 
 export default function LiveStream({
-  youtubeChannelId = "UCxxxxxxxxxxxxxxxxxxxxxx",
+  youtubeChannelId = "UCKf9xsi0uL1mwdrq7PmZsQA",
   youtubeVideoId,
   title = "Weru TV — Live Stream",
 }: LiveStreamProps) {

@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const YOUTUBE_CHANNEL_ID = "UCxxxxxxxxxxxxxxxxxxxxxx";
+const YOUTUBE_CHANNEL_ID  = "UCKf9xsi0uL1mwdrq7PmZsQA";
+// Playlist embed always shows content (latest upload / active live stream)
+const YOUTUBE_EMBED_SRC   = `https://www.youtube.com/embed?listType=user_uploads&list=${YOUTUBE_CHANNEL_ID}&index=1`;
+const YOUTUBE_LIVE_URL    = "https://www.youtube.com/@werutvfm3411/live";
 
 type Headline = {
   id: string;
@@ -101,7 +104,6 @@ export default function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   // 40 ticks × 100 ms = 4 s auto-advance
   useEffect(() => {
@@ -119,8 +121,6 @@ export default function HeroSection() {
 
   const headline = headlines[current];
 
-  const embedSrc = `https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=1&rel=0`;
-
   return (
     <section
       className="w-full flex flex-col md:flex-row overflow-hidden pt-14"
@@ -132,18 +132,29 @@ export default function HeroSection() {
         style={{ borderRight: "1px solid rgba(255,255,255,0.07)" }}
       >
         <div className="w-full" style={{ maxWidth: "640px" }}>
-          {/* Live badge */}
-          <div className="flex items-center gap-2 mb-3">
-            <div className="glass-red flex items-center gap-1.5 px-2.5 py-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-white live-dot inline-block" />
-              <span className="text-white text-[10px] font-extrabold tracking-wider uppercase">
-                Live
-              </span>
+          {/* Top bar: live badge + watch live link */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="glass-red flex items-center gap-1.5 px-2.5 py-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-white live-dot inline-block" />
+                <span className="text-white text-[10px] font-extrabold tracking-wider uppercase">
+                  Weru TV
+                </span>
+              </div>
+              <span className="text-white/40 text-xs hidden sm:inline">Streaming Now</span>
             </div>
-            <span className="text-white/40 text-xs">Weru TV — Streaming Now</span>
+            <a
+              href={YOUTUBE_LIVE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-white text-[10px] font-extrabold tracking-wide transition-opacity hover:opacity-80"
+              style={{ background: "#C8102E" }}
+            >
+              ▶ WATCH LIVE
+            </a>
           </div>
 
-          {/* 16:9 player */}
+          {/* 16:9 player — always shows latest content / live stream */}
           <div
             className="relative w-full rounded-xl overflow-hidden"
             style={{
@@ -153,32 +164,14 @@ export default function HeroSection() {
               boxShadow: "0 16px 56px rgba(0,0,0,0.55)",
             }}
           >
-            {isPlaying ? (
-              <iframe
-                src={embedSrc}
-                title="Weru TV Live Stream"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-                style={{ border: "none" }}
-              />
-            ) : (
-              <button
-                className="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 group"
-                onClick={() => setIsPlaying(true)}
-                aria-label="Watch Weru TV Live"
-              >
-                <motion.div
-                  className="glass-orange w-16 h-16 flex items-center justify-center text-white text-2xl"
-                  style={{ borderRadius: "50%" }}
-                  whileHover={{ scale: 1.12 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  ▶
-                </motion.div>
-                <span className="text-white/55 text-xs font-medium">Click to Watch Live</span>
-              </button>
-            )}
+            <iframe
+              src={YOUTUBE_EMBED_SRC}
+              title="Weru TV"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+              style={{ border: "none" }}
+            />
           </div>
 
           {/* Player footer */}
