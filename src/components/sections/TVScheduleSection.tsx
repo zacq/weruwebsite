@@ -41,6 +41,10 @@ const TAG_COLORS: Record<ProgramTag, { bg: string; text: string; glow: string }>
   Kids:          { bg: "rgba(251,191,36,0.15)",  text: "#fde68a", glow: "rgba(251,191,36,0.20)"  },
   Documentary:   { bg: "rgba(99,102,241,0.15)",  text: "#818cf8", glow: "rgba(99,102,241,0.20)"  },
   Magazine:      { bg: "rgba(217,119,6,0.15)",   text: "#fbbf24", glow: "rgba(217,119,6,0.20)"   },
+  Agriculture:   { bg: "rgba(34,197,94,0.15)",   text: "#4ade80", glow: "rgba(34,197,94,0.20)"   },
+  Political:     { bg: "rgba(239,68,68,0.15)",   text: "#f87171", glow: "rgba(239,68,68,0.20)"   },
+  Culinary:      { bg: "rgba(251,146,60,0.15)",  text: "#fb923c", glow: "rgba(251,146,60,0.20)"  },
+  Youth:         { bg: "rgba(167,139,250,0.15)", text: "#a78bfa", glow: "rgba(167,139,250,0.20)" },
 };
 
 function Initials({ name }: { name: string }) {
