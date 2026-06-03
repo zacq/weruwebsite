@@ -270,7 +270,7 @@ export default function AdvertisingModal({ isOpen, title, onClose }: Props) {
                         Thank you <strong style={{ color: "#f97d00" }}>{form.name}</strong>! Our team will be in touch within 24 hours.
                       </p>
                       <motion.a
-                        href="https://wa.me/254700000000"
+                        href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 mt-6 px-5 py-2.5 rounded-xl text-white font-bold text-sm"

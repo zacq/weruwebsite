@@ -49,6 +49,15 @@ export default function Footer() {
             >
               📋 Get Rate Card
             </a>
+            <a
+              href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-xl text-white text-xs font-bold transition-all duration-200 hover:opacity-85"
+              style={{ background: "#25D366" }}
+            >
+              💬 WhatsApp Us
+            </a>
           </div>
 
           {/* Nav links */}
@@ -70,23 +79,52 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col items-center md:items-start gap-2 text-sm">
+          <div className="flex flex-col items-center md:items-start gap-1.5 text-sm">
             <p className="text-[10px] tracking-widest uppercase font-bold mb-1"
               style={{ color: "rgba(255,255,255,0.40)" }}>
               Contact
             </p>
-            <a href="tel:+254700000000"
+
+            {/* Reception */}
+            <p className="text-[10px] font-bold tracking-wider uppercase mt-1"
+              style={{ color: "rgba(255,255,255,0.35)" }}>
+              Reception
+            </p>
+            <a href="tel:+254700117026"
               className="transition-colors duration-150 hover:text-[#f97d00]"
               style={{ color: "rgba(255,255,255,0.70)" }}>
-              📞 +254 700 000 000
+              📞 0700 117026
             </a>
-            <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer"
+            <a href="tel:+254738970438"
               className="transition-colors duration-150 hover:text-[#f97d00]"
               style={{ color: "rgba(255,255,255,0.70)" }}>
-              💬 WhatsApp Us
+              📞 0738 970438
             </a>
+
+            {/* Commercials */}
+            <p className="text-[10px] font-bold tracking-wider uppercase mt-2"
+              style={{ color: "rgba(255,255,255,0.35)" }}>
+              Commercials
+            </p>
+            <a href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number" target="_blank" rel="noopener noreferrer"
+              className="transition-colors duration-150 hover:text-[#f97d00]"
+              style={{ color: "rgba(255,255,255,0.70)" }}>
+              💬 0707 065000
+            </a>
+
+            {/* News */}
+            <p className="text-[10px] font-bold tracking-wider uppercase mt-2"
+              style={{ color: "rgba(255,255,255,0.35)" }}>
+              News Hotline
+            </p>
+            <a href="tel:+254703223363"
+              className="transition-colors duration-150 hover:text-[#f97d00]"
+              style={{ color: "rgba(255,255,255,0.70)" }}>
+              📞 0703 223363
+            </a>
+
             <a href="mailto:info@werudigital.co.ke"
-              className="transition-colors duration-150 hover:text-[#f97d00]"
+              className="mt-1 transition-colors duration-150 hover:text-[#f97d00]"
               style={{ color: "rgba(255,255,255,0.70)" }}>
               ✉️ info@werudigital.co.ke
             </a>

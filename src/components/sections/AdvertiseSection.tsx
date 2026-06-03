@@ -209,13 +209,24 @@ export default function AdvertiseSection() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={() => setOpenModal("rate-card")}
-                  className="inline-flex items-center gap-1.5 mt-6 px-4 py-2 rounded-xl text-white text-xs font-bold self-start transition-opacity hover:opacity-80"
-                  style={{ background: "#f97d00" }}
-                >
-                  Get TV rate card →
-                </button>
+                <div className="flex flex-wrap gap-2 mt-6">
+                  <button
+                    onClick={() => setOpenModal("rate-card")}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-80"
+                    style={{ background: "#f97d00" }}
+                  >
+                    Get TV rate card →
+                  </button>
+                  <a
+                    href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-80"
+                    style={{ background: "#25D366" }}
+                  >
+                    💬 WhatsApp Us
+                  </a>
+                </div>
               </div>
 
               {/* Right: scrolling ad carousel */}

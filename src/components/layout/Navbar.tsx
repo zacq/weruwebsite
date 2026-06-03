@@ -17,29 +17,172 @@ const navLinks = [
   { label: "Weather",     href: "/weather" },
 ];
 
+const WHATSAPP = "https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number";
+const MAPS     = "https://www.google.com/maps/search/Weru+TV+Meru+Kenya";
+
+function ContactDropdown() {
+  const [open, setOpen] = useState(false);
+  const ref  = useRef<HTMLDivElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const show = () => {
+    if (timer.current) clearTimeout(timer.current);
+    setOpen(true);
+  };
+  const hide = () => {
+    timer.current = setTimeout(() => setOpen(false), 180);
+  };
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={show}
+      onMouseLeave={hide}
+    >
+      {/* Trigger */}
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-wide rounded transition-colors duration-150"
+        style={{ color: open ? "#f97d00" : "rgba(255,255,255,0.70)" }}
+      >
+        Contact
+        <svg
+          className="w-3 h-3 transition-transform duration-200"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+          viewBox="0 0 12 12" fill="none"
+        >
+          <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+
+      {/* Dropdown panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="absolute top-full right-0 mt-2 rounded-2xl overflow-hidden"
+            style={{
+              width: "240px",
+              background: "#111111",
+              border: "1px solid rgba(255,255,255,0.14)",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.80)",
+            }}
+            initial={{ opacity: 0, y: -8, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0,  scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.96 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
+            <div className="px-4 pt-4 pb-3 flex flex-col gap-3">
+
+              {/* Reception */}
+              <div>
+                <p className="text-[9px] font-extrabold tracking-widest uppercase mb-1.5"
+                  style={{ color: "#f97d00" }}>Reception</p>
+                <a href="tel:+254700117026"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+                  style={{ color: "#ffffff" }}>
+                  📞 0700 117026
+                </a>
+                <a href="tel:+254738970438"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+                  style={{ color: "#ffffff" }}>
+                  📞 0738 970438
+                </a>
+              </div>
+
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)" }} />
+
+              {/* Commercials */}
+              <div>
+                <p className="text-[9px] font-extrabold tracking-widest uppercase mb-1.5"
+                  style={{ color: "#f97d00" }}>Commercials</p>
+                <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#25D366] transition-colors"
+                  style={{ color: "#ffffff" }}>
+                  💬 0793 004303
+                </a>
+              </div>
+
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)" }} />
+
+              {/* News */}
+              <div>
+                <p className="text-[9px] font-extrabold tracking-widest uppercase mb-1.5"
+                  style={{ color: "#f97d00" }}>News Hotline</p>
+                <a href="tel:+254703223363"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+                  style={{ color: "#ffffff" }}>
+                  📞 0703 223363
+                </a>
+              </div>
+
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)" }} />
+
+              {/* Email */}
+              <a href="mailto:info@werudigital.co.ke"
+                className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+                style={{ color: "#ffffff" }}>
+                ✉️ info@werudigital.co.ke
+              </a>
+
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }} />
+
+              {/* Action buttons */}
+              <div className="flex flex-col gap-2 pb-1">
+                <a
+                  href={WHATSAPP}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-85"
+                  style={{ background: "#25D366" }}
+                >
+                  💬 WhatsApp Us
+                </a>
+                <a
+                  href={MAPS}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-85"
+                  style={{ background: "#4285F4" }}
+                >
+                  📍 Find Us on Google Maps
+                </a>
+              </div>
+
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
-  const [atTop, setAtTop] = useState(true);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handler = () => {
       const currentY = window.scrollY;
-      setAtTop(currentY < 10);
-
       if (currentY < 10) {
         setVisible(true);
       } else if (currentY < lastScrollY.current) {
-        // scrolling up
         setVisible(true);
       } else if (currentY > lastScrollY.current + 6) {
-        // scrolling down (add threshold to avoid jitter)
         setVisible(false);
       }
       lastScrollY.current = currentY;
     };
-
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -57,14 +200,9 @@ export default function Navbar() {
         >
           <div
             className="glass-strong w-full px-4 h-14 flex items-center justify-between gap-4 transition-all duration-300"
-            style={{
-              borderRadius: 0,
-              borderTop: "none",
-              borderLeft: "none",
-              borderRight: "none",
-            }}
+            style={{ borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}
           >
-            {/* ── Logo ───────────────────────────────────── */}
+            {/* Logo */}
             <Link href="/" className="shrink-0 flex items-center">
               <Image
                 src="/logo.png"
@@ -76,11 +214,10 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* ── Nav links ──────────────────────────────── */}
+            {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => {
-                const active =
-                  link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+                const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
                 return (
                   <Link
                     key={link.href}
@@ -92,18 +229,17 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+
+              {/* Contact dropdown */}
+              <ContactDropdown />
             </div>
 
-            {/* ── Right: Live buttons + Advertise ────────── */}
+            {/* Right: Live buttons + Advertise */}
             <div className="flex items-center gap-2">
-              {/* LIVE RADIO */}
               <motion.a
                 href="/radio"
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
-                style={{
-                  background: "rgba(0,0,0,0.55)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                }}
+                style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.18)" }}
                 whileHover={{ scale: 1.05, background: "rgba(0,0,0,0.75)" }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -114,7 +250,6 @@ export default function Navbar() {
                 <span>LIVE RADIO</span>
               </motion.a>
 
-              {/* LIVE TV */}
               <motion.a
                 href="/tv"
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-black text-xs font-bold"
@@ -125,14 +260,10 @@ export default function Navbar() {
                 📺 LIVE TV
               </motion.a>
 
-              {/* Advertise CTA */}
               <motion.a
                 href="#rate-card"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
-                style={{
-                  background: "#f97d00",
-                  boxShadow: "0 0 14px rgba(249,125,0,0.35)",
-                }}
+                style={{ background: "#f97d00", boxShadow: "0 0 14px rgba(249,125,0,0.35)" }}
                 whileHover={{ scale: 1.06, boxShadow: "0 0 22px rgba(249,125,0,0.55)" }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -140,7 +271,6 @@ export default function Navbar() {
                 <span className="lg:hidden">📢</span>
               </motion.a>
 
-              {/* Mobile nav hamburger */}
               <MobileMenu pathname={pathname} />
             </div>
           </div>
@@ -151,7 +281,8 @@ export default function Navbar() {
 }
 
 function MobileMenu({ pathname }: { pathname: string }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen]        = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   return (
     <div className="md:hidden">
@@ -180,12 +311,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
         {open && (
           <motion.div
             className="glass-strong absolute top-14 left-0 right-0 px-4 py-3 flex flex-col gap-2"
-            style={{
-              borderRadius: 0,
-              borderTop: "none",
-              borderLeft: "none",
-              borderRight: "none",
-            }}
+            style={{ borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -205,6 +331,62 @@ function MobileMenu({ pathname }: { pathname: string }) {
                 </Link>
               );
             })}
+
+            {/* Contact section — collapsible */}
+            <div className="border-t border-white/8 pt-2">
+              <button
+                onClick={() => setContactOpen((o) => !o)}
+                className="w-full flex items-center justify-between py-3 text-lg font-bold"
+                style={{ color: "rgba(255,255,255,0.75)" }}
+              >
+                Contact
+                <svg
+                  className="w-4 h-4 transition-transform duration-200"
+                  style={{ transform: contactOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                  viewBox="0 0 12 12" fill="none"
+                >
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              <AnimatePresence>
+                {contactOpen && (
+                  <motion.div
+                    className="flex flex-col gap-2 pb-2"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <p className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.35)" }}>Reception</p>
+                    <a href="tel:+254700117026" className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>📞 0700 117026</a>
+                    <a href="tel:+254738970438" className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>📞 0738 970438</a>
+
+                    <p className="text-[10px] font-bold tracking-widest uppercase mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>Commercials</p>
+                    <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>💬 0793 004303</a>
+
+                    <p className="text-[10px] font-bold tracking-widest uppercase mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>News Hotline</p>
+                    <a href="tel:+254703223363" className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>📞 0703 223363</a>
+
+                    <a href="mailto:info@werudigital.co.ke" className="text-sm font-medium mt-1" style={{ color: "rgba(255,255,255,0.75)" }}>✉️ info@werudigital.co.ke</a>
+
+                    <div className="flex gap-2 mt-2">
+                      <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-white text-xs font-bold"
+                        style={{ background: "#25D366" }}>
+                        💬 WhatsApp
+                      </a>
+                      <a href={MAPS} target="_blank" rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-white text-xs font-bold"
+                        style={{ background: "#4285F4" }}>
+                        📍 Maps
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <div className="flex gap-2 pt-1">
               <a href="/radio" onClick={() => setOpen(false)}
                 className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-white text-xs font-bold"

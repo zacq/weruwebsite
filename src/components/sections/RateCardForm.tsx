@@ -268,7 +268,7 @@ export default function RateCardForm() {
                   will send your rate card and get in touch within 24 hours.
                 </p>
                 <motion.a
-                  href="https://wa.me/254700000000"
+                  href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl text-white font-bold text-sm"
