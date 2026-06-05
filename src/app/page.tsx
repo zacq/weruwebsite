@@ -41,6 +41,7 @@ function toNewsArticles(feed: Headline[]) {
     category: h.category,
     date: toShortDate(h.pubDate),
     link: h.link,
+    image: h.image,
   }));
 }
 

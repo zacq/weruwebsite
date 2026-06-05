@@ -1,6 +1,14 @@
 import Parser from "rss-parser";
 
-export type Headline = { category: string; color: string; text: string; pubDate?: string; link?: string; excerpt?: string };
+export type Headline = {
+  category: string;
+  color: string;
+  text: string;
+  pubDate?: string;
+  link?: string;
+  excerpt?: string;
+  image?: string;
+};
 
 const FEEDS = [
   "https://www.kbc.co.ke/feed/",
@@ -34,6 +42,26 @@ function mapCategory(cats: string[]): { label: string; color: string } {
   return { label: "NEWS", color: "#C8102E" };
 }
 
+type MediaThumbnail = { $?: { url?: string } };
+type MediaContent  = { $?: { url?: string } };
+type MediaGroup    = { "media:content"?: MediaContent | MediaContent[] };
+
+function extractImage(item: Record<string, unknown>): string | undefined {
+  // KBC: <media:thumbnail url="..."/>
+  const thumb = item["media:thumbnail"] as MediaThumbnail | undefined;
+  if (thumb?.$?.url) return thumb.$.url;
+
+  // Nation.Africa: <media:group><media:content url="..."/></media:group>
+  const group = item["media:group"] as MediaGroup | undefined;
+  if (group) {
+    const mc = group["media:content"];
+    if (Array.isArray(mc)) return mc[0]?.$?.url;
+    return mc?.$?.url;
+  }
+
+  return undefined;
+}
+
 export const FALLBACK_HEADLINES: Headline[] = [
   { category: "NEWS",        color: "#C8102E", text: "Why Wetangʼula is Warning MPs About Life After Parliament" },
   { category: "POLITICS",    color: "#1565C0", text: "Rigathi Gachagua Threatens Nationwide Protests Over Alleged Oppression" },
@@ -46,19 +74,28 @@ export const FALLBACK_HEADLINES: Headline[] = [
 ];
 
 export async function getNewsFeed(): Promise<Headline[]> {
-  const parser = new Parser();
+  const parser = new Parser({
+    customFields: {
+      item: ["media:thumbnail", "media:group"],
+    },
+  });
   const items: Headline[] = [];
 
   for (const url of FEEDS) {
     try {
       const feed = await parser.parseURL(url);
-      for (const item of feed.items.slice(0, 6)) {
+      for (const raw of feed.items.slice(0, 6)) {
+        const item = raw as unknown as Record<string, unknown> & {
+          title?: string; contentSnippet?: string; pubDate?: string;
+          link?: string; categories?: string[]; category?: string;
+        };
         const title = item.title?.trim();
         if (!title) continue;
-        const cats = item.categories ?? (item.category ? [item.category as string] : []);
+        const cats = item.categories ?? (item.category ? [item.category] : []);
         const { label, color } = mapCategory(cats);
         const excerpt = item.contentSnippet?.trim().slice(0, 160) ?? "";
-        items.push({ category: label, text: title, color, pubDate: item.pubDate, link: item.link, excerpt });
+        const image = extractImage(item);
+        items.push({ category: label, text: title, color, pubDate: item.pubDate, link: item.link, excerpt, image });
       }
     } catch {
       // Skip failed feed silently
