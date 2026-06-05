@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/sections/HeroSection";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
+import { getNewsFeed } from "@/lib/getNewsFeed";
 
 const VideoGrid = dynamic(
   () => import("@/components/sections/VideoGrid"),
@@ -44,14 +45,16 @@ const RateCardForm = dynamic(
 
 const Footer = dynamic(() => import("@/components/layout/Footer"));
 
-export default function HomePage() {
+export default async function HomePage() {
+  const headlines = await getNewsFeed();
+
   return (
     <>
       {/* 1. Hero — Live TV player (left) + headline carousel (right) */}
       <HeroSection />
 
       {/* 2. Scrolling headlines ticker */}
-      <HeadlineTicker />
+      <HeadlineTicker headlines={headlines} />
 
       {/* 3. Latest Videos grid + View All on YouTube button */}
       <VideoGrid />

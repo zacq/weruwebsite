@@ -1,33 +1,16 @@
-"use client";
+import { type Headline, FALLBACK_HEADLINES } from "@/lib/getNewsFeed";
 
-import { useState, useEffect } from "react";
+// Duplicate for seamless infinite scroll loop
+function buildItems(headlines: Headline[]) {
+  return [...headlines, ...headlines];
+}
 
-type Headline = { category: string; color: string; text: string };
-
-// Static fallback — shown instantly while API loads, and if API fails
-const FALLBACK: Headline[] = [
-  { category: "NEWS",        color: "#C8102E", text: "Why Wetangʼula is Warning MPs About Life After Parliament" },
-  { category: "POLITICS",    color: "#1565C0", text: "Rigathi Gachagua Threatens Nationwide Protests Over Alleged Oppression" },
-  { category: "BUSINESS",    color: "#2E7D32", text: "Ruto Launches New Ksh36,000 Funding for 90,000 Kenyan Youth" },
-  { category: "BREAKING",    color: "#C8102E", text: "Several Injured After Matatu Flips on Haile Selassie Avenue" },
-  { category: "DEVELOPMENT", color: "#E65100", text: "KETRACO Energises New 132kV Power Line to End Outages in Homa Bay" },
-  { category: "POLITICS",    color: "#1565C0", text: "Government to Preserve All Raila Odinga Tributes in National Archives" },
-  { category: "NEWS",        color: "#C8102E", text: "Junet: Collaboration with President Ruto Brings Quick Development" },
-  { category: "HEALTH",      color: "#00695C", text: "Truphena Muthoni Plans Next Move After Guinness World Record" },
-];
-
-export default function HeadlineTicker() {
-  const [headlines, setHeadlines] = useState<Headline[]>(FALLBACK);
-
-  useEffect(() => {
-    fetch("/api/news-feed")
-      .then((r) => r.json())
-      .then((data: Headline[]) => { if (data.length > 0) setHeadlines(data); })
-      .catch(() => {}); // Keep fallback on error
-  }, []);
-
-  // Duplicate for seamless infinite scroll loop
-  const items = [...headlines, ...headlines];
+export default function HeadlineTicker({
+  headlines = FALLBACK_HEADLINES,
+}: {
+  headlines?: Headline[];
+}) {
+  const items = buildItems(headlines);
 
   return (
     <div
