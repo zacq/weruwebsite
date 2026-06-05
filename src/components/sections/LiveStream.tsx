@@ -18,9 +18,10 @@ export default function LiveStream() {
   }, []);
 
   // Prefer API-resolved video ID; fall back to channel live_stream URL
+  // mute=1 is required — browsers block autoplay with audio
   const embedSrc = stream?.videoId
-    ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=0&rel=0&modestbranding=1`
-    : `https://www.youtube.com/embed/live_stream?channel=${CHANNEL_ID}&autoplay=0&rel=0`;
+    ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&mute=1&rel=0&modestbranding=1`
+    : `https://www.youtube.com/embed/live_stream?channel=${CHANNEL_ID}&autoplay=1&mute=1&rel=0`;
 
   return (
     <section id="live" className="px-4 py-10" style={{ background: "#f97d00" }}>
