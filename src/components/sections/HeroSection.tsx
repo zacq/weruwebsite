@@ -49,15 +49,15 @@ export default function HeroSection({ heroHeadlines }: { heroHeadlines?: Headlin
       .catch(() => setStream({ videoId: null, isLive: false }));
   }, []);
 
-  // 40 ticks × 100 ms = 4 s auto-advance
+  // 45 ticks × 100 ms = 4.5 s auto-advance
   useEffect(() => {
     if (isHovered) return;
-    const id = setInterval(() => setProgress((p) => (p >= 39 ? 40 : p + 1)), 100);
+    const id = setInterval(() => setProgress((p) => (p >= 44 ? 45 : p + 1)), 100);
     return () => clearInterval(id);
   }, [isHovered]);
 
   useEffect(() => {
-    if (progress >= 40) {
+    if (progress >= 45) {
       setCurrent((c) => (c + 1) % headlines.length);
       setProgress(0);
     }
@@ -202,7 +202,7 @@ export default function HeroSection({ heroHeadlines }: { heroHeadlines?: Headlin
 
               {/* Progress bar */}
               <div className="hero-progress">
-                <div className="hero-progress-fill" style={{ width: `${progress * 2.5}%` }} />
+                <div className="hero-progress-fill" style={{ width: `${(progress / 45) * 100}%` }} />
               </div>
             </motion.div>
           </AnimatePresence>

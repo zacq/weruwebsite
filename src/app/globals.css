@@ -127,7 +127,7 @@ input, select, textarea { font-size: 16px; }
 }
 
 /* Animation utility classes */
-.ticker-track      { animation: ticker 35s linear infinite; will-change: transform; }
+.ticker-track      { animation: ticker 55s linear infinite; will-change: transform; }
 .scroll-left       { animation: scroll-left 40s linear infinite; will-change: transform; }
 .scroll-slow       { animation: scroll-left 65s linear infinite; will-change: transform; }
 .live-dot          { animation: live-pulse 1.2s ease-in-out infinite; }
