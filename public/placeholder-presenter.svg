@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" fill="#1a1a1a"/>
+  <circle cx="100" cy="78" r="36" fill="#2d2d2d"/>
+  <ellipse cx="100" cy="170" rx="60" ry="46" fill="#2d2d2d"/>
+  <text x="100" y="108" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#555" letter-spacing="2">PHOTO COMING</text>
+</svg>

@@ -94,6 +94,23 @@ Utility classes also defined in `globals.css`:
 - `.form-input` / `.form-input-light` — styled form fields (dark and light backgrounds respectively)
 - `.ticker-track`, `.scroll-left`, `.scroll-slow`, `.live-dot`, `.eq-bar` — animation classes
 
+### Navbar — adding new top-level items or dropdowns
+
+**Rule: never remove an entry from `navLinks` to replace it with a component rendered outside the `.map()` loop.**
+
+The `navLinks` array in `src/components/layout/Navbar.tsx` is the single source of truth for menu order. Appending a replacement component after the loop silently pushes it to the end of the bar.
+
+The correct pattern when a link needs a dropdown:
+
+1. Keep the entry in `navLinks` at the correct position, add `dropdown: true`.
+2. Inside the `.map()`, detect the flag and render the dropdown component in-place:
+   ```tsx
+   if (link.dropdown) return <MyDropdown key={link.href} pathname={pathname} />;
+   ```
+3. For the mobile hamburger, `.filter((l) => !l.dropdown)` before mapping plain links — the dropdown's accordion is rendered separately but still in the correct visual slot.
+
+This ensures menu order is always controlled by the array, not by JSX position.
+
 ### Image domains
 
 `next.config.ts` whitelists `img.youtube.com` and `i.ytimg.com` for `next/image`. Add other domains there as needed.

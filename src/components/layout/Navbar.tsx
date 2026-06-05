@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 
 const navLinks = [
   { label: "Home",        href: "/" },
-  { label: "TV",          href: "/tv" },
+  { label: "TV",          href: "/tv",          dropdown: true },
   { label: "Radio",       href: "/radio" },
   { label: "Politics",    href: "/politics" },
   { label: "Sports",      href: "/sports" },
@@ -166,6 +166,83 @@ function ContactDropdown() {
   );
 }
 
+function TVDropdown({ pathname }: { pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const ref   = useRef<HTMLDivElement>(null);
+  const timer  = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const show = () => { if (timer.current) clearTimeout(timer.current); setOpen(true); };
+  const hide = () => { timer.current = setTimeout(() => setOpen(false), 180); };
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const active = pathname.startsWith("/tv") || pathname.startsWith("/presenters");
+
+  return (
+    <div ref={ref} className="relative" onMouseEnter={show} onMouseLeave={hide}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-wide rounded transition-colors duration-150"
+        style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.70)" }}
+      >
+        TV
+        <svg
+          className="w-3 h-3 transition-transform duration-200"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+          viewBox="0 0 12 12" fill="none"
+        >
+          <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="absolute top-full left-0 mt-2 rounded-2xl overflow-hidden"
+            style={{
+              width: "180px",
+              background: "#111111",
+              border: "1px solid rgba(255,255,255,0.14)",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.80)",
+            }}
+            initial={{ opacity: 0, y: -8, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0,  scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.96 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
+            <div className="px-3 py-3 flex flex-col gap-1">
+              <Link
+                href="/tv#tv-schedule"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors hover:text-[#f97d00]"
+                style={{ color: "rgba(255,255,255,0.85)" }}
+              >
+                <span className="text-base">📅</span>
+                Program
+              </Link>
+              <Link
+                href="/presenters"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors hover:text-[#f97d00]"
+                style={{ color: "rgba(255,255,255,0.85)" }}
+              >
+                <span className="text-base">🎙️</span>
+                Presenters
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
@@ -217,6 +294,9 @@ export default function Navbar() {
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => {
+                if (link.dropdown) {
+                  return <TVDropdown key={link.href} pathname={pathname} />;
+                }
                 const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
                 return (
                   <Link
@@ -282,6 +362,7 @@ export default function Navbar() {
 
 function MobileMenu({ pathname }: { pathname: string }) {
   const [open, setOpen]        = useState(false);
+  const [tvOpen, setTvOpen]    = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
   return (
@@ -317,7 +398,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
           >
-            {navLinks.map((link) => {
+            {navLinks.filter((link) => !link.dropdown).map((link) => {
               const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
               return (
                 <Link
@@ -331,6 +412,53 @@ function MobileMenu({ pathname }: { pathname: string }) {
                 </Link>
               );
             })}
+
+            {/* TV section — collapsible */}
+            <div className="border-t border-white/8 pt-2">
+              <button
+                onClick={() => setTvOpen((o) => !o)}
+                className="w-full flex items-center justify-between py-3 text-lg font-bold"
+                style={{ color: pathname.startsWith("/tv") || pathname.startsWith("/presenters") ? "#f97d00" : "rgba(255,255,255,0.75)" }}
+              >
+                TV
+                <svg
+                  className="w-4 h-4 transition-transform duration-200"
+                  style={{ transform: tvOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                  viewBox="0 0 12 12" fill="none"
+                >
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              <AnimatePresence>
+                {tvOpen && (
+                  <motion.div
+                    className="flex flex-col gap-1 pb-2 pl-2"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Link
+                      href="/tv#tv-schedule"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2 py-2 text-sm font-medium"
+                      style={{ color: "rgba(255,255,255,0.75)" }}
+                    >
+                      📅 Program
+                    </Link>
+                    <Link
+                      href="/presenters"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2 py-2 text-sm font-medium"
+                      style={{ color: "rgba(255,255,255,0.75)" }}
+                    >
+                      🎙️ Presenters
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Contact section — collapsible */}
             <div className="border-t border-white/8 pt-2">
