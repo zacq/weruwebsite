@@ -72,9 +72,62 @@ src/components/
 src/app/api/
   rate-card/route.ts   # POST — advertising enquiry form
   viewer/route.ts      # POST — viewer lead capture modal
+  quiz/route.ts        # POST — quiz lead capture (Airtable stub)
+  news-feed/route.ts   # GET  — live Kenyan headlines from RSS (10-min cache)
+  youtube-live/route.ts# GET  — resolves live/latest YouTube video ID (60s cache)
 ```
 
-Both routes currently `console.log` submissions. Supabase and Resend/WhatsApp integrations are stubbed out in comments inside each route file — uncomment and add env vars when ready.
+`rate-card`, `viewer`, and `quiz` currently `console.log` submissions. Supabase, Resend, and Airtable integrations are stubbed in comments — uncomment and add env vars when ready.
+
+### Live news feed (RSS integration)
+
+**Single source of truth:** `src/lib/getNewsFeed.ts`
+
+All news data for the site flows through one function: `getNewsFeed()`. It fetches two free Kenyan RSS feeds in sequence, parses them with `rss-parser`, and returns up to 10 `Headline` objects. **Never fetch RSS anywhere else — always import from this lib.**
+
+**Feeds (in priority order):**
+1. `https://www.kbc.co.ke/feed/` — primary (public broadcaster, reliable)
+2. `https://nation.africa/kenya/rss.xml` — secondary fallback
+
+**`Headline` type** (add fields here, not inline in components):
+```ts
+type Headline = {
+  category: string;   // mapped label e.g. "POLITICS", "SPORTS", "NEWS"
+  color: string;      // hex for that category
+  text: string;       // article title
+  pubDate?: string;   // raw RSS pubDate string
+  link?: string;      // URL to source article (opens in new tab)
+  excerpt?: string;   // contentSnippet, trimmed to 160 chars
+  image?: string;     // thumbnail URL extracted from media:thumbnail or media:group
+}
+```
+
+**Image extraction:** Both feeds use Media RSS (`xmlns:media`). The parser is configured with `customFields: { item: ['media:thumbnail', 'media:group'] }`. KBC uses `<media:thumbnail url="..."/>`, Nation.Africa uses `<media:group><media:content url="..."/></media:group>`. The `extractImage()` helper handles both structures.
+
+**Category → color mapping** is defined in the `CATEGORY_MAP` constant. To add a new category, add a keyword entry there — it applies everywhere automatically.
+
+**Fallback:** If both feeds fail, `FALLBACK_HEADLINES` (static array in the same file) is returned. Components always receive valid data.
+
+**How `page.tsx` consumes the feed** (this pattern must be followed for all homepage sections that show news):
+```ts
+// In the async server component:
+const feed = await getNewsFeed();
+
+// Ticker strip — pass feed directly
+<HeadlineTicker headlines={feed} />
+
+// Hero card carousel — transform to HeroSection shape
+<HeroSection heroHeadlines={toHeroHeadlines(feed)} />
+
+// Latest Headlines grid — transform to Article shape, first 6 items
+<NewsGrid articles={toNewsArticles(feed)} />
+```
+
+**Adding a new section that shows news:** add a transformer function in `page.tsx` (like `toHeroHeadlines` or `toNewsArticles`) and pass the result as a prop. Do not add a second `getNewsFeed()` call — the single call at the top of `HomePage` serves all sections.
+
+**Cache:** `news-feed` API route uses `export const revalidate = 600` (10 minutes). The server component page re-fetches on each Netlify ISR cycle. No client-side fetching of news — all data is baked into the HTML at render time.
+
+**Article cards must be clickable:** `ArticleCard` in `NewsGrid.tsx` renders as `<a href={article.link} target="_blank">` when `link` is present. Always pass `link` from the feed data. Never hardcode article URLs.
 
 ### Design system
 
