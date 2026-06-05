@@ -17,10 +17,10 @@ export default function LiveStream() {
       .catch(() => setStream({ videoId: null, isLive: false }));
   }, []);
 
-  // Prefer API-resolved video ID; fall back to channel live_stream URL
+  // mute=1 required — browsers block autoplay with audio
   const embedSrc = stream?.videoId
-    ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=0&rel=0&modestbranding=1`
-    : `https://www.youtube.com/embed/live_stream?channel=${CHANNEL_ID}&autoplay=0&rel=0`;
+    ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&mute=1&rel=0&modestbranding=1`
+    : null;
 
   return (
     <section id="live" className="px-4 py-10" style={{ background: "#f97d00" }}>
@@ -88,7 +88,7 @@ export default function LiveStream() {
               </div>
             )}
 
-            {stream !== null && (
+            {stream !== null && embedSrc && (
               <iframe
                 src={embedSrc}
                 title="Weru TV — Live Stream"
@@ -97,6 +97,32 @@ export default function LiveStream() {
                 className="absolute inset-0 w-full h-full"
                 style={{ border: "none" }}
               />
+            )}
+
+            {/* Shown when API has no video to resolve (e.g. key not set on server) */}
+            {stream !== null && !embedSrc && (
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-6"
+                style={{ background: "rgba(0,0,0,0.80)" }}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="w-2 h-2 rounded-full bg-[#C8102E] live-dot" />
+                  <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Weru TV</span>
+                </div>
+                <p className="text-white font-extrabold text-lg leading-tight">Watch live on YouTube</p>
+                <p className="text-white/45 text-sm max-w-xs">
+                  Tap below to open the Weru TV channel and watch the latest broadcast.
+                </p>
+                <a
+                  href={`https://www.youtube.com/channel/${CHANNEL_ID}/live`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white text-sm font-extrabold"
+                  style={{ background: "#FF0000" }}
+                >
+                  ▶ Open Live Stream
+                </a>
+              </div>
             )}
           </div>
 

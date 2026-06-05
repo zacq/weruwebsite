@@ -15,7 +15,7 @@ export async function GET() {
   try {
     // ── 1. Check for an active live broadcast ────────────────────────────────
     const liveRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&eventType=live&type=video&key=${key}`,
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&eventType=live&type=video&videoEmbeddable=true&key=${key}`,
       { next: { revalidate: 60 } }
     );
     const liveData = await liveRes.json();
@@ -25,9 +25,9 @@ export async function GET() {
       return NextResponse.json({ videoId, isLive: true });
     }
 
-    // ── 2. Fallback: most recent upload ──────────────────────────────────────
+    // ── 2. Fallback: most recent embeddable upload ───────────────────────────
     const recentRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&order=date&type=video&maxResults=1&key=${key}`,
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&order=date&type=video&videoEmbeddable=true&maxResults=1&key=${key}`,
       { next: { revalidate: 300 } }
     );
     const recentData = await recentRes.json();
