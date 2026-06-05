@@ -1,6 +1,6 @@
 import Parser from "rss-parser";
 
-export type Headline = { category: string; color: string; text: string; pubDate?: string };
+export type Headline = { category: string; color: string; text: string; pubDate?: string; link?: string; excerpt?: string };
 
 const FEEDS = [
   "https://www.kbc.co.ke/feed/",
@@ -57,7 +57,8 @@ export async function getNewsFeed(): Promise<Headline[]> {
         if (!title) continue;
         const cats = item.categories ?? (item.category ? [item.category as string] : []);
         const { label, color } = mapCategory(cats);
-        items.push({ category: label, text: title, color, pubDate: item.pubDate });
+        const excerpt = item.contentSnippet?.trim().slice(0, 160) ?? "";
+        items.push({ category: label, text: title, color, pubDate: item.pubDate, link: item.link, excerpt });
       }
     } catch {
       // Skip failed feed silently

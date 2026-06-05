@@ -26,6 +26,24 @@ function toHeroHeadlines(feed: Headline[]) {
   }));
 }
 
+const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+function toShortDate(pubDate?: string): string {
+  if (!pubDate) return "";
+  const d = new Date(pubDate);
+  return `${MONTHS[d.getMonth()]} ${d.getDate()}`;
+}
+
+function toNewsArticles(feed: Headline[]) {
+  return feed.slice(0, 6).map((h, i) => ({
+    id: String(i + 1),
+    title: h.text,
+    excerpt: h.excerpt ?? "",
+    category: h.category,
+    date: toShortDate(h.pubDate),
+    link: h.link,
+  }));
+}
+
 const VideoGrid = dynamic(
   () => import("@/components/sections/VideoGrid"),
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
@@ -70,7 +88,6 @@ const Footer = dynamic(() => import("@/components/layout/Footer"));
 
 export default async function HomePage() {
   const feed = await getNewsFeed();
-  const headlines = feed;
   const heroHeadlines = toHeroHeadlines(feed);
 
   return (
@@ -79,7 +96,7 @@ export default async function HomePage() {
       <HeroSection heroHeadlines={heroHeadlines} />
 
       {/* 2. Scrolling headlines ticker */}
-      <HeadlineTicker headlines={headlines} />
+      <HeadlineTicker headlines={feed} />
 
       {/* 3. Latest Videos grid + View All on YouTube button */}
       <VideoGrid />
@@ -94,7 +111,7 @@ export default async function HomePage() {
       <AdvertiseSection />
 
       {/* 7. Latest Headlines news grid */}
-      <NewsGrid />
+      <NewsGrid articles={toNewsArticles(feed)} />
 
       {/* 8. Google Reviews carousel */}
       <ReviewsCarousel />

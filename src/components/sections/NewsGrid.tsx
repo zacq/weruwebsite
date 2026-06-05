@@ -10,6 +10,7 @@ interface Article {
   date: string;
   image?: string;
   slug?: string;
+  link?: string;
 }
 
 const sampleArticles: Article[] = [
@@ -64,9 +65,15 @@ const sampleArticles: Article[] = [
 ];
 
 function ArticleCard({ article, index }: { article: Article; index: number }) {
+  const Tag = article.link ? motion.a : motion.article;
+  const linkProps = article.link
+    ? { href: article.link, target: "_blank", rel: "noopener noreferrer" }
+    : {};
+
   return (
-    <motion.article
-      className="group relative glass overflow-hidden rounded-2xl cursor-pointer"
+    <Tag
+      {...(linkProps as object)}
+      className="group relative glass overflow-hidden rounded-2xl cursor-pointer block"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -133,7 +140,7 @@ function ArticleCard({ article, index }: { article: Article; index: number }) {
         </h3>
         <p className="text-white/50 text-xs leading-relaxed line-clamp-3">{article.excerpt}</p>
       </div>
-    </motion.article>
+    </Tag>
   );
 }
 
