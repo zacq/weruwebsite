@@ -17,79 +17,15 @@ type Headline = {
   timeAgo: string;
 };
 
-const headlines: Headline[] = [
-  {
-    id: "1",
-    category: "BREAKING",
-    categoryColor: "#C8102E",
-    isBreaking: true,
-    headline: "Several Injured After 14-Seater Matatu Flips on Haile Selassie Avenue",
-    author: "Weru Newsdesk",
-    timeAgo: "Just now",
-  },
-  {
-    id: "2",
-    category: "POLITICS",
-    categoryColor: "#1565C0",
-    isBreaking: false,
-    headline: "Wetangula Warns MPs: Life After Parliament Is Not What You Expect",
-    author: "James Mwangi",
-    timeAgo: "15 min ago",
-  },
-  {
-    id: "3",
-    category: "BUSINESS",
-    categoryColor: "#2E7D32",
-    isBreaking: false,
-    headline: "Ruto Launches Ksh36,000 Funding Initiative for 90,000 Kenyan Youth",
-    author: "Grace Wanjiku",
-    timeAgo: "32 min ago",
-  },
-  {
-    id: "4",
-    category: "NEWS",
-    categoryColor: "#C8102E",
-    isBreaking: false,
-    headline: "Government to Preserve All Raila Odinga Tributes in National Archives",
-    author: "Peter Kariuki",
-    timeAgo: "1 hr ago",
-  },
-  {
-    id: "5",
-    category: "DEVELOPMENT",
-    categoryColor: "#E65100",
-    isBreaking: false,
-    headline: "KETRACO Energises New 132kV Power Line to End Outages in Homa Bay",
-    author: "Mary Njeri",
-    timeAgo: "2 hr ago",
-  },
-  {
-    id: "6",
-    category: "HEALTH",
-    categoryColor: "#00695C",
-    isBreaking: false,
-    headline: "Truphena Muthoni Plans Next Conservation Milestone After Guinness Record",
-    author: "Samuel Gitau",
-    timeAgo: "3 hr ago",
-  },
-  {
-    id: "7",
-    category: "POLITICS",
-    categoryColor: "#1565C0",
-    isBreaking: false,
-    headline: "Gachagua Threatens Nationwide Protests Over Alleged Systematic Oppression",
-    author: "Agnes Kamau",
-    timeAgo: "4 hr ago",
-  },
-  {
-    id: "8",
-    category: "BUSINESS",
-    categoryColor: "#2E7D32",
-    isBreaking: false,
-    headline: "Nairobi Records 15.4% Rise in Small Business Registrations This Quarter",
-    author: "David Ngugi",
-    timeAgo: "5 hr ago",
-  },
+const FALLBACK_HEADLINES: Headline[] = [
+  { id: "1", category: "BREAKING",    categoryColor: "#C8102E", isBreaking: true,  headline: "Several Injured After 14-Seater Matatu Flips on Haile Selassie Avenue",      author: "Weru Newsdesk", timeAgo: "Just now"  },
+  { id: "2", category: "POLITICS",    categoryColor: "#1565C0", isBreaking: false, headline: "Wetangula Warns MPs: Life After Parliament Is Not What You Expect",           author: "Weru Newsdesk", timeAgo: "15 min ago" },
+  { id: "3", category: "BUSINESS",    categoryColor: "#2E7D32", isBreaking: false, headline: "Ruto Launches Ksh36,000 Funding Initiative for 90,000 Kenyan Youth",         author: "Weru Newsdesk", timeAgo: "32 min ago" },
+  { id: "4", category: "NEWS",        categoryColor: "#C8102E", isBreaking: false, headline: "Government to Preserve All Raila Odinga Tributes in National Archives",      author: "Weru Newsdesk", timeAgo: "1 hr ago"   },
+  { id: "5", category: "DEVELOPMENT", categoryColor: "#E65100", isBreaking: false, headline: "KETRACO Energises New 132kV Power Line to End Outages in Homa Bay",          author: "Weru Newsdesk", timeAgo: "2 hr ago"   },
+  { id: "6", category: "HEALTH",      categoryColor: "#00695C", isBreaking: false, headline: "Truphena Muthoni Plans Next Conservation Milestone After Guinness Record",   author: "Weru Newsdesk", timeAgo: "3 hr ago"   },
+  { id: "7", category: "POLITICS",    categoryColor: "#1565C0", isBreaking: false, headline: "Gachagua Threatens Nationwide Protests Over Alleged Systematic Oppression",  author: "Weru Newsdesk", timeAgo: "4 hr ago"   },
+  { id: "8", category: "BUSINESS",    categoryColor: "#2E7D32", isBreaking: false, headline: "Nairobi Records 15.4% Rise in Small Business Registrations This Quarter",   author: "Weru Newsdesk", timeAgo: "5 hr ago"   },
 ];
 
 function getInitials(name: string): string {
@@ -99,7 +35,8 @@ function getInitials(name: string): string {
     : parts[0].slice(0, 2).toUpperCase();
 }
 
-export default function HeroSection() {
+export default function HeroSection({ heroHeadlines }: { heroHeadlines?: Headline[] }) {
+  const headlines = heroHeadlines?.length ? heroHeadlines : FALLBACK_HEADLINES;
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);

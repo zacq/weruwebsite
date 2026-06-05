@@ -1,7 +1,30 @@
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/sections/HeroSection";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
-import { getNewsFeed } from "@/lib/getNewsFeed";
+import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
+
+function toTimeAgo(pubDate?: string): string {
+  if (!pubDate) return "Just now";
+  const diff = Date.now() - new Date(pubDate).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 2) return "Just now";
+  if (mins < 60) return `${mins} min ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs} hr ago`;
+  return `${Math.floor(hrs / 24)} days ago`;
+}
+
+function toHeroHeadlines(feed: Headline[]) {
+  return feed.map((h, i) => ({
+    id: String(i + 1),
+    category: h.category,
+    categoryColor: h.color,
+    isBreaking: h.category === "BREAKING",
+    headline: h.text,
+    author: "Weru Newsdesk",
+    timeAgo: toTimeAgo(h.pubDate),
+  }));
+}
 
 const VideoGrid = dynamic(
   () => import("@/components/sections/VideoGrid"),
@@ -46,12 +69,14 @@ const RateCardForm = dynamic(
 const Footer = dynamic(() => import("@/components/layout/Footer"));
 
 export default async function HomePage() {
-  const headlines = await getNewsFeed();
+  const feed = await getNewsFeed();
+  const headlines = feed;
+  const heroHeadlines = toHeroHeadlines(feed);
 
   return (
     <>
       {/* 1. Hero — Live TV player (left) + headline carousel (right) */}
-      <HeroSection />
+      <HeroSection heroHeadlines={heroHeadlines} />
 
       {/* 2. Scrolling headlines ticker */}
       <HeadlineTicker headlines={headlines} />
