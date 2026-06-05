@@ -392,7 +392,13 @@ function MobileMenu({ pathname }: { pathname: string }) {
         {open && (
           <motion.div
             className="glass-strong absolute top-14 left-0 right-0 px-4 py-3 flex flex-col gap-2"
-            style={{ borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}
+            style={{
+              borderRadius: 0,
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
+              background: "rgba(8, 8, 8, 0.97)",
+            }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}

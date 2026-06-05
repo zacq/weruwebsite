@@ -76,6 +76,13 @@ export default function Footer() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/quiz"
+              className="text-sm font-bold transition-opacity duration-150 hover:opacity-80 mt-1"
+              style={{ color: "#FACC15" }}
+            >
+              🏆 10 for 10: Castle Escape
+            </Link>
           </div>
 
           {/* Contact */}
