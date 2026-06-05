@@ -1,4 +1,11 @@
-const headlines = [
+"use client";
+
+import { useState, useEffect } from "react";
+
+type Headline = { category: string; color: string; text: string };
+
+// Static fallback — shown instantly while API loads, and if API fails
+const FALLBACK: Headline[] = [
   { category: "NEWS",        color: "#C8102E", text: "Why Wetangʼula is Warning MPs About Life After Parliament" },
   { category: "POLITICS",    color: "#1565C0", text: "Rigathi Gachagua Threatens Nationwide Protests Over Alleged Oppression" },
   { category: "BUSINESS",    color: "#2E7D32", text: "Ruto Launches New Ksh36,000 Funding for 90,000 Kenyan Youth" },
@@ -9,10 +16,19 @@ const headlines = [
   { category: "HEALTH",      color: "#00695C", text: "Truphena Muthoni Plans Next Move After Guinness World Record" },
 ];
 
-// Duplicate for seamless infinite loop
-const items = [...headlines, ...headlines];
-
 export default function HeadlineTicker() {
+  const [headlines, setHeadlines] = useState<Headline[]>(FALLBACK);
+
+  useEffect(() => {
+    fetch("/api/news-feed")
+      .then((r) => r.json())
+      .then((data: Headline[]) => { if (data.length > 0) setHeadlines(data); })
+      .catch(() => {}); // Keep fallback on error
+  }, []);
+
+  // Duplicate for seamless infinite scroll loop
+  const items = [...headlines, ...headlines];
+
   return (
     <div
       id="headlines"
@@ -29,24 +45,17 @@ export default function HeadlineTicker() {
               border: "1px solid rgba(255,255,255,0.10)",
             }}
           >
-            {/* Category badge */}
             <span
               className={`text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 shrink-0 ${h.category === "BREAKING" ? "glass-red" : "glass-sm rounded-full"}`}
               style={{ color: h.category === "BREAKING" ? "#fff" : h.color }}
             >
               {h.category}
             </span>
-
-            {/* Live dot */}
             <span
               className="w-1.5 h-1.5 rounded-full shrink-0 live-dot"
               style={{ background: h.color }}
             />
-
-            {/* Headline */}
-            <span className="text-white/85 text-xs font-medium">
-              {h.text}
-            </span>
+            <span className="text-white/85 text-xs font-medium">{h.text}</span>
           </div>
         ))}
       </div>
