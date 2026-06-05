@@ -3,6 +3,9 @@ import HeroSection from "@/components/sections/HeroSection";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
 import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
 
+// Re-fetch RSS and regenerate page every 10 minutes on Netlify (ISR)
+export const revalidate = 600;
+
 function toTimeAgo(pubDate?: string): string {
   if (!pubDate) return "Just now";
   const diff = Date.now() - new Date(pubDate).getTime();
