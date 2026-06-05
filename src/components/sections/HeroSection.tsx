@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const YOUTUBE_CHANNEL_ID  = "UCKf9xsi0uL1mwdrq7PmZsQA";
-// Playlist embed always shows content (latest upload / active live stream)
-const YOUTUBE_EMBED_SRC   = `https://www.youtube.com/embed?listType=user_uploads&list=${YOUTUBE_CHANNEL_ID}&index=1`;
-const YOUTUBE_LIVE_URL    = "https://www.youtube.com/@werutvfm3411/live";
+const YOUTUBE_LIVE_URL = "https://www.youtube.com/@werutvfm3411/live";
+
+type StreamData = { videoId: string | null; isLive: boolean };
 
 type Headline = {
   id: string;
@@ -104,6 +103,14 @@ export default function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [stream, setStream] = useState<StreamData | null>(null);
+
+  useEffect(() => {
+    fetch("/api/youtube-live")
+      .then((r) => r.json())
+      .then(setStream)
+      .catch(() => setStream({ videoId: null, isLive: false }));
+  }, []);
 
   // 40 ticks × 100 ms = 4 s auto-advance
   useEffect(() => {
@@ -141,7 +148,9 @@ export default function HeroSection() {
                   Weru TV
                 </span>
               </div>
-              <span className="text-white/40 text-xs hidden sm:inline">Streaming Now</span>
+              <span className="text-white/40 text-xs hidden sm:inline">
+                {stream?.isLive ? "Streaming Now" : "Latest Video"}
+              </span>
             </div>
             <a
               href={YOUTUBE_LIVE_URL}
@@ -154,7 +163,7 @@ export default function HeroSection() {
             </a>
           </div>
 
-          {/* 16:9 player — always shows latest content / live stream */}
+          {/* 16:9 player */}
           <div
             className="relative w-full rounded-xl overflow-hidden"
             style={{
@@ -164,14 +173,25 @@ export default function HeroSection() {
               boxShadow: "0 16px 56px rgba(0,0,0,0.55)",
             }}
           >
-            <iframe
-              src={YOUTUBE_EMBED_SRC}
-              title="Weru TV"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-              style={{ border: "none" }}
-            />
+            {stream === null && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+              </div>
+            )}
+            {stream !== null && (
+              <iframe
+                src={
+                  stream.videoId
+                    ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=0&rel=0&modestbranding=1`
+                    : `https://www.youtube.com/embed?listType=user_uploads&list=UCKf9xsi0uL1mwdrq7PmZsQA&index=1`
+                }
+                title="Weru TV"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+                style={{ border: "none" }}
+              />
+            )}
           </div>
 
           {/* Player footer */}
