@@ -203,6 +203,40 @@ a, button, [role="button"] { touch-action: manipulation; }
 .eq-bar:nth-child(4) { animation-duration: 1.0s; animation-delay: 0.10s; }
 .eq-bar:nth-child(5) { animation-duration: 0.8s; animation-delay: 0.25s; }
 .eq-bar:nth-child(6) { animation-duration: 0.65s; animation-delay: 0.40s; }
+.eq-bar:nth-child(7) { animation-duration: 0.75s; animation-delay: 0.20s; }
+
+/* ─── Radio volume slider ───────────────────── */
+.radio-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.radio-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f97d00;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 8px rgba(249,125,0,0.55);
+}
+.radio-volume::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 14px rgba(249,125,0,0.75);
+}
+.radio-volume::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f97d00;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(249,125,0,0.55);
+}
 
 /* ─── Scrollbar ─────────────────────────────── */
 ::-webkit-scrollbar          { height: 3px; width: 3px; }

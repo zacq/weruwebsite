@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { radioSchedule, type RadioDaySchedule } from "@/data/radioSchedule";
 
-const RADIO_STREAM_URL = "http://media2.streambrothers.com:8212/;";
+const RADIO_STREAM_URL = "/api/radio-stream";
 
 type Day = RadioDaySchedule["day"];
 
@@ -58,6 +58,7 @@ function BellIcon({ filled }: { filled: boolean }) {
 
 export default function RadioSection() {
   const [playing, setPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.8);
   const [selectedDay, setSelectedDay] = useState<Day>(todayName());
   const [notified, setNotified] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
@@ -74,6 +75,7 @@ export default function RadioSection() {
     if (!audioRef.current) {
       audioRef.current = new Audio(RADIO_STREAM_URL);
       audioRef.current.preload = "none";
+      audioRef.current.volume = volume;
     }
     if (playing) {
       audioRef.current.pause();
@@ -82,6 +84,14 @@ export default function RadioSection() {
     }
     setPlaying(!playing);
   };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = parseFloat(e.target.value);
+    setVolume(v);
+    if (audioRef.current) audioRef.current.volume = v;
+  };
+
+  const volumeIcon = volume === 0 ? "🔇" : volume < 0.4 ? "🔈" : "🔊";
 
   const handleNotify = (id: string, name: string) => {
     const next = new Set(notified);
@@ -107,53 +117,94 @@ export default function RadioSection() {
     <section id="radio" className="w-full" style={{ background: "#f97d00" }}>
 
       {/* ── Live Radio Player ─────────────────────────── */}
-      <div className="px-4 pt-10 pb-6">
+      <div className="px-4 pt-6 pb-6">
         <div className="max-w-2xl mx-auto">
           <motion.div
             className="glass rounded-2xl overflow-hidden"
             style={{ background: "#111111" }}
+            animate={{
+              boxShadow: playing
+                ? "0 0 48px rgba(200,16,46,0.40), 0 16px 48px rgba(0,0,0,0.6)"
+                : "0 8px 32px rgba(0,0,0,0.45)",
+            }}
+            transition={{ duration: 0.6 }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
           >
-            <div className="flex items-center gap-3 sm:gap-5 px-4 sm:px-5 py-4">
-              <motion.button
-                onClick={togglePlay}
-                className="shrink-0 w-14 h-14 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white text-xl"
-                style={{
-                  background: playing ? "#C8102E" : "#f97d00",
-                  boxShadow: playing
-                    ? "0 0 24px rgba(200,16,46,0.55)"
-                    : "0 0 24px rgba(249,125,0,0.55)",
-                  minWidth: "48px",
-                }}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.93 }}
-                aria-label={playing ? "Pause radio" : "Play radio"}
-              >
-                {playing ? "⏸" : "▶"}
-              </motion.button>
+            {/* Main controls row */}
+            <div className="flex items-center gap-4 sm:gap-6 px-5 sm:px-6 pt-7 pb-5">
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span
-                    className="text-[10px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded shrink-0"
-                    style={{ background: "#C8102E", color: "#fff" }}
+              {/* Play / Pause button with pulsing rings */}
+              <div className="relative shrink-0 flex items-center justify-center">
+                {playing && (
+                  <>
+                    <motion.span
+                      className="absolute rounded-full"
+                      style={{ inset: -6, background: "#C8102E" }}
+                      animate={{ scale: [1, 1.65, 1], opacity: [0.40, 0, 0.40] }}
+                      transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                    />
+                    <motion.span
+                      className="absolute rounded-full"
+                      style={{ inset: -12, background: "#C8102E" }}
+                      animate={{ scale: [1, 1.45, 1], opacity: [0.20, 0, 0.20] }}
+                      transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut", delay: 0.4 }}
+                    />
+                  </>
+                )}
+                <motion.button
+                  onClick={togglePlay}
+                  className="relative w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl z-10"
+                  style={{
+                    background: playing ? "#C8102E" : "#f97d00",
+                    boxShadow: playing
+                      ? "0 0 24px rgba(200,16,46,0.70)"
+                      : "0 0 20px rgba(249,125,0,0.55)",
+                  }}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.90 }}
+                  aria-label={playing ? "Pause radio" : "Play radio"}
+                >
+                  <motion.span
+                    key={playing ? "pause" : "play"}
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.18 }}
+                    style={{ display: "flex" }}
                   >
-                    {playing ? "PLAYING" : "READY"}
-                  </span>
-                </div>
-                <p className="text-white font-bold text-sm">LIVE RADIO</p>
-                <p className="text-white/45 text-xs">Weru FM Radio Station</p>
+                    {playing ? "⏸" : "▶"}
+                  </motion.span>
+                </motion.button>
               </div>
 
-              <div className="shrink-0 flex items-end gap-0.5 h-7">
-                {[...Array(6)].map((_, i) => (
+              {/* Station info */}
+              <div className="flex-1 min-w-0">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={playing ? "on-air" : "ready"}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.2 }}
+                    className="inline-block text-[10px] font-extrabold tracking-widest uppercase px-2.5 py-0.5 rounded mb-1.5"
+                    style={{ background: playing ? "#C8102E" : "rgba(255,255,255,0.12)", color: "#fff" }}
+                  >
+                    {playing ? "● ON AIR" : "READY"}
+                  </motion.span>
+                </AnimatePresence>
+                <p className="text-white font-extrabold text-base leading-tight">Weru FM</p>
+                <p className="text-white/45 text-xs mt-0.5">96.4 MHz · Live Radio</p>
+              </div>
+
+              {/* EQ bars */}
+              <div className="shrink-0 flex items-end gap-[3px] h-9">
+                {[...Array(7)].map((_, i) => (
                   <div
                     key={i}
                     className="eq-bar"
                     style={{
+                      width: "4px",
                       height: playing ? undefined : "4px",
                       animationPlayState: playing ? "running" : "paused",
                     }}
@@ -161,6 +212,29 @@ export default function RadioSection() {
                 ))}
               </div>
             </div>
+
+            {/* Volume row */}
+            <div className="flex items-center gap-3 px-5 sm:px-6 pb-6">
+              <span className="text-base shrink-0 select-none" style={{ lineHeight: 1 }}>{volumeIcon}</span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={handleVolumeChange}
+                className="radio-volume flex-1"
+                aria-label="Volume"
+                style={{
+                  background: `linear-gradient(to right, #f97d00 0%, #f97d00 ${volume * 100}%, rgba(255,255,255,0.12) ${volume * 100}%, rgba(255,255,255,0.12) 100%)`,
+                }}
+              />
+              <span className="text-white/40 text-xs shrink-0 w-8 text-right tabular-nums">
+                {Math.round(volume * 100)}%
+              </span>
+            </div>
+
+            {/* Gradient bar */}
             <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, #f97d00, #C8102E, #f97d00)" }} />
           </motion.div>
         </div>
