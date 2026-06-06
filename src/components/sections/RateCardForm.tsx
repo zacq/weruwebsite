@@ -75,7 +75,7 @@ export default function RateCardForm() {
     <section
       id="rate-card"
       className="px-4 py-16"
-      style={{ background: "#FFFFFF" }}
+      style={{ background: "#0D1117" }}
     >
       <div className="max-w-2xl mx-auto">
         {/* Header */}
@@ -86,20 +86,14 @@ export default function RateCardForm() {
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
         >
-          <span
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase mb-4"
-            style={{
-              background: "rgba(249,125,0,0.12)",
-              border: "1.5px solid rgba(249,125,0,0.50)",
-              color: "#f97d00",
-            }}
-          >
-            📋 Rate Card Enquiry
-          </span>
-          <h2 className="font-extrabold text-3xl sm:text-4xl" style={{ color: "#111111" }}>
-            Book Your Advertising Slot
+          <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#f97d00" }}>
+            RATE CARD ENQUIRY
+          </p>
+          <h2 className="font-extrabold text-3xl sm:text-4xl md:text-5xl text-white">
+            Book Your{" "}
+            <span className="font-headline italic" style={{ color: "#f97d00" }}>Advertising Slot</span>
           </h2>
-          <p className="text-sm mt-3 max-w-md mx-auto" style={{ color: "#666666" }}>
+          <p className="text-sm sm:text-base mt-3 max-w-md mx-auto text-white/50">
             Fill in your details and our team will send you a full rate card and availability within 24 hours.
           </p>
         </motion.div>
@@ -108,9 +102,11 @@ export default function RateCardForm() {
         <motion.div
           className="rounded-3xl p-6 sm:p-8"
           style={{
-            background: "#FFFFFF",
-            boxShadow: "0 4px 48px rgba(0,0,0,0.10), 0 1px 0 rgba(0,0,0,0.04)",
-            border: "1.5px solid #EBEBEB",
+            background: "rgba(255,255,255,0.05)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            boxShadow: "0 4px 60px rgba(0,0,0,0.40), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.10)",
           }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -132,7 +128,7 @@ export default function RateCardForm() {
                     <input
                       type="text"
                       placeholder="Your Name *"
-                      className={`form-input-light ${errors.name ? "error" : ""}`}
+                      className={`form-input ${errors.name ? "error" : ""}`}
                       value={form.name}
                       onChange={(e) => set("name", e.target.value)}
                     />
@@ -144,7 +140,7 @@ export default function RateCardForm() {
                     <input
                       type="text"
                       placeholder="Company Name"
-                      className="form-input-light"
+                      className="form-input"
                       value={form.company}
                       onChange={(e) => set("company", e.target.value)}
                     />
@@ -157,7 +153,7 @@ export default function RateCardForm() {
                     <input
                       type="tel"
                       placeholder="Phone Number *"
-                      className={`form-input-light ${errors.phone ? "error" : ""}`}
+                      className={`form-input ${errors.phone ? "error" : ""}`}
                       value={form.phone}
                       onChange={(e) => set("phone", e.target.value)}
                     />
@@ -169,7 +165,7 @@ export default function RateCardForm() {
                     <input
                       type="email"
                       placeholder="Email Address *"
-                      className={`form-input-light ${errors.email ? "error" : ""}`}
+                      className={`form-input ${errors.email ? "error" : ""}`}
                       value={form.email}
                       onChange={(e) => set("email", e.target.value)}
                     />
@@ -181,7 +177,7 @@ export default function RateCardForm() {
 
                 {/* Ad type selector */}
                 <div>
-                  <p className="text-xs mb-2 font-semibold" style={{ color: "#555555" }}>Type of Ad *</p>
+                  <p className="text-xs mb-2 font-semibold text-white/55">Type of Ad *</p>
                   <div className="flex gap-2 sm:gap-3">
                     {AD_TYPE_OPTIONS.map((opt) => {
                       const active = form.adType === opt.value;
@@ -212,7 +208,7 @@ export default function RateCardForm() {
                 {/* Budget */}
                 <div>
                   <select
-                    className="form-input-light"
+                    className="form-input"
                     value={form.budget}
                     onChange={(e) => set("budget", e.target.value)}
                   >
@@ -227,7 +223,7 @@ export default function RateCardForm() {
                 <div>
                   <textarea
                     placeholder="Tell us about your campaign goals... (optional)"
-                    className="form-input-light resize-none"
+                    className="form-input resize-none"
                     rows={4}
                     value={form.message}
                     onChange={(e) => set("message", e.target.value)}
@@ -249,7 +245,7 @@ export default function RateCardForm() {
                   {loading ? "Sending Enquiry..." : "📋 Request Rate Card"}
                 </motion.button>
 
-                <p className="text-[11px] text-center" style={{ color: "#AAAAAA" }}>
+                <p className="text-[11px] text-center text-white/35">
                   We respond within 24 hours · No spam · Your data is safe
                 </p>
               </motion.form>
@@ -262,8 +258,8 @@ export default function RateCardForm() {
                 transition={{ type: "spring", stiffness: 280, damping: 22 }}
               >
                 <div className="text-6xl mb-4">🎉</div>
-                <h3 className="font-extrabold text-2xl mb-2" style={{ color: "#111111" }}>Enquiry Received!</h3>
-                <p className="text-sm max-w-sm mx-auto leading-relaxed" style={{ color: "#666666" }}>
+                <h3 className="font-extrabold text-2xl mb-2 text-white">Enquiry Received!</h3>
+                <p className="text-sm max-w-sm mx-auto leading-relaxed text-white/55">
                   Thank you <strong style={{ color: "#f97d00" }}>{form.name}</strong>! Our advertising team
                   will send your rate card and get in touch within 24 hours.
                 </p>

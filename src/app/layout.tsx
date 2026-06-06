@@ -21,6 +21,7 @@ const dmSerifDisplay = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://werutv.co.ke"),
   title: "Weru TV & Radio — Watch. Listen. Connect.",
   description:
     "Kenya's premier broadcast experience. Watch live TV, listen to FM radio, and stay updated with the latest news from Weru Digital.",

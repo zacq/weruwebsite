@@ -1,132 +1,85 @@
-import dynamic from "next/dynamic";
-import HeroSection from "@/components/sections/HeroSection";
-import HeadlineTicker from "@/components/sections/HeadlineTicker";
-import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
+import lazyImport from "next/dynamic";
+import HomeHero from "@/components/sections/HomeHero";
 
-// Re-fetch RSS and regenerate page every 10 minutes on Netlify (ISR)
-export const revalidate = 600;
+export const dynamic    = "force-static";
+export const revalidate = 3600;
 
-function toTimeAgo(pubDate?: string): string {
-  if (!pubDate) return "Just now";
-  const diff = Date.now() - new Date(pubDate).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 2) return "Just now";
-  if (mins < 60) return `${mins} min ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs} hr ago`;
-  return `${Math.floor(hrs / 24)} days ago`;
-}
+export const metadata = {
+  title: "Weru TV — Kenya's Premier Regional TV Channel",
+  description:
+    "Weru TV is Central Kenya's most-watched Kikuyu channel, broadcasting live on Azam TV, DStv, Startimes & Zuku across 6 countries. News, culture, entertainment.",
+  openGraph: {
+    title: "Weru TV — Kenya's Premier Regional TV Channel",
+    description:
+      "Broadcasting live across East Africa — Azam TV CH 342, DStv CH 368, Startimes CH 440, Zuku CH 39.",
+    images: ["/Werulogo.jpeg"],
+  },
+};
 
-function toHeroHeadlines(feed: Headline[]) {
-  return feed.map((h, i) => ({
-    id: String(i + 1),
-    category: h.category,
-    categoryColor: h.color,
-    isBreaking: h.category === "BREAKING",
-    headline: h.text,
-    author: "Weru Newsdesk",
-    timeAgo: toTimeAgo(h.pubDate),
-  }));
-}
-
-const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-function toShortDate(pubDate?: string): string {
-  if (!pubDate) return "";
-  const d = new Date(pubDate);
-  return `${MONTHS[d.getMonth()]} ${d.getDate()}`;
-}
-
-function toNewsArticles(feed: Headline[]) {
-  return feed.slice(0, 6).map((h, i) => ({
-    id: String(i + 1),
-    title: h.text,
-    excerpt: h.excerpt ?? "",
-    category: h.category,
-    date: toShortDate(h.pubDate),
-    link: h.link,
-    image: h.image,
-  }));
-}
-
-const VideoGrid = dynamic(
-  () => import("@/components/sections/VideoGrid"),
+const PlatformsSection = lazyImport(
+  () => import("@/components/sections/PlatformsSection"),
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
-const TVProgramLineup = dynamic(
-  () => import("@/components/sections/TVProgramLineup"),
+const WhyWeruSection = lazyImport(
+  () => import("@/components/sections/WhyWeruSection"),
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
-const RadioSection = dynamic(
-  () => import("@/components/sections/RadioSection"),
+const CultureSection = lazyImport(
+  () => import("@/components/sections/CultureSection"),
   { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
-const AdvertiseSection = dynamic(
+const AdvertiseSection = lazyImport(
   () => import("@/components/sections/AdvertiseSection"),
   { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
-const NewsGrid = dynamic(
-  () => import("@/components/sections/NewsGrid"),
-  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
-);
-
-const ReviewsCarousel = dynamic(
+const ReviewsCarousel = lazyImport(
   () => import("@/components/sections/ReviewsCarousel"),
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
-const PartnersCarousel = dynamic(
+const PartnersCarousel = lazyImport(
   () => import("@/components/sections/PartnersCarousel"),
   { loading: () => <div className="h-24 mx-4 my-6 rounded-2xl bg-black/20" /> }
 );
 
-const RateCardForm = dynamic(
+const RateCardForm = lazyImport(
   () => import("@/components/sections/RateCardForm"),
   { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
-const Footer = dynamic(() => import("@/components/layout/Footer"));
+const Footer = lazyImport(() => import("@/components/layout/Footer"));
 
-export default async function HomePage() {
-  const feed = await getNewsFeed();
-  const heroHeadlines = toHeroHeadlines(feed);
-
+export default function HomePage() {
   return (
     <>
-      {/* 1. Hero — Live TV player (left) + headline carousel (right) */}
-      <HeroSection heroHeadlines={heroHeadlines} />
+      {/* 1. Full-screen hero — image carousel */}
+      <HomeHero />
 
-      {/* 2. Scrolling headlines ticker */}
-      <HeadlineTicker headlines={feed} />
+      {/* 2. Watch Weru TV Everywhere — platforms & international coverage */}
+      <PlatformsSection />
 
-      {/* 3. Latest Videos grid + View All on YouTube button */}
-      <VideoGrid />
+      {/* 3. Why Weru TV — premium differentiators */}
+      <WhyWeruSection />
 
-      {/* 4. TV Programs Lineup — day-tabbed schedule with notifications */}
-      <TVProgramLineup />
+      {/* 4. Arts, Culture & Studios */}
+      <CultureSection />
 
-      {/* 5. Live Radio player + radio schedule */}
-      <RadioSection />
-
-      {/* 6. Grow Your Brand / Advertise section */}
+      {/* 5. Grow Your Brand */}
       <AdvertiseSection />
 
-      {/* 7. Latest Headlines news grid */}
-      <NewsGrid articles={toNewsArticles(feed)} />
-
-      {/* 8. Google Reviews carousel */}
+      {/* 6. What Our Viewers Say */}
       <ReviewsCarousel />
 
-      {/* 9. Partners & Advertisers strip */}
+      {/* 7. Trusted by Leading Brands */}
       <PartnersCarousel />
 
-      {/* 10. Rate Card enquiry form */}
+      {/* 8. Rate Card Enquiry */}
       <RateCardForm />
 
-      {/* Footer */}
       <Footer />
     </>
   );

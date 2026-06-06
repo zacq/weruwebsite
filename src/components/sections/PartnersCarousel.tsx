@@ -3,31 +3,35 @@
 import { motion } from "framer-motion";
 
 const partners = [
-  { name: "Safaricom",       abbr: "Safaricom",   color: "#4CAF50" },
-  { name: "KCB Bank",        abbr: "KCB",         color: "#1B5E20" },
-  { name: "Equity Bank",     abbr: "Equity",      color: "#E53935" },
-  { name: "Nation Media",    abbr: "NMG",         color: "#1565C0" },
-  { name: "NCBA Bank",       abbr: "NCBA",        color: "#37474F" },
-  { name: "Kenya Airways",   abbr: "KQ",          color: "#C62828" },
-  { name: "Twiga Foods",     abbr: "Twiga",       color: "#F9A825" },
-  { name: "Jambojet",        abbr: "Jambojet",    color: "#E65100" },
-  { name: "Co-op Bank",      abbr: "Co-op",       color: "#2E7D32" },
-  { name: "EABL",            abbr: "EABL",        color: "#4A148C" },
+  { name: "Safaricom"   },
+  { name: "KCB Bank"    },
+  { name: "Equity Bank" },
+  { name: "Nation Media"},
+  { name: "NCBA Bank"   },
+  { name: "Kenya Airways"},
+  { name: "Twiga Foods" },
+  { name: "Jambojet"    },
+  { name: "Co-op Bank"  },
+  { name: "EABL"        },
 ];
 
-function LogoChip({ partner }: { partner: (typeof partners)[0] }) {
+function LogoTile({ name }: { name: string }) {
   return (
     <div
-      className="glass-sm shrink-0 mx-2 sm:mx-4 px-4 sm:px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-200 cursor-default"
-      style={{ minWidth: "100px" }}
+      className="shrink-0 mx-2 sm:mx-3 px-5 sm:px-7 py-3 rounded-xl flex items-center justify-center transition-all duration-250 hover:scale-[1.04]"
+      style={{
+        background: "rgba(255,255,255,0.05)",
+        border: "1px solid rgba(255,255,255,0.10)",
+        minWidth: "120px",
+        height: "48px",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.20)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+      }}
     >
-      <div
-        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-extrabold text-white shrink-0"
-        style={{ background: partner.color }}
-      >
-        {partner.abbr.slice(0, 2)}
-      </div>
-      <span className="text-white/70 text-sm font-semibold whitespace-nowrap">{partner.name}</span>
+      <span className="text-white/55 text-sm font-bold tracking-wide whitespace-nowrap hover:text-white/85 transition-colors">
+        {name}
+      </span>
     </div>
   );
 }
@@ -36,27 +40,36 @@ export default function PartnersCarousel() {
   const doubled = [...partners, ...partners];
 
   return (
-    <section className="py-10 overflow-hidden" style={{ background: "#0A0A0A" }}>
+    <section
+      className="py-10 sm:py-14 overflow-hidden"
+      style={{
+        background: "#0A0A0A",
+        borderTop: "1px solid rgba(249,125,0,0.18)",
+      }}
+    >
       <motion.div
-        className="text-center mb-6 px-4"
+        className="text-center mb-7 px-4"
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.45 }}
       >
-        <p className="text-white/35 text-[11px] font-bold tracking-widest uppercase">
+        <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-1">
           Trusted by Leading Brands
         </p>
-        <h2 className="text-white font-extrabold text-xl sm:text-2xl mt-1">
-          Our Partners & Advertisers
+        <h2 className="text-white font-extrabold text-xl sm:text-2xl">
+          Our Partners &{" "}
+          <span className="font-headline italic" style={{ color: "#f97d00" }}>
+            Advertisers
+          </span>
         </h2>
       </motion.div>
 
-      {/* Slow scroll strip */}
+      {/* Auto-scrolling strip */}
       <div className="relative flex overflow-hidden">
         <div className="scroll-slow flex items-center">
           {doubled.map((p, i) => (
-            <LogoChip key={`${p.name}-${i}`} partner={p} />
+            <LogoTile key={`${p.name}-${i}`} name={p.name} />
           ))}
         </div>
       </div>

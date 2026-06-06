@@ -118,7 +118,7 @@ export default function AdvertiseSection() {
 
   return (
     <>
-      <section id="advertise" className="px-4 py-14" style={{ background: "#111111" }}>
+      <section id="advertise" className="px-4 py-14" style={{ background: "#0D1117" }}>
         <div className="max-w-6xl mx-auto">
 
           {/* Header */}
@@ -141,20 +141,13 @@ export default function AdvertiseSection() {
             </span>
 
             <motion.h2
-              className="text-white font-extrabold text-3xl sm:text-4xl leading-tight"
-              animate={{ scale: [1, 1.03, 1] }}
-              transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+              className="text-white font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight"
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ duration: 3.0, repeat: Infinity, ease: "easeInOut" }}
             >
-              Advertise on{" "}
-              <span
-                style={{
-                  background: "linear-gradient(90deg, #f97d00, #FACC15)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                Weru TV & Radio
-              </span>
+              Grow Your{" "}
+              <span className="font-headline italic" style={{ color: "#f97d00" }}>Brand</span>
+              {" "}with Weru
             </motion.h2>
 
             <p className="text-white/55 mt-3 max-w-xl mx-auto text-sm leading-relaxed">
@@ -168,7 +161,7 @@ export default function AdvertiseSection() {
             {stats.map((s, i) => (
               <motion.div
                 key={s.label}
-                className="glass rounded-2xl p-5 text-center"
+                className="glass-card rounded-2xl p-5 text-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -189,7 +182,7 @@ export default function AdvertiseSection() {
 
             {/* TV card — featured, with embedded ad strip */}
             <motion.div
-              className="md:col-span-2 glass-orange rounded-2xl p-5 flex flex-row gap-4"
+              className="md:col-span-2 glass-orange rounded-2xl p-5 flex flex-col sm:flex-row gap-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -229,8 +222,10 @@ export default function AdvertiseSection() {
                 </div>
               </div>
 
-              {/* Right: scrolling ad carousel */}
-              <MiniAdStrip />
+              {/* Right: scrolling ad carousel — hidden on small screens to avoid cramped layout */}
+              <div className="hidden sm:block shrink-0">
+                <MiniAdStrip />
+              </div>
             </motion.div>
 
             {/* Radio + Digital */}
