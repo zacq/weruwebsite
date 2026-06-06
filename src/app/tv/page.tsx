@@ -1,9 +1,22 @@
+import lazyImport from "next/dynamic";
 import LiveStream from "@/components/sections/LiveStream";
+import HeadlineTicker from "@/components/sections/HeadlineTicker";
 import TVScheduleSection from "@/components/sections/TVScheduleSection";
 import ShowsCarousel from "@/components/sections/ShowsCarousel";
 import VideoGrid from "@/components/sections/VideoGrid";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
+import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
+
+const AdvertiseSection = lazyImport(
+  () => import("@/components/sections/AdvertiseSection"),
+  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
+const NewsGrid = lazyImport(
+  () => import("@/components/sections/NewsGrid"),
+  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
@@ -13,11 +26,35 @@ export const metadata = {
   description: "Watch Weru TV live stream and browse the latest TV shows and videos.",
 };
 
-export default function TVPage() {
+const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+function toShortDate(pubDate?: string): string {
+  if (!pubDate) return "";
+  const d = new Date(pubDate);
+  return `${MONTHS[d.getMonth()]} ${d.getDate()}`;
+}
+
+function toNewsArticles(feed: Headline[]) {
+  return feed.slice(0, 6).map((h, i) => ({
+    id: String(i + 1),
+    title: h.text,
+    excerpt: h.excerpt ?? "",
+    category: h.category,
+    date: toShortDate(h.pubDate),
+    link: h.link,
+    image: h.image,
+  }));
+}
+
+export default async function TVPage() {
+  const feed = await getNewsFeed();
+
   return (
     <>
       {/* Live stream hero */}
       <LiveStream />
+
+      {/* Scrolling headlines ticker */}
+      <HeadlineTicker headlines={feed} />
 
       {/* Full program schedule */}
       <TVScheduleSection />
@@ -28,21 +65,10 @@ export default function TVPage() {
       {/* Latest Videos */}
       <VideoGrid />
 
-      {/* Advertise CTA */}
-      <div className="px-4 py-12 text-center" style={{ background: "#f97d00" }}>
-        <p className="text-white font-extrabold text-2xl mb-2">Sponsor a Show or Buy Airtime</p>
-        <p className="text-white/70 text-sm mb-6 max-w-md mx-auto">
-          Put your brand in front of millions of engaged Kenyan viewers.
-        </p>
-        <a
-          href="#rate-card"
-          className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-white font-extrabold text-sm"
-          style={{ background: "#111111" }}
-        >
-          📋 Get Rate Card
-        </a>
-      </div>
+      {/* Latest Headlines */}
+      <NewsGrid articles={toNewsArticles(feed)} />
 
+      <AdvertiseSection />
       <RateCardForm />
       <Footer />
     </>
