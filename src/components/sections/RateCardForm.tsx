@@ -89,7 +89,7 @@ export default function RateCardForm() {
           <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#f97d00" }}>
             RATE CARD ENQUIRY
           </p>
-          <h2 className="font-extrabold text-3xl sm:text-4xl md:text-5xl text-white">
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-white">
             Book Your{" "}
             <span className="font-headline italic" style={{ color: "#f97d00" }}>Advertising Slot</span>
           </h2>
@@ -258,7 +258,7 @@ export default function RateCardForm() {
                 transition={{ type: "spring", stiffness: 280, damping: 22 }}
               >
                 <div className="text-6xl mb-4">🎉</div>
-                <h3 className="font-extrabold text-2xl mb-2 text-white">Enquiry Received!</h3>
+                <h3 className="font-display font-extrabold text-2xl mb-2 text-white">Enquiry Received!</h3>
                 <p className="text-sm max-w-sm mx-auto leading-relaxed text-white/55">
                   Thank you <strong style={{ color: "#f97d00" }}>{form.name}</strong>! Our advertising team
                   will send your rate card and get in touch within 24 hours.

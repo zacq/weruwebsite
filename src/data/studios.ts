@@ -1,69 +1,43 @@
-// Replace src paths with real studio photos once available.
-// Drop images into public/Studios/ and update the src fields below.
-// The first entry with featured: true becomes the hero image.
-
 export interface StudioPhoto {
   src: string;
   caption: string;
-  category: string;
-  featured?: boolean;
+  category: "News & Talk" | "Lounges" | "Sports" | "Heritage Garden";
 }
 
+export const STUDIO_CATEGORIES = [
+  "All",
+  "News & Talk",
+  "Lounges",
+  "Sports",
+  "Heritage Garden",
+] as const;
+
+const B = "/Studio%20images";
+
 export const studioGallery: StudioPhoto[] = [
-  {
-    src: "/Presenters/makena-wa-matiri.png",
-    caption: "Main Studio — Morning Show Set",
-    category: "Main Studio",
-    featured: true,
-  },
-  {
-    src: "/Presenters/martin-gichunge.png",
-    caption: "Evening Entertainment Desk",
-    category: "Main Studio",
-  },
-  {
-    src: "/Presenters/empress-rita-natty.png",
-    caption: "Reggaemani Live Recording",
-    category: "Live Stage",
-  },
-  {
-    src: "/Presenters/munene-wa-kagwi.png",
-    caption: "News Anchor Booth",
-    category: "News Studio",
-  },
-  {
-    src: "/Presenters/stella-karimi.png",
-    caption: "County Affairs Set",
-    category: "News Studio",
-  },
-  {
-    src: "/Presenters/ajelyne-george.png",
-    caption: "Mantu Kimenchu Stage",
-    category: "Live Stage",
-  },
-  {
-    src: "/Presenters/nelly-githinji.png",
-    caption: "Agricultural Programme Set",
-    category: "Outdoor",
-  },
-  {
-    src: "/Presenters/mc-tash.png",
-    caption: "Afternoon Entertainment Studio",
-    category: "Main Studio",
-  },
-  {
-    src: "/Presenters/mwenda-h-pilot.png",
-    caption: "Nyontoka Live Set",
-    category: "Live Stage",
-  },
-  {
-    src: "/Presenters/edward-mutembei.png",
-    caption: "Gaaru ya Ciaca Recording",
-    category: "Radio Booth",
-  },
-  {
-    src: "/Presenters/ReggaeMania.png",
-    caption: "Reggae & Culture Stage",
-    category: "Live Stage",
-  },
+  // News & Talk (2)
+  { src: `${B}/studio%20area13.png`,  caption: "Ntcto Cia Newsdesk",       category: "News & Talk" },
+  { src: `${B}/studio%20area17.png`,  caption: "Main Broadcast Studio",    category: "News & Talk" },
+
+  // Lounges (6)
+  { src: `${B}/studio%20area.png`,    caption: "Multi-Set Hall",            category: "Lounges" },
+  { src: `${B}/studio%20area3.png`,   caption: "Heritage Interview Set",    category: "Lounges" },
+  { src: `${B}/studio%20area4.png`,   caption: "Prestige Gold Set",         category: "Lounges" },
+  { src: `${B}/studio%20area5.png`,   caption: "Diamond Lounge",            category: "Lounges" },
+  { src: `${B}/studio%20area6.png`,   caption: "Classic Talk Chair",        category: "Lounges" },
+  { src: `${B}/studio%20area14.png`,  caption: "Royal Blue Set",            category: "Lounges" },
+
+  // Sports (4)
+  { src: `${B}/studio%20area2.png`,   caption: "Kurukuru Bienine Set",      category: "Sports" },
+  { src: `${B}/studio%20area8.png`,   caption: "Sports Bar — Front",        category: "Sports" },
+  { src: `${B}/studio%20area9.png`,   caption: "Sports Bar — Side",         category: "Sports" },
+  { src: `${B}/studio%20area10.png`,  caption: "Game-Day Mural",            category: "Sports" },
+
+  // Heritage Garden (6)
+  { src: `${B}/Garden%20Photo.png`,   caption: "Heritage Village — Night",  category: "Heritage Garden" },
+  { src: `${B}/studio%20area7.png`,   caption: "Kikuyu Homestead",          category: "Heritage Garden" },
+  { src: `${B}/studio%20area11.png`,  caption: "Village Square",            category: "Heritage Garden" },
+  { src: `${B}/studio%20area12.png`,  caption: "Garden Walkway",            category: "Heritage Garden" },
+  { src: `${B}/studio%20area15.png`,  caption: "Heritage Huts — Dusk",      category: "Heritage Garden" },
+  { src: `${B}/studio%20area16.png`,  caption: "Culture Garden",            category: "Heritage Garden" },
 ];

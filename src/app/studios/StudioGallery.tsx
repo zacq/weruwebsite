@@ -1,167 +1,189 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { StudioPhoto } from "@/data/studios";
-
-const CATEGORIES = ["All", "Main Studio", "News Studio", "Live Stage", "Radio Booth", "Outdoor"];
+import { STUDIO_CATEGORIES } from "@/data/studios";
 
 export default function StudioGallery({ photos }: { photos: StudioPhoto[] }) {
-  const [active, setActive] = useState("All");
-  const [lightbox, setLightbox] = useState<StudioPhoto | null>(null);
+  const [active, setActive]   = useState<string>("All");
+  const [lbIdx,  setLbIdx]    = useState<number | null>(null);
 
-  const filtered =
-    active === "All" ? photos : photos.filter((p) => p.category === active);
+  const filtered = active === "All" ? photos : photos.filter((p) => p.category === active);
+
+  const openLb  = (i: number) => setLbIdx(i);
+  const closeLb = () => setLbIdx(null);
+  const prev    = useCallback(() => setLbIdx((i) => (i! - 1 + filtered.length) % filtered.length), [filtered.length]);
+  const next    = useCallback(() => setLbIdx((i) => (i! + 1) % filtered.length), [filtered.length]);
 
   return (
-    <section className="px-4 sm:px-8 md:px-12 py-10 sm:py-14 max-w-7xl mx-auto">
-
-      {/* Section label */}
-      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
-        <div>
-          <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-1">
-            BEHIND THE BROADCAST
-          </p>
-          <h2 className="text-white font-extrabold text-xl sm:text-2xl">
-            The{" "}
-            <span className="font-headline italic" style={{ color: "#f97d00" }}>
-              Studio
-            </span>{" "}
-            Gallery
-          </h2>
-        </div>
-
-        {/* Category filter pills */}
-        <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((cat) => {
-            const hasItems = cat === "All" || photos.some((p) => p.category === cat);
-            if (!hasItems) return null;
-            return (
-              <button
-                key={cat}
-                onClick={() => setActive(cat)}
-                className="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200"
-                style={
-                  active === cat
-                    ? { background: "#f97d00", color: "#000" }
-                    : {
-                        background: "rgba(255,255,255,0.06)",
-                        color: "rgba(255,255,255,0.55)",
-                        border: "1px solid rgba(255,255,255,0.10)",
-                      }
-                }
-              >
-                {cat}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Masonry-style bento grid */}
-      <motion.div
-        layout
-        className="grid gap-3"
+    <>
+      {/* ── Sticky filter bar ─────────────────────────────── */}
+      <div
+        className="sticky z-30 flex items-center gap-2.5 px-5 sm:px-10 py-4 overflow-x-auto no-scrollbar"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(clamp(220px, 28vw, 320px), 1fr))",
+          top: "56px",
+          background: "rgba(8,8,10,.84)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(255,255,255,.10)",
         }}
       >
-        <AnimatePresence>
-          {filtered.map((photo, i) => (
-            <motion.div
-              key={photo.src + photo.caption}
-              layout
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.94 }}
-              transition={{ duration: 0.35, delay: i * 0.04 }}
-              onClick={() => setLightbox(photo)}
-              className="group relative overflow-hidden rounded-2xl cursor-zoom-in"
+        {STUDIO_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActive(cat)}
+            className="shrink-0 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-200 whitespace-nowrap"
+            style={
+              active === cat
+                ? { background: "linear-gradient(180deg,#FF9425,#FF7A00)", color: "#1a1003", border: "none" }
+                : { background: "transparent", color: "rgba(244,241,236,.60)", border: "1px solid rgba(255,255,255,.14)" }
+            }
+          >
+            {cat}
+          </button>
+        ))}
+        <span
+          className="ml-4 shrink-0 text-sm font-medium"
+          style={{ color: "rgba(244,241,236,.45)" }}
+        >
+          {filtered.length} {filtered.length === 1 ? "set" : "sets"}
+        </span>
+      </div>
+
+      {/* ── Masonry gallery ───────────────────────────────── */}
+      <div className="columns-1 sm:columns-2 [column-gap:16px] px-5 sm:px-10 py-7">
+        {filtered.map((photo, i) => (
+          <motion.div
+            key={photo.src}
+            layout
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: i * 0.05 }}
+            onClick={() => openLb(i)}
+            className="group relative overflow-hidden cursor-pointer"
+            style={{
+              breakInside: "avoid",
+              marginBottom: "16px",
+              borderRadius: "16px",
+              border: "1px solid rgba(255,255,255,.10)",
+              background: "#111",
+              display: "block",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={photo.src}
+              alt={photo.caption}
+              loading={i < 4 ? "eager" : "lazy"}
+              className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+              style={{ display: "block" }}
+            />
+
+            {/* Hover overlay */}
+            <div
+              className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ background: "linear-gradient(180deg,transparent 40%,rgba(8,8,10,.88))" }}
+            >
+              <p
+                className="text-[10px] font-bold tracking-[1.4px] uppercase mb-1"
+                style={{ color: "#FF7A00" }}
+              >
+                {photo.category}
+              </p>
+              <p className="font-display font-bold text-white text-[18px] leading-snug tracking-tight">
+                {photo.caption}
+              </p>
+            </div>
+
+            {/* Zoom icon */}
+            <div
+              className="absolute top-3 right-3 w-9 h-9 rounded-full grid place-items-center opacity-0 group-hover:opacity-100 transition-all duration-300 text-white text-xs"
               style={{
-                aspectRatio: i % 5 === 0 ? "4/3" : "3/4",
-                background: "#111111",
+                background: "rgba(8,8,10,.62)",
+                border: "1px solid rgba(255,255,255,.14)",
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.src}
-                alt={photo.caption}
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-              />
+              ⤢
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
-              {/* Hover overlay */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4"
-                style={{
-                  background:
-                    "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.20) 60%, transparent 100%)",
-                }}
-              >
-                <span
-                  className="self-start text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2"
-                  style={{ background: "#f97d00", color: "#000" }}
-                >
-                  {photo.category}
-                </span>
-                <p className="text-white font-bold text-sm leading-snug">{photo.caption}</p>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
-
-      {/* Lightbox */}
+      {/* ── Lightbox ──────────────────────────────────────── */}
       <AnimatePresence>
-        {lightbox && (
+        {lbIdx !== null && (
           <motion.div
-            key="lightbox"
+            key="lb"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setLightbox(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-10"
-            style={{ background: "rgba(0,0,0,0.92)", backdropFilter: "blur(12px)" }}
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-12"
+            style={{ background: "rgba(5,5,7,.95)", backdropFilter: "blur(10px)" }}
+            onClick={closeLb}
           >
+            {/* Close */}
+            <button
+              onClick={closeLb}
+              className="absolute top-6 right-7 w-11 h-11 rounded-full grid place-items-center text-white text-xl font-light transition-all hover:scale-110"
+              style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.14)" }}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            {/* Prev */}
+            <button
+              onClick={(e) => { e.stopPropagation(); prev(); }}
+              className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full grid place-items-center text-white text-xl sm:text-2xl transition-all hover:bg-[#FF7A00] hover:text-[#1a1003] hover:border-transparent"
+              style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.14)" }}
+              aria-label="Previous"
+            >
+              ‹
+            </button>
+
+            {/* Image */}
             <motion.div
-              initial={{ scale: 0.88, opacity: 0 }}
+              key={lbIdx}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.92, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 280, damping: 26 }}
+              transition={{ type: "spring", stiffness: 300, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-3xl w-full"
-              style={{ maxHeight: "85dvh" }}
+              className="flex flex-col items-center gap-5 max-w-4xl w-full"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={lightbox.src}
-                alt={lightbox.caption}
-                className="w-full rounded-2xl object-contain"
-                style={{ maxHeight: "75dvh" }}
+                src={filtered[lbIdx].src}
+                alt={filtered[lbIdx].caption}
+                className="rounded-xl object-contain w-full"
+                style={{ maxHeight: "76dvh", boxShadow: "0 30px 80px rgba(0,0,0,.60)" }}
               />
-              <div className="mt-4 flex items-center justify-between">
-                <div>
-                  <span
-                    className="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mr-2"
-                    style={{ background: "#f97d00", color: "#000" }}
-                  >
-                    {lightbox.category}
-                  </span>
-                  <span className="text-white font-semibold text-sm">{lightbox.caption}</span>
-                </div>
-                <button
-                  onClick={() => setLightbox(null)}
-                  className="text-white/60 hover:text-white text-2xl leading-none transition-colors"
-                  aria-label="Close"
+              <div className="flex items-center gap-3">
+                <span
+                  className="text-[10px] font-bold tracking-[1.6px] uppercase px-2.5 py-1 rounded"
+                  style={{ background: "#FF7A00", color: "#1a1003" }}
                 >
-                  ×
-                </button>
+                  {filtered[lbIdx].category}
+                </span>
+                <span className="font-display font-bold text-white text-lg">
+                  {filtered[lbIdx].caption}
+                </span>
               </div>
             </motion.div>
+
+            {/* Next */}
+            <button
+              onClick={(e) => { e.stopPropagation(); next(); }}
+              className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full grid place-items-center text-white text-xl sm:text-2xl transition-all hover:bg-[#FF7A00] hover:text-[#1a1003] hover:border-transparent"
+              style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.14)" }}
+              aria-label="Next"
+            >
+              ›
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </>
   );
 }

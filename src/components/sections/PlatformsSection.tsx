@@ -89,7 +89,7 @@ export default function PlatformsSection() {
           <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#f97d00" }}>
             WERU TV GOES INTERNATIONAL
           </p>
-          <h2 className="text-white font-extrabold text-3xl sm:text-4xl md:text-5xl mb-4">
+          <h2 className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl mb-4">
             Watch Weru TV{" "}
             <span className="font-headline italic" style={{ color: "#f97d00" }}>
               Everywhere

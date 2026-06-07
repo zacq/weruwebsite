@@ -1,22 +1,29 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Serif_Display } from "next/font/google";
+import { Bricolage_Grotesque, Fraunces, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import FloatingCTA from "@/components/ui/FloatingCTA";
 import ViewerCaptureModal from "@/components/ui/ViewerCaptureModal";
 
-const spaceGrotesk = Space_Grotesk({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["500", "700", "800"],
+  variable: "--font-display",
   display: "swap",
 });
 
-const dmSerifDisplay = DM_Serif_Display({
+const serif = Fraunces({
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-dm-serif",
+  weight: ["500", "600"],
+  style: ["italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const ui = Hanken_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-ui",
   display: "swap",
 });
 
@@ -42,7 +49,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`h-full ${spaceGrotesk.variable} ${dmSerifDisplay.variable}`}>
+    <html lang="en" className={`h-full ${display.variable} ${serif.variable} ${ui.variable}`}>
       <body className="min-h-full flex flex-col">
         <Navbar />
         <main className="flex-1">{children}</main>

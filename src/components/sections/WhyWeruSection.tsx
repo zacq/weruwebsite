@@ -52,7 +52,7 @@ export default function WhyWeruSection() {
           <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#f97d00" }}>
             WHY CHOOSE US
           </p>
-          <h2 className="text-white font-extrabold text-3xl sm:text-4xl md:text-5xl">
+          <h2 className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl">
             Why{" "}
             <span className="font-headline italic" style={{ color: "#FACC15" }}>
               Weru TV?
@@ -75,7 +75,7 @@ export default function WhyWeruSection() {
         >
           <div className="text-5xl sm:text-6xl shrink-0">{features[0].icon}</div>
           <div>
-            <h3 className="text-white font-extrabold text-2xl sm:text-3xl mb-2">
+            <h3 className="font-display text-white font-extrabold text-2xl sm:text-3xl mb-2">
               {features[0].title}
             </h3>
             <p
@@ -109,7 +109,7 @@ export default function WhyWeruSection() {
               whileHover={{ y: -4 }}
             >
               <div className="text-4xl">{f.icon}</div>
-              <h3 className="text-white font-bold text-lg leading-snug">{f.title}</h3>
+              <h3 className="font-display text-white font-bold text-lg leading-snug">{f.title}</h3>
               <p className="text-white/50 text-sm leading-relaxed">{f.copy}</p>
             </motion.div>
           ))}

@@ -194,7 +194,7 @@ export default function ReviewsCarousel() {
         <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#f97d00" }}>
           VIEWER REVIEWS
         </p>
-        <h2 className="text-white font-extrabold text-2xl sm:text-3xl md:text-4xl">
+        <h2 className="font-display text-white font-extrabold text-2xl sm:text-3xl md:text-4xl">
           What Our Viewers{" "}
           <span className="font-headline italic" style={{ color: "#FACC15" }}>Say</span>
         </h2>

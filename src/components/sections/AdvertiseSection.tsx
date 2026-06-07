@@ -141,7 +141,7 @@ export default function AdvertiseSection() {
             </span>
 
             <motion.h2
-              className="text-white font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight"
+              className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight"
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ duration: 3.0, repeat: Infinity, ease: "easeInOut" }}
             >
