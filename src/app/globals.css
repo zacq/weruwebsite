@@ -354,3 +354,13 @@ select.form-input-light option { background: #ffffff; color: #111111; }
 /* ─── Hero progress bar ─────────────────────── */
 .hero-progress      { height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
 .hero-progress-fill { height: 100%; background: #f97d00; border-radius: 2px; transition: width 40ms linear; }
+
+/* ─── Reduced motion — disable all animations for users who request it ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

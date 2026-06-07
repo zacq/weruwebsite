@@ -22,7 +22,7 @@ const serif = Fraunces({
 
 const ui = Hanken_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
   variable: "--font-ui",
   display: "swap",
 });
@@ -45,11 +45,43 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BroadcastService",
+  name: "Weru TV",
+  alternateName: "Weru Digital",
+  description: "Kenya's premier Kikuyu-language TV and radio broadcaster, reaching 6 countries across East Africa.",
+  url: "https://werutv.co.ke",
+  broadcastAffiliateOf: {
+    "@type": "Organization",
+    name: "Weru Digital",
+  },
+  inLanguage: ["sw", "ki", "en"],
+  areaServed: ["KE", "UG", "TZ", "RW", "ZW", "ZM"],
+  sameAs: [
+    "https://www.youtube.com/@werutvfm3411",
+    "https://www.facebook.com/WeruTV",
+  ],
+  contactPoint: [
+    { "@type": "ContactPoint", telephone: "+254700117026", contactType: "customer support" },
+    { "@type": "ContactPoint", telephone: "+254793004303", contactType: "sales" },
+    { "@type": "ContactPoint", email: "info@werudigital.co.ke", contactType: "general" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`h-full ${display.variable} ${serif.variable} ${ui.variable}`}>
+      <head>
+        {/* Preload the first hero image so the browser fetches it before JS runs — critical for LCP on high-latency connections */}
+        <link rel="preload" as="image" href="/heroimages/studio%20area17.png" fetchPriority="high" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <Navbar />
         <main className="flex-1">{children}</main>
