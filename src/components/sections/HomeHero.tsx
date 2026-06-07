@@ -173,10 +173,8 @@ export default function HomeHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.46 }}
               >
-                <a
-                  href="https://www.youtube.com/@werutvfm3411/live"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/tv"
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all duration-200 hover:opacity-90 hover:scale-[1.03] active:scale-95"
                   style={{
                     background: "linear-gradient(180deg,#FF9425,#FF7A00)",
@@ -185,7 +183,7 @@ export default function HomeHero() {
                   }}
                 >
                   ▶ Watch Live
-                </a>
+                </Link>
                 <Link
                   href="/tv"
                   className="glass-sm inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-white transition-all duration-200 hover:bg-white/10 active:scale-95"
