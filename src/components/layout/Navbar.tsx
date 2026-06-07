@@ -14,6 +14,7 @@ const navLinks = [
   { label: "News",    href: "/blog" },
   { label: "Sports",  href: "/tv#sports" },
   { label: "Studios", href: "/studios" },
+  { label: "Contact", href: "#contact",  dropdown: true },
 ];
 
 const WHATSAPP = "https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number";
@@ -299,6 +300,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => {
                 if (link.dropdown) {
+                  if (link.label === "Contact") return <ContactDropdown key={link.label} />;
                   return <TVDropdown key={link.label} pathname={pathname} />;
                 }
                 const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
@@ -364,6 +366,7 @@ export default function Navbar() {
 
 function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boolean; setOpen: (v: boolean) => void }) {
   const [tvOpen, setTvOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   return (
     <div className="md:hidden">
@@ -406,6 +409,59 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
           >
             {navLinks.map((link) => {
               if (link.dropdown) {
+                if (link.label === "Contact") {
+                  return (
+                    <div key={link.label} className="border-b border-white/8">
+                      <button
+                        onClick={() => setContactOpen((o) => !o)}
+                        className="w-full flex items-center justify-between py-3 text-lg font-bold"
+                        style={{ color: "rgba(255,255,255,0.75)" }}
+                      >
+                        Contact
+                        <svg
+                          className="w-4 h-4 transition-transform duration-200"
+                          style={{ transform: contactOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                          viewBox="0 0 12 12" fill="none"
+                        >
+                          <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                      <AnimatePresence>
+                        {contactOpen && (
+                          <motion.div
+                            className="flex flex-col gap-2 pb-3 pl-1"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>Reception</p>
+                            <a href="tel:+254700117026" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>📞 0700 117026</a>
+                            <a href="tel:+254738970438" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>📞 0738 970438</a>
+                            <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>Commercials</p>
+                            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>💬 0793 004303</a>
+                            <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>News Hotline</p>
+                            <a href="tel:+254703223363" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>📞 0703 223363</a>
+                            <a href="mailto:info@werudigital.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold mt-1" style={{ color: "#ffffff" }}>✉️ info@werudigital.co.ke</a>
+                            <div className="flex flex-col gap-2 mt-2">
+                              <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold"
+                                style={{ background: "#25D366" }}>
+                                💬 WhatsApp Us
+                              </a>
+                              <a href={MAPS} target="_blank" rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold"
+                                style={{ background: "#4285F4" }}>
+                                📍 Find Us on Google Maps
+                              </a>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
+
                 const tvActive = pathname.startsWith("/tv") || pathname.startsWith("/presenters");
                 return (
                   <div key={link.label} className="border-b border-white/8">
