@@ -133,25 +133,45 @@ export default function QuizModal() {
 
   return (
     <>
-      {/* Floating button — bottom-left, always visible */}
+      {/* Floating card — bottom-left, always visible */}
       <motion.button
         onClick={handleOpen}
         aria-label="Open quiz: 10 for 10 Castle Escape"
-        className="fixed bottom-6 md:bottom-8 left-4 md:left-8 z-50 flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 text-black font-bold text-sm"
+        className="fixed bottom-6 md:bottom-8 left-4 md:left-8 z-50 w-[290px] sm:w-[310px] text-left rounded-2xl p-4 flex flex-col gap-3"
         style={{
-          background: "#FACC15",
-          borderRadius: "9999px",
-          boxShadow: "0 0 28px rgba(250,204,21,0.55), 0 6px 20px rgba(0,0,0,0.4)",
           marginBottom: "env(safe-area-inset-bottom, 0px)",
+          background: "linear-gradient(145deg, #4A2000 0%, #7A3A00 55%, #5C2A00 100%)",
+          border: "1px solid rgba(250,180,50,0.3)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.55), 0 0 24px rgba(180,80,0,0.2)",
         }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, type: "spring", stiffness: 300, damping: 22 }}
-        whileHover={{ scale: 1.07, boxShadow: "0 0 42px rgba(250,204,21,0.75), 0 6px 24px rgba(0,0,0,0.4)" }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.03, boxShadow: "0 12px 40px rgba(0,0,0,0.6), 0 0 36px rgba(250,120,0,0.3)" }}
+        whileTap={{ scale: 0.97 }}
       >
-        <span className="text-base" aria-hidden>🏆</span>
-        <span>10 for 10</span>
+        <div className="flex items-center gap-3">
+          <div
+            className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl"
+            style={{ background: "rgba(0,0,0,0.35)" }}
+          >
+            🎯
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold text-sm leading-tight" style={{ color: "#F97D00" }}>
+              10 for 10: Castle Escape
+            </span>
+            <span className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.62)" }}>
+              10 questions for 10 years – win a night at Tafaria
+            </span>
+          </div>
+        </div>
+        <div
+          className="w-full py-2 rounded-full font-bold text-sm text-black text-center"
+          style={{ background: "#FACC15" }}
+        >
+          Start Quiz →
+        </div>
       </motion.button>
 
       {/* Modal overlay */}

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 const presenterImages = [
@@ -104,6 +105,46 @@ export default function CultureSection() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Quiz promo card — floats below the ticker */}
+      <div className="flex justify-center mt-8 px-4">
+        <motion.div
+          className="flex items-center gap-3 rounded-2xl px-4 py-3"
+          style={{
+            background: "linear-gradient(145deg, #4A2000 0%, #7A3A00 55%, #5C2A00 100%)",
+            border: "1px solid rgba(250,180,50,0.3)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.55), 0 0 24px rgba(180,80,0,0.2)",
+          }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+          whileHover={{ scale: 1.03, boxShadow: "0 12px 40px rgba(0,0,0,0.6), 0 0 36px rgba(250,120,0,0.3)" }}
+        >
+          <motion.span
+            className="text-xl shrink-0"
+            animate={{ scale: [1, 1.12, 1] }}
+            transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
+          >
+            🎯
+          </motion.span>
+          <div className="flex flex-col min-w-0">
+            <span className="font-bold text-sm leading-tight" style={{ color: "#F97D00" }}>
+              10 for 10: Castle Escape
+            </span>
+            <span className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>
+              10 questions for 10 years – win a night at Tafaria
+            </span>
+          </div>
+          <Link
+            href="/quiz"
+            className="shrink-0 ml-2 px-4 py-2 rounded-full font-bold text-xs text-black whitespace-nowrap"
+            style={{ background: "#FACC15" }}
+          >
+            Start Quiz →
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
