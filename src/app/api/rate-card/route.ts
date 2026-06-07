@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const BASE_ID  = "appXyMV3O6ycSVRAi";
+const TABLE_ID = "tblaRTNBlhZAAfA07";
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-
     const { name, company, phone, email, adType, budget, message } = body;
 
-    // ── Validation ──────────────────────────────────────────────────────────
     if (!name || !phone || !email || !adType) {
       return NextResponse.json(
         { success: false, error: "Missing required fields" },
@@ -14,48 +15,40 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ── Log to console (replace with Supabase/DB insert below) ─────────────
-    console.log("[RATE CARD ENQUIRY]", {
-      name, company, phone, email, adType, budget, message,
-      timestamp: new Date().toISOString(),
-    });
+    const pat = process.env.AIRTABLE_PAT;
+    if (!pat) {
+      console.error("[RATE CARD] AIRTABLE_PAT env var not set");
+      return NextResponse.json({ success: true });
+    }
 
-    /*
-    ── SUPABASE INTEGRATION (uncomment when ready) ────────────────────────────
-    import { createClient } from "@supabase/supabase-js";
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-    await supabase.from("rate_card_enquiries").insert([{
-      name, company, phone, email, ad_type: adType, budget, message
-    }]);
+    const fields: Record<string, unknown> = {
+      Name: name,
+      Phone: phone,
+      Email: email,
+      "Ad Type": adType,
+      "Submitted At": new Date().toISOString(),
+      Status: "New",
+    };
+    if (company)  fields.Company = company;
+    if (budget)   fields.Budget  = budget;
+    if (message)  fields.Message = message;
 
-    ── EMAIL NOTIFICATION (e.g. Resend) ──────────────────────────────────────
-    await fetch("https://api.resend.com/emails", {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${pat}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from: "noreply@werudigital.co.ke",
-        to: "sales@werudigital.co.ke",
-        subject: `New Rate Card Enquiry from ${name}`,
-        text: `Name: ${name}\nCompany: ${company}\nPhone: ${phone}\nEmail: ${email}\nAd Type: ${adType}\nBudget: ${budget}\nMessage: ${message}`,
-      }),
+      body: JSON.stringify({ fields }),
     });
 
-    ── WHATSAPP ALERT (WhatsApp Business API) ─────────────────────────────────
-    // See: https://developers.facebook.com/docs/whatsapp/cloud-api/
-    */
+    if (!res.ok) {
+      console.error("[RATE CARD] Airtable error:", await res.text());
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[RATE CARD ERROR]", err);
-    return NextResponse.json(
-      { success: false, error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }

@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const BASE_ID  = "appXyMV3O6ycSVRAi";
+const TABLE_ID = "tblYEsFb2gKyPariy";
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-
     const { name, phone, interests } = body;
 
     if (!name || !phone) {
@@ -13,30 +15,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ── Log to console (replace with Supabase/DB insert below) ─────────────
-    console.log("[VIEWER CAPTURE]", {
-      name, phone, interests,
-      timestamp: new Date().toISOString(),
+    const pat = process.env.AIRTABLE_PAT;
+    if (!pat) {
+      console.error("[VIEWER CAPTURE] AIRTABLE_PAT env var not set");
+      return NextResponse.json({ success: true });
+    }
+
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${pat}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fields: {
+          Name: name,
+          Phone: phone,
+          Interests: Array.isArray(interests) ? interests[0] : interests,
+          "Submitted At": new Date().toISOString().split("T")[0],
+          Status: "New",
+        },
+      }),
     });
 
-    /*
-    ── SUPABASE INTEGRATION (uncomment when ready) ────────────────────────────
-    import { createClient } from "@supabase/supabase-js";
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-    await supabase.from("viewer_leads").insert([{
-      name, phone, interests: interests?.join(", ") ?? ""
-    }]);
-    */
+    if (!res.ok) {
+      console.error("[VIEWER CAPTURE] Airtable error:", await res.text());
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[VIEWER CAPTURE ERROR]", err);
-    return NextResponse.json(
-      { success: false, error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }

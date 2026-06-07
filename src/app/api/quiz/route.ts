@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const BASE_ID  = "appXyMV3O6ycSVRAi";
+const TABLE_ID = "tblukJS1pCXs85ydk";
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -12,42 +15,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("[QUIZ ENTRY]", {
-      name,
-      phone,
-      score,
-      answers,
-      timestamp: new Date().toISOString(),
-    });
+    const pat = process.env.AIRTABLE_PAT;
+    if (!pat) {
+      console.error("[QUIZ ENTRY] AIRTABLE_PAT env var not set");
+      return NextResponse.json({ success: true });
+    }
 
-    /*
-    ── AIRTABLE INTEGRATION (uncomment when base is ready) ──────────────────────
-    Requires: npm install airtable
-    Env vars: AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_QUIZ_TABLE
-
-    import Airtable from "airtable";
-    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-      process.env.AIRTABLE_BASE_ID!
-    );
-    await base(process.env.AIRTABLE_QUIZ_TABLE!).create([
-      {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${pat}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         fields: {
           Name: name,
           Phone: phone,
-          Score: score,
-          Answers: JSON.stringify(answers),
+          Score: typeof score === "number" ? score : 0,
+          "Answers (JSON)": JSON.stringify(answers ?? []),
           "Submitted At": new Date().toISOString(),
+          "Draw Status": "Pending",
         },
-      },
-    ]);
-    ─────────────────────────────────────────────────────────────────────────── */
+      }),
+    });
+
+    if (!res.ok) {
+      console.error("[QUIZ ENTRY] Airtable error:", await res.text());
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[QUIZ ERROR]", err);
-    return NextResponse.json(
-      { success: false, error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }

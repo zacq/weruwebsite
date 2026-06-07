@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// ── Dummy answers — replace correct index per question when real answers arrive
 const QUESTIONS = [
   {
     q: "When did Weru TV start broadcasting?",
@@ -12,51 +11,51 @@ const QUESTIONS = [
   },
   {
     q: "What is Amerucan Extravaganza?",
-    options: ["A weekly music variety show", "A travel documentary series", "A morning talk show"],
+    options: ["Weru TV 1st Anniversary", "A weekly music variety show", "A talent search competition"],
     correct: 0,
   },
   {
     q: "Which stand-up comedy show once featured on Weru TV?",
-    options: ["Churchill Show", "Laugh Factory Live", "Comedy Masala"],
-    correct: 1,
+    options: ["Churchill Show", "Laugh Factory Live", "Tuune Mbaru"],
+    correct: 2,
   },
   {
     q: "Name three drama shows that aired on Weru TV.",
     options: [
-      "Tahidi High, Imenti & Wendo",
+      "Witho, Kaiguetie, Chibu Nkobotia",
       "Selina, Zora & Makutano Junction",
-      "Mwisho wa Lami, Papa Shirandula & Inspekta Mwala",
+      "Tahidi High, Imenti & Wendo",
     ],
     correct: 0,
   },
   {
     q: "Who hosts the Gikaro show on Weru TV?",
-    options: ["James Mwangi", "John Kamau", "Peter Njoroge"],
-    correct: 1,
-  },
-  {
-    q: "Who paired with Phineas Imaana for news bulletins in 2017?",
-    options: ["Mary Wanjiku", "Grace Wanjiru", "Anne Wairimu"],
+    options: ["James Mwangi", "John Kamau", "Stella Karimi Kaunty"],
     correct: 2,
   },
   {
+    q: "Who paired with Phineas Imaana for news bulletins in 2017?",
+    options: ["Mary Wanjiku", "Maureen Kinya", "Anne Wairimu"],
+    correct: 1,
+  },
+  {
     q: "When does Gaaru E Ciaca air?",
-    options: ["Weekdays at 6:00 PM", "Sundays at 8:00 PM", "Saturdays at 7:00 PM"],
+    options: ["Thursday 8.20 PM", "Sundays at 8:00 PM", "Saturdays at 7:00 PM"],
     correct: 0,
   },
   {
     q: "Who hosts Gichunki Gia Ciaca?",
-    options: ["Samuel Gitau", "Joseph Mwangi", "David Kamau"],
-    correct: 1,
+    options: ["Martin Gichunge", "Joseph Mwangi", "David Kamau"],
+    correct: 0,
   },
   {
     q: "Where is Weru TV located?",
-    options: ["Nairobi CBD", "Nyeri Town", "Meru Town"],
-    correct: 1,
+    options: ["Nairobi CBD", "Nyeri Town", "Kirogine, Meru"],
+    correct: 2,
   },
   {
     q: "Name the first two hosts of Reggamania.",
-    options: ["DJ Roots & MC Fire", "Ras Kimani & Mama Africa", "Sipho & Reggae Dan"],
+    options: ["DJ Roots & MC Fire", "Empress Rita & Selector Prince", "Sipho & Reggae Dan"],
     correct: 1,
   },
 ];
