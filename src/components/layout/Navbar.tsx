@@ -14,6 +14,7 @@ const navLinks = [
   { label: "News",    href: "/blog" },
   { label: "Sports",  href: "/tv#sports" },
   { label: "Studios", href: "/studios" },
+  { label: "Gallery", href: "/gallery" },
   { label: "Contact", href: "#contact",  dropdown: true },
 ];
 
