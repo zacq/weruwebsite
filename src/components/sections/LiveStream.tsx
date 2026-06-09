@@ -2,25 +2,38 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import type { StreamResponse } from "@/app/api/youtube-live/route";
 
 const CHANNEL_ID = "UCKf9xsi0uL1mwdrq7PmZsQA";
 
-type StreamData = { videoId: string | null; isLive: boolean };
-
 export default function LiveStream() {
-  const [stream, setStream] = useState<StreamData | null>(null);
+  const [stream, setStream] = useState<StreamResponse | null>(null);
 
   useEffect(() => {
     fetch("/api/youtube-live")
       .then((r) => r.json())
       .then(setStream)
-      .catch(() => setStream({ videoId: null, isLive: false }));
+      .catch(() => setStream({ type: "none" }));
   }, []);
 
-  // mute=1 required — browsers block autoplay with audio
-  const embedSrc = stream?.videoId
-    ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&mute=1&rel=0&modestbranding=1`
-    : null;
+  const isLive   = stream?.type === "youtube" && stream.isLive;
+  const hasVideo = stream !== null && stream.type !== "none";
+
+  // Build embed src based on stream type
+  const embedSrc = (() => {
+    if (!stream) return null;
+    if (stream.type === "embed")   return stream.url;
+    if (stream.type === "youtube") return `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+    return null;
+  })();
+
+  const statusLabel = stream === null
+    ? "Loading stream…"
+    : stream.type === "embed"
+    ? "Live from Weru Digital"
+    : isLive
+    ? "Streaming live from Weru Digital"
+    : "Latest from Weru TV";
 
   return (
     <section id="live" className="px-4 py-10" style={{ background: "#f97d00" }}>
@@ -36,25 +49,18 @@ export default function LiveStream() {
         >
           <div>
             <h2 className="text-white font-extrabold text-xl sm:text-2xl">Live TV</h2>
-            <p className="text-white/65 text-xs mt-0.5">
-              {stream === null
-                ? "Loading stream…"
-                : stream.isLive
-                ? "Streaming live from Weru Digital"
-                : "Latest from Weru TV"}
-            </p>
+            <p className="text-white/65 text-xs mt-0.5">{statusLabel}</p>
           </div>
 
-          {/* Badge — LIVE (red pulse) when live, LATEST (muted) otherwise */}
           <div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors duration-300"
-            style={{ background: stream?.isLive ? "#C8102E" : "rgba(0,0,0,0.30)" }}
+            style={{ background: (stream?.type === "embed" || isLive) ? "#C8102E" : "rgba(0,0,0,0.30)" }}
           >
-            {stream?.isLive && (
+            {(stream?.type === "embed" || isLive) && (
               <span className="w-2 h-2 rounded-full bg-white live-dot inline-block" />
             )}
             <span className="text-white text-[11px] font-extrabold tracking-wider uppercase">
-              {stream?.isLive ? "LIVE" : "LATEST"}
+              {stream?.type === "embed" ? "LIVE" : isLive ? "LIVE" : "LATEST"}
             </span>
           </div>
         </motion.div>
@@ -73,14 +79,11 @@ export default function LiveStream() {
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.5 }}
         >
-          {/* 16:9 wrapper */}
           <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+
             {/* Loading skeleton */}
             {stream === null && (
-              <div
-                className="absolute inset-0 flex items-center justify-center"
-                style={{ background: "rgba(0,0,0,0.7)" }}
-              >
+              <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.7)" }}>
                 <div className="flex flex-col items-center gap-3">
                   <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white animate-spin" />
                   <span className="text-white/50 text-xs">Loading stream…</span>
@@ -88,19 +91,20 @@ export default function LiveStream() {
               </div>
             )}
 
-            {stream !== null && embedSrc && (
+            {/* Embed or YouTube iframe */}
+            {embedSrc && (
               <iframe
                 src={embedSrc}
                 title="Weru TV — Live Stream"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                 allowFullScreen
                 className="absolute inset-0 w-full h-full"
                 style={{ border: "none" }}
               />
             )}
 
-            {/* Shown when API has no video to resolve (e.g. key not set on server) */}
-            {stream !== null && !embedSrc && (
+            {/* Fallback — no source available */}
+            {stream !== null && !hasVideo && (
               <div
                 className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-6"
                 style={{ background: "rgba(0,0,0,0.80)" }}
