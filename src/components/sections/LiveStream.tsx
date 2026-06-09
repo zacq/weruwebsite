@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import type { StreamResponse } from "@/app/api/youtube-live/route";
 
@@ -8,6 +8,7 @@ const CHANNEL_ID = "UCKf9xsi0uL1mwdrq7PmZsQA";
 
 export default function LiveStream() {
   const [stream, setStream] = useState<StreamResponse | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     fetch("/api/youtube-live")
@@ -16,10 +17,35 @@ export default function LiveStream() {
       .catch(() => setStream({ type: "none" }));
   }, []);
 
-  const isLive   = stream?.type === "youtube" && stream.isLive;
-  const hasVideo = stream !== null && stream.type !== "none";
+  useEffect(() => {
+    if (stream?.type !== "hls" || !videoRef.current) return;
+    const video = videoRef.current;
+    const url = stream.url;
 
-  // Build embed src based on stream type
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = url;
+      video.play().catch(() => {});
+      return;
+    }
+
+    let hlsInstance: import("hls.js").default | null = null;
+    import("hls.js").then(({ default: Hls }) => {
+      if (!Hls.isSupported()) return;
+      hlsInstance = new Hls({ lowLatencyMode: true });
+      hlsInstance.loadSource(url);
+      hlsInstance.attachMedia(video);
+      hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+      });
+    });
+
+    return () => { hlsInstance?.destroy(); };
+  }, [stream]);
+
+  const isLive      = stream?.type === "youtube" && stream.isLive;
+  const isStreamLive = stream?.type === "embed" || stream?.type === "hls" || isLive;
+  const hasVideo    = stream !== null && stream.type !== "none";
+
   const embedSrc = (() => {
     if (!stream) return null;
     if (stream.type === "embed")   return stream.url;
@@ -29,7 +55,7 @@ export default function LiveStream() {
 
   const statusLabel = stream === null
     ? "Loading stream…"
-    : stream.type === "embed"
+    : stream.type === "embed" || stream.type === "hls"
     ? "Live from Weru Digital"
     : isLive
     ? "Streaming live from Weru Digital"
@@ -54,13 +80,13 @@ export default function LiveStream() {
 
           <div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors duration-300"
-            style={{ background: (stream?.type === "embed" || isLive) ? "#C8102E" : "rgba(0,0,0,0.30)" }}
+            style={{ background: isStreamLive ? "#C8102E" : "rgba(0,0,0,0.30)" }}
           >
-            {(stream?.type === "embed" || isLive) && (
+            {isStreamLive && (
               <span className="w-2 h-2 rounded-full bg-white live-dot inline-block" />
             )}
             <span className="text-white text-[11px] font-extrabold tracking-wider uppercase">
-              {stream?.type === "embed" ? "LIVE" : isLive ? "LIVE" : "LATEST"}
+              {isStreamLive ? "LIVE" : "LATEST"}
             </span>
           </div>
         </motion.div>
@@ -91,7 +117,20 @@ export default function LiveStream() {
               </div>
             )}
 
-            {/* Embed or YouTube iframe */}
+            {/* HLS native video player */}
+            {stream?.type === "hls" && (
+              <video
+                ref={videoRef}
+                className="absolute inset-0 w-full h-full"
+                style={{ objectFit: "cover" }}
+                autoPlay
+                muted
+                controls
+                playsInline
+              />
+            )}
+
+            {/* Platform embed or YouTube iframe */}
             {embedSrc && (
               <iframe
                 src={embedSrc}

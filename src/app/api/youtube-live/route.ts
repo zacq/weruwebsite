@@ -5,12 +5,19 @@ const UPLOADS_PLAYLIST = "UUKf9xsi0uL1mwdrq7PmZsQA";
 export const revalidate = 1800;
 
 export type StreamResponse =
+  | { type: "hls";     url: string }
   | { type: "embed";   url: string }
   | { type: "youtube"; videoId: string; isLive: boolean }
   | { type: "none" };
 
 export async function GET() {
-  // Priority 1: platform embed URL (OK.ru, Castr, Restream, etc.)
+  // Priority 1: HLS stream (.m3u8) — lowest latency, no third-party iframe
+  const hlsUrl = process.env.STREAM_HLS_URL;
+  if (hlsUrl) {
+    return NextResponse.json({ type: "hls", url: hlsUrl } satisfies StreamResponse);
+  }
+
+  // Priority 2: platform embed URL (Restream, Castr, etc.)
   const embedUrl = process.env.STREAM_EMBED_URL;
   if (embedUrl) {
     return NextResponse.json({ type: "embed", url: embedUrl } satisfies StreamResponse);
