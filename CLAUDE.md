@@ -74,7 +74,7 @@ src/app/api/
   viewer/route.ts      # POST — viewer lead capture modal
   quiz/route.ts        # POST — quiz lead capture (Airtable stub)
   news-feed/route.ts   # GET  — live Kenyan headlines from RSS (10-min cache)
-  youtube-live/route.ts# GET  — resolves live/latest YouTube video ID (60s cache)
+  youtube-live/route.ts# GET  — resolves stream source (HLS → embed → YouTube cascade, 30-min cache)
 ```
 
 `rate-card`, `viewer`, and `quiz` currently `console.log` submissions. Supabase, Resend, and Airtable integrations are stubbed in comments — uncomment and add env vars when ready.
@@ -168,9 +168,65 @@ This ensures menu order is always controlled by the array, not by JSX position.
 
 `next.config.ts` whitelists `img.youtube.com` and `i.ytimg.com` for `next/image`. Add other domains there as needed.
 
-### Live stream
+### Live stream — architecture
 
-`LiveStream` accepts `youtubeChannelId` (default placeholder) and optional `youtubeVideoId` props. Set the real channel ID in the component default or pass it from the page.
+**Component:** `src/components/sections/LiveStream.tsx` (`"use client"`)
+**API route:** `src/app/api/youtube-live/route.ts` (GET, `revalidate = 1800`)
+
+The player resolves its source by calling `/api/youtube-live` on mount. The API checks three env vars in priority order and returns the first available:
+
+```
+STREAM_HLS_URL set?   → { type: "hls",    url: string }         # .m3u8 — native video element + hls.js
+STREAM_EMBED_URL set? → { type: "embed",  url: string }         # iframe — OK.ru, Castr, Restream, etc.
+YOUTUBE_API_KEY set?  → { type: "youtube", videoId, isLive }    # YouTube API fallback
+none                  → { type: "none" }                        # "Watch on YouTube" button
+```
+
+**Switching stream sources requires only an env var change on Netlify — no code deploy.**
+
+#### Current production setup (as of June 2026)
+
+| Layer | Detail |
+|---|---|
+| Encoder | OBS Studio → **Restream.io** (native service, not custom RTMP) |
+| Multistream hub | Restream relays to OK.ru CDN and any other configured destinations |
+| OK.ru account | **WERU TV Kenya** — `ok.ru/profile/910505749103` |
+| OK.ru RTMP ingest | Server: `rtmp://vsu.okcdn.ru:1935/input/` · Key: `14785780981359_15794534812` |
+| Embed URL | `https://ok.ru/videoembed/14785780981359?autoplay=1` |
+| Env var | `STREAM_EMBED_URL=https://ok.ru/videoembed/14785780981359?autoplay=1` |
+
+The OK.ru live stream page: `https://ok.ru/video/14785780981359`
+
+**The original OK.ru group (`330582007485`) was banned by OK.ru for regulation violations.** The new account (`910505749103`) is a fresh personal profile. Do not attempt to use or restore the old stream key `330582007485_304991767229_ur374rzkym`.
+
+#### HLS player (hls.js — already installed)
+
+`hls.js` is installed. If the station ever provides an `.m3u8` URL (from Castr, Mux, or a CDN), set `STREAM_HLS_URL` on Netlify and clear `STREAM_EMBED_URL`. The player in `LiveStream.tsx` handles native Safari HLS and hls.js for all other browsers automatically.
+
+#### Restream setup
+
+OBS → Restream is configured in **OBS Settings → Stream → Service: Restream.io**. Restream's channel list includes the WERU Digital output pointing at OK.ru CDN. Restream stream key: `re_5682877_eventca127021fd54405aa90afb5e3a34090a` (ingest credential — never embed in client code).
+
+#### Platforms evaluated and ruled out
+
+| Platform | Reason ruled out |
+|---|---|
+| Restream video player | Requires $199/mo Business plan — embed token is chat-only on current plan |
+| Dailymotion | No permanent channel embed URL; new video ID per broadcast; paid plan required |
+| YouTube channel embed | Station doesn't always stream to YouTube — not permanent |
+| Livepeer free tier | 30 concurrent viewer cap — too small for live TV |
+
+#### Updating the stream URL
+
+When the stream source changes (new OK.ru broadcast, switch to Castr/Mux, etc.):
+1. Update `STREAM_EMBED_URL` or `STREAM_HLS_URL` in Netlify environment variables
+2. Trigger a redeploy (or wait for next deploy)
+3. No code change needed
+
+If the OK.ru broadcast ID changes (e.g. new live stream created on the account):
+- Go to `ok.ru/profile/910505749103` → find the live stream → copy the URL
+- The video ID is the number in `ok.ru/video/XXXXXXXXXX`
+- Update `STREAM_EMBED_URL` to `https://ok.ru/videoembed/XXXXXXXXXX?autoplay=1`
 
 ---
 
