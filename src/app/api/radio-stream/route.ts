@@ -1,11 +1,10 @@
-import http from "node:http";
+import https from "node:https";
 
 export async function GET() {
   return new Promise<Response>((resolve) => {
-    const req = http.get({
-      hostname: "media2.streambrothers.com",
-      port: 8212,
-      path: "/stream",
+    const req = https.get({
+      hostname: "media.streambrothers.com",
+      path: "/stream/8252",
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Accept": "*/*",
