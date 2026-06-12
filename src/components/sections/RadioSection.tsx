@@ -63,6 +63,8 @@ export default function RadioSection() {
   const [notified, setNotified] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playingRef = useRef(false);
+  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     try {
@@ -76,11 +78,30 @@ export default function RadioSection() {
       audioRef.current = new Audio(RADIO_STREAM_URL);
       audioRef.current.preload = "none";
       audioRef.current.volume = volume;
+
+      const scheduleReconnect = (delayMs: number) => {
+        if (!playingRef.current) return;
+        if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+        reconnectTimerRef.current = setTimeout(() => {
+          if (!playingRef.current || !audioRef.current) return;
+          audioRef.current.src = RADIO_STREAM_URL;
+          audioRef.current.load();
+          audioRef.current.play().catch(() => {});
+        }, delayMs);
+      };
+
+      audioRef.current.addEventListener("error",   () => scheduleReconnect(3000));
+      audioRef.current.addEventListener("stalled", () => scheduleReconnect(5000));
+      audioRef.current.addEventListener("ended",   () => scheduleReconnect(1000));
     }
-    if (playing) {
+
+    if (playingRef.current) {
+      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
       audioRef.current.pause();
+      playingRef.current = false;
     } else {
       audioRef.current.play().catch(() => {});
+      playingRef.current = true;
     }
     setPlaying(!playing);
   };
