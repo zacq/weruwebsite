@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { radioSchedule, type RadioDaySchedule } from "@/data/radioSchedule";
 
-const RADIO_STREAM_URL = "/api/radio-stream";
+const RADIO_STREAM_URL = "https://media.streambrothers.com/stream/8252";
 
 type Day = RadioDaySchedule["day"];
 
