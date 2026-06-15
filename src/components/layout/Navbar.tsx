@@ -54,8 +54,8 @@ function ContactDropdown() {
       {/* Trigger */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-wide rounded transition-colors duration-150"
-        style={{ color: open ? "#f97d00" : "rgba(255,255,255,0.70)" }}
+        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
+        style={{ color: open ? "#f97d00" : "rgba(255,255,255,0.65)" }}
       >
         Contact
         <svg
@@ -190,8 +190,8 @@ function TVDropdown({ pathname }: { pathname: string }) {
     <div ref={ref} className="relative" onMouseEnter={show} onMouseLeave={hide}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-wide rounded transition-colors duration-150"
-        style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.70)" }}
+        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
+        style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.65)" }}
       >
         TV
         <svg
@@ -301,8 +301,8 @@ export default function Navbar() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="px-3 py-1.5 text-xs font-bold tracking-wide rounded transition-colors duration-150"
-                    style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.70)" }}
+                    className="px-3 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
+                    style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.65)" }}
                   >
                     {link.label}
                   </Link>
@@ -387,28 +387,28 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
       <AnimatePresence>
         {open && (
           <motion.div
-            className="glass-strong absolute top-14 left-0 right-0 px-4 py-3 flex flex-col gap-2"
+            className="absolute top-14 left-0 right-0 flex flex-col overflow-y-auto"
             style={{
-              borderRadius: 0,
-              borderTop: "none",
-              borderLeft: "none",
-              borderRight: "none",
-              background: "rgba(8, 8, 8, 0.97)",
+              maxHeight: "calc(100dvh - 3.5rem)",
+              background: "rgba(8, 8, 8, 0.98)",
+              borderBottom: "1px solid rgba(255,255,255,0.10)",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.60)",
             }}
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
+          <div className="px-4 py-3 flex flex-col gap-1">
             {navLinks.map((link) => {
               if (link.dropdown) {
                 if (link.label === "Contact") {
                   return (
-                    <div key={link.label} className="border-b border-white/8">
+                    <div key={link.label}>
                       <button
                         onClick={() => setContactOpen((o) => !o)}
-                        className="w-full flex items-center justify-between py-3 text-lg font-bold"
-                        style={{ color: "rgba(255,255,255,0.75)" }}
+                        className="w-full flex items-center justify-between py-3.5 text-base font-semibold tracking-wide transition-colors duration-150"
+                        style={{ color: contactOpen ? "#f97d00" : "rgba(255,255,255,0.70)" }}
                       >
                         Contact
                         <svg
@@ -422,30 +422,31 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                       <AnimatePresence>
                         {contactOpen && (
                           <motion.div
-                            className="flex flex-col gap-2 pb-3 pl-1"
+                            className="flex flex-col gap-2 pb-4 pl-3"
+                            style={{ borderLeft: "2px solid rgba(249,125,0,0.35)" }}
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.2 }}
                           >
                             <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>Reception</p>
-                            <a href="tel:+254700117026" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>📞 0700 117026</a>
-                            <a href="tel:+254738970438" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>📞 0738 970438</a>
+                            <a href="tel:+254700117026" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>📞 0700 117026</a>
+                            <a href="tel:+254738970438" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>📞 0738 970438</a>
                             <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>Commercials</p>
-                            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>💬 0793 004303</a>
+                            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>💬 0793 004303</a>
                             <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>News Hotline</p>
-                            <a href="tel:+254703223363" className="flex items-center gap-2 py-1 text-sm font-semibold" style={{ color: "#ffffff" }}>📞 0703 223363</a>
-                            <a href="mailto:info@werudigital.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold mt-1" style={{ color: "#ffffff" }}>✉️ info@werudigital.co.ke</a>
-                            <div className="flex flex-col gap-2 mt-2">
+                            <a href="tel:+254703223363" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>📞 0703 223363</a>
+                            <a href="mailto:info@werudigital.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold mt-1 active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>✉️ info@werudigital.co.ke</a>
+                            <div className="flex flex-col gap-2 mt-3">
                               <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold"
+                                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-white text-sm font-bold active:scale-95 transition-transform"
                                 style={{ background: "#25D366" }}>
                                 💬 WhatsApp Us
                               </a>
                               <a href={MAPS} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold"
+                                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-white text-sm font-bold active:scale-95 transition-transform"
                                 style={{ background: "#4285F4" }}>
-                                📍 Find Us on Google Maps
+                                📍 Find Us on Maps
                               </a>
                             </div>
                           </motion.div>
@@ -457,13 +458,16 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
 
                 const tvActive = pathname.startsWith("/tv");
                 return (
-                  <div key={link.label} className="border-b border-white/8">
+                  <div key={link.label}>
                     <button
                       onClick={() => setTvOpen((o) => !o)}
-                      className="w-full flex items-center justify-between py-3 text-lg font-bold"
-                      style={{ color: tvActive ? "#f97d00" : "rgba(255,255,255,0.75)" }}
+                      className="w-full flex items-center justify-between py-3.5 text-base font-semibold tracking-wide transition-colors duration-150"
+                      style={{ color: tvActive ? "#f97d00" : "rgba(255,255,255,0.70)" }}
                     >
-                      TV
+                      <span className="flex items-center gap-3">
+                        {tvActive && <span className="w-1 h-4 rounded-full bg-[#f97d00]" />}
+                        TV
+                      </span>
                       <svg
                         className="w-4 h-4 transition-transform duration-200"
                         style={{ transform: tvOpen ? "rotate(180deg)" : "rotate(0deg)" }}
@@ -475,13 +479,14 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                     <AnimatePresence>
                       {tvOpen && (
                         <motion.div
-                          className="flex flex-col gap-1 pb-2 pl-2"
+                          className="flex flex-col gap-1 pb-2 pl-4"
+                          style={{ borderLeft: "2px solid rgba(249,125,0,0.35)" }}
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.2 }}
                         >
-                          <Link href="/tv#tv-schedule" onClick={() => setOpen(false)} className="flex items-center gap-2 py-2 text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>
+                          <Link href="/tv#tv-schedule" onClick={() => setOpen(false)} className="flex items-center gap-2 py-2.5 text-sm font-medium active:opacity-60 transition-opacity" style={{ color: "rgba(255,255,255,0.75)" }}>
                             📅 Program
                           </Link>
                         </motion.div>
@@ -496,26 +501,32 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                   key={link.label}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="py-3 text-lg font-bold border-b border-white/8 last:border-0"
-                  style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.75)" }}
+                  className="py-3.5 text-base font-semibold tracking-wide flex items-center gap-3 transition-colors duration-150 active:opacity-60"
+                  style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.70)" }}
                 >
+                  {active && <span className="w-1 h-4 rounded-full bg-[#f97d00] shrink-0" />}
                   {link.label}
                 </Link>
               );
             })}
 
-            <div className="flex gap-2 pt-2 border-t border-white/8">
+            <div className="flex gap-2 pt-3 mt-1 border-t border-white/[0.08]">
               <a href="/radio" onClick={() => setOpen(false)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-white text-xs font-bold"
-                style={{ background: "rgba(255,255,255,0.12)" }}>
-                📻 LIVE RADIO
+                className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl text-white text-sm font-bold active:scale-95 transition-transform"
+                style={{ background: "rgba(249,125,0,0.15)", border: "1px solid rgba(249,125,0,0.25)" }}>
+                <span className="relative flex h-2 w-2">
+                  <span className="live-dot absolute inline-flex h-full w-full rounded-full bg-[#f97d00] opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#f97d00]" />
+                </span>
+                LIVE RADIO
               </a>
               <a href="/tv" onClick={() => setOpen(false)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-black text-xs font-bold"
+                className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl text-black text-sm font-bold active:scale-95 transition-transform"
                 style={{ background: "#ffffff" }}>
                 📺 LIVE TV
               </a>
             </div>
+          </div>
           </motion.div>
         )}
       </AnimatePresence>
