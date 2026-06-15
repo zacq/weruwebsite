@@ -33,7 +33,7 @@ const tvShows = [
   },
   {
     id: 3,
-    presenter: "Empress Rita",
+    presenter: "Empress Ritta & Empress Natty",
     showName: "REGGAEMANI",
     subtitle: "Reggae & African Culture",
     description:
@@ -56,19 +56,6 @@ const tvShows = [
     image: "/Presenters/mc-tash.png",
     bg: "#7A1010",
     accent: "#f97d00",
-  },
-  {
-    id: 5,
-    presenter: "DJ Tush",
-    showName: "UNTAMED REGGAEMANI",
-    subtitle: "Reggae Fusion",
-    description:
-      "DJ Tush takes you on an untamed musical journey through the best of reggae, dancehall, and afrobeats fusion.",
-    time: "Weekends 7:00 PM",
-    initials: "DT",
-    image: "/Presenters/ReggaeMania.png",
-    bg: "#6B0A0A",
-    accent: "#FACC15",
   },
 ];
 

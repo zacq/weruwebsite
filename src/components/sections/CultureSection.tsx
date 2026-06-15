@@ -4,21 +4,17 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const presenterImages = [
-  { src: "/Presenters/ajelyne-george.png",   caption: "Ajelyne George" },
-  { src: "/Presenters/makena-wa-matiri.png",  caption: "Makena Wa Matiri" },
-  { src: "/Presenters/martin-gichunge.png",   caption: "Martin Gichunge" },
-  { src: "/Presenters/mc-tash.png",           caption: "MC Tash" },
-  { src: "/Presenters/munene-wa-kagwi.png",   caption: "Munene Wa Kagwi" },
-  { src: "/Presenters/mwenda-h-pilot.png",    caption: "Mwenda H Pilot" },
-  { src: "/Presenters/nelly-githinji.png",    caption: "Nelly Githinji" },
-  { src: "/Presenters/ReggaeMania.png",       caption: "DJ Tush" },
-  { src: "/Presenters/stella-karimi.png",     caption: "Stella Karimi" },
-  { src: "/Presenters/empress-rita-natty.png",caption: "Empress Rita" },
-  { src: "/Presenters/edward-mutembei.png",   caption: "Edward Mutembei" },
-  {
-    src: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png",
-    caption: "Betty",
-  },
+  { src: "/Presenters/ajelyne-george.png",   caption: "Ajelyne George",               slug: "ajelyne-george" },
+  { src: "/Presenters/makena-wa-matiri.png",  caption: "Makena Wa Matiri",             slug: "makena-wa-matiri" },
+  { src: "/Presenters/martin-gichunge.png",   caption: "Martin Gichunge",              slug: "martin-gichunge" },
+  { src: "/Presenters/mc-tash.png",           caption: "MC Tash",                      slug: "mc-tash" },
+  { src: "/Presenters/munene-wa-kagwi.png",   caption: "Munene Wa Kagwi",              slug: "munene-wa-kagwi" },
+  { src: "/Presenters/mwenda-h-pilot.png",    caption: "Mwenda H Pilot",               slug: "mwenda-h-pilot" },
+  { src: "/Presenters/nelly-githinji.png",    caption: "Nelly Githinji",               slug: "nelly-githinji" },
+  { src: "/Presenters/stella-karimi.png",     caption: "Stella Karimi",                slug: "stella-karimi" },
+  { src: "/Presenters/empress-rita-natty.png",caption: "Empress Ritta & Empress Natty",slug: "empress-rita-natty" },
+  { src: "/Presenters/edward-mutembei.png",   caption: "Edward Mutembei",              slug: "edward-mutembei" },
+  { src: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png", caption: "Betty",            slug: null },
 ];
 
 // Duplicate for seamless infinite loop
@@ -94,8 +90,17 @@ export default function CultureSection() {
                   background: "linear-gradient(to top, rgba(0,0,0,0.70) 0%, transparent 50%)",
                 }}
               />
-              <p className="absolute bottom-2.5 left-2.5 text-white text-[11px] font-bold">
+              <p className="absolute bottom-2.5 left-2.5 text-white text-[11px] font-bold leading-tight">
                 {img.caption}
+                {img.slug && (
+                  <Link
+                    href={`/presenters/${img.slug}`}
+                    className="block text-[10px] font-bold mt-0.5 hover:underline"
+                    style={{ color: "#FACC15" }}
+                  >
+                    Read profile →
+                  </Link>
+                )}
               </p>
               {/* Gold border on hover */}
               <div

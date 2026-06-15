@@ -7,15 +7,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 const navLinks = [
-  { label: "Home",    href: "/" },
-  { label: "TV",      href: "/tv",       dropdown: true },
-  { label: "Radio",   href: "/radio" },
-  { label: "Shows",   href: "/tv" },
-  { label: "News",    href: "/blog" },
-  { label: "Sports",  href: "/tv#sports" },
-  { label: "Studios", href: "/studios" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Contact", href: "#contact",  dropdown: true },
+  { label: "Home",       href: "/" },
+  { label: "TV",         href: "/tv",         dropdown: true },
+  { label: "Radio",      href: "/radio" },
+  { label: "Presenters", href: "/presenters" },
+  { label: "Shows",      href: "/tv" },
+  { label: "News",       href: "/blog" },
+  { label: "Sports",     href: "/tv#sports" },
+  { label: "Studios",    href: "/studios" },
+  { label: "Gallery",    href: "/gallery" },
+  { label: "Contact",    href: "#contact",    dropdown: true },
 ];
 
 const WHATSAPP = "https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number";
@@ -183,7 +184,7 @@ function TVDropdown({ pathname }: { pathname: string }) {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const active = pathname.startsWith("/tv") || pathname.startsWith("/presenters");
+  const active = pathname.startsWith("/tv");
 
   return (
     <div ref={ref} className="relative" onMouseEnter={show} onMouseLeave={hide}>
@@ -226,15 +227,6 @@ function TVDropdown({ pathname }: { pathname: string }) {
               >
                 <span className="text-base">📅</span>
                 Program
-              </Link>
-              <Link
-                href="/presenters"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors hover:text-[#f97d00]"
-                style={{ color: "rgba(255,255,255,0.85)" }}
-              >
-                <span className="text-base">🎙️</span>
-                Presenters
               </Link>
             </div>
           </motion.div>
@@ -463,7 +455,7 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                   );
                 }
 
-                const tvActive = pathname.startsWith("/tv") || pathname.startsWith("/presenters");
+                const tvActive = pathname.startsWith("/tv");
                 return (
                   <div key={link.label} className="border-b border-white/8">
                     <button
@@ -491,9 +483,6 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                         >
                           <Link href="/tv#tv-schedule" onClick={() => setOpen(false)} className="flex items-center gap-2 py-2 text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>
                             📅 Program
-                          </Link>
-                          <Link href="/presenters" onClick={() => setOpen(false)} className="flex items-center gap-2 py-2 text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>
-                            🎙️ Presenters
                           </Link>
                         </motion.div>
                       )}
