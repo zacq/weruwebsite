@@ -154,7 +154,7 @@ export default function StudiosPage() {
               Book the Studio →
             </a>
             <Link
-              href="/#rate-card"
+              href="/advertise"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white transition-all duration-200 hover:bg-white/10"
               style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.14)" }}
             >

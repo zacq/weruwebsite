@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import type { Album } from "@/data/gallery";
 
@@ -15,15 +15,25 @@ const GALLERY_STYLES = `
   .gl-btns  { display: flex; gap: 14px; flex-wrap: wrap; position: relative; }
   .gl-links { padding: 0 40px 60px; }
   .gl-arrow { width: 52px; height: 52px; font-size: 22px; }
+  /* lightbox two-column layout */
+  .lb-body     { display: flex; flex-direction: row; flex: 1; min-height: 0; }
+  .lb-stage    { flex: 1; position: relative; min-width: 0; overflow: hidden; }
+  .lb-sidebar  { width: 200px; flex-shrink: 0; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 10px; align-content: start;
+                 background: rgba(6,6,8,0.95); border-left: 1px solid rgba(255,255,255,0.08); }
+  .lb-dots     { display: none; }
+  .gl-arrow    { width: 52px; height: 52px; font-size: 22px; }
 
-  @media (max-width: 640px) {
-    .gl-hero  { padding: 100px 20px 32px; }
-    .gl-bar   { padding: 12px 16px; }
-    .gl-grid  { padding: 20px 16px 36px; }
-    .gl-cta   { margin: 0 16px 40px; padding: 32px 22px; }
-    .gl-btns  { flex-direction: column; }
-    .gl-links { padding: 0 16px 48px; }
-    .gl-arrow { width: 40px; height: 40px; font-size: 18px; }
+  @media (max-width: 768px) {
+    .lb-body    { flex-direction: column; }
+    .lb-sidebar { display: none; }
+    .lb-dots    { display: flex; justify-content: center; align-items: center; gap: 6px; padding: 10px 16px 14px; flex-shrink: 0;
+                  background: rgba(6,6,8,0.95); border-top: 1px solid rgba(255,255,255,0.08); }
+    .gl-arrow   { width: 40px; height: 40px; font-size: 18px; }
+  }
+
+  @keyframes imgFadeIn {
+    from { opacity: 0; transform: scale(1.015); }
+    to   { opacity: 1; transform: scale(1); }
   }
 `;
 
@@ -213,6 +223,7 @@ function Lightbox({
   onSelect: (i: number) => void;
 }) {
   const image = album.images[index];
+  const touchStartX = useRef(0);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -229,111 +240,159 @@ function Lightbox({
     return () => { document.body.style.overflow = ""; };
   }, []);
 
-  // Base shared by close + nav buttons; size for nav arrows via .gl-arrow class
   const btnBase: React.CSSProperties = {
     borderRadius: "50%",
-    background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.10)",
+    backdropFilter: "blur(10px)",
+    border: "1px solid rgba(255,255,255,0.16)",
     color: "#fff",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
+    transition: "background 0.18s, color 0.18s",
   };
 
   return (
     <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 100,
-        display: "flex",
-        flexDirection: "column",
-        background: "rgba(5,5,7,0.95)",
-        backdropFilter: "blur(8px)",
+      style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column", background: "#06060a" }}
+      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => {
+        const delta = touchStartX.current - e.changedTouches[0].clientX;
+        if (delta > 45) onStep(1);
+        else if (delta < -45) onStep(-1);
       }}
     >
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", flexShrink: 0 }}>
-        <div>
-          <span className="font-display" style={{ fontWeight: 700, fontSize: "19px", color: "#fff" }}>
+      {/* ── Header ── */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "12px 20px", flexShrink: 0,
+        background: "rgba(6,6,10,0.90)", backdropFilter: "blur(14px)",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* Orange accent bar */}
+          <div style={{ width: 3, height: 22, borderRadius: 2, background: "#f97d00", flexShrink: 0 }} />
+          <span className="font-display" style={{ fontWeight: 700, fontSize: "16px", color: "#fff", letterSpacing: "-0.2px" }}>
             {album.title}
           </span>
-          <span style={{ marginLeft: "10px", fontSize: "14px", color: "rgba(244,241,236,0.6)" }}>
+          <span style={{
+            fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: 999,
+            background: "rgba(249,125,0,0.15)", color: "#f97d00", border: "1px solid rgba(249,125,0,0.3)",
+            fontVariantNumeric: "tabular-nums",
+          }}>
             {index + 1} / {album.images.length}
           </span>
         </div>
         <button
           onClick={onClose}
-          className="hover:bg-[#f97d00] hover:text-[#1a1003] transition-colors"
-          style={{ ...btnBase, width: "44px", height: "44px", fontSize: "18px" }}
+          className="hover:bg-[#f97d00] hover:text-[#1a1003]"
+          style={{ ...btnBase, width: "40px", height: "40px", fontSize: "16px" }}
           aria-label="Close"
-        >
-          ✕
-        </button>
+        >✕</button>
       </div>
 
-      {/* Stage */}
-      <div style={{ flex: 1, position: "relative", minHeight: 0, overflow: "hidden" }}>
-        <img
-          key={image.src}
-          src={image.src}
-          alt={image.alt}
-          decoding="async"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            display: "block",
-          }}
-        />
+      {/* ── Body: image stage + sidebar ── */}
+      <div className="lb-body">
 
-        {/* Nav arrows — size controlled by .gl-arrow */}
-        <button
-          onClick={() => onStep(-1)}
-          className="gl-arrow hover:bg-[#f97d00] hover:text-[#1a1003] transition-colors"
-          style={{ ...btnBase, position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)" }}
-          aria-label="Previous"
-        >
-          ‹
-        </button>
-        <button
-          onClick={() => onStep(1)}
-          className="gl-arrow hover:bg-[#f97d00] hover:text-[#1a1003] transition-colors"
-          style={{ ...btnBase, position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)" }}
-          aria-label="Next"
-        >
-          ›
-        </button>
+        {/* ── Image stage ── */}
+        <div className="lb-stage">
+          <img
+            key={image.src}
+            src={image.src}
+            alt={image.alt}
+            decoding="async"
+            style={{
+              width: "100%", height: "100%", objectFit: "contain", display: "block",
+              animation: "imgFadeIn 0.28s ease",
+            }}
+          />
+
+          {/* Caption overlay */}
+          {image.alt && (
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0, height: 90,
+              background: "linear-gradient(to top, rgba(6,6,10,0.92) 0%, transparent 100%)",
+              display: "flex", alignItems: "flex-end", justifyContent: "center",
+              padding: "0 80px 14px", pointerEvents: "none",
+            }}>
+              <p style={{ fontSize: "13px", color: "rgba(244,241,236,0.7)", textAlign: "center", margin: 0 }}>
+                {image.alt}
+              </p>
+            </div>
+          )}
+
+          {/* Nav arrows */}
+          <button
+            onClick={() => onStep(-1)}
+            className="gl-arrow hover:bg-[#f97d00] hover:text-[#1a1003]"
+            style={{ ...btnBase, position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}
+            aria-label="Previous"
+          >‹</button>
+          <button
+            onClick={() => onStep(1)}
+            className="gl-arrow hover:bg-[#f97d00] hover:text-[#1a1003]"
+            style={{ ...btnBase, position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)" }}
+            aria-label="Next"
+          >›</button>
+        </div>
+
+        {/* ── Thumbnail sidebar — desktop only ── */}
+        <div className="lb-sidebar no-scrollbar">
+          <div style={{ gridColumn: "1 / -1", padding: "2px 0 6px" }}>
+            <p style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(244,241,236,0.35)", margin: 0 }}>
+              All Photos
+            </p>
+          </div>
+          {album.images.map((img, i) => (
+            <button
+              key={img.src}
+              onClick={() => onSelect(i)}
+              style={{ padding: 0, background: "none", border: "none", cursor: "pointer", position: "relative" }}
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                decoding="async"
+                style={{
+                  width: "100%", aspectRatio: "4/3", objectFit: "cover",
+                  borderRadius: 8,
+                  opacity: i === index ? 1 : 0.5,
+                  border: i === index ? "2px solid #f97d00" : "2px solid transparent",
+                  transform: i === index ? "scale(1.04)" : "scale(1)",
+                  transition: "all 0.2s",
+                  display: "block",
+                }}
+              />
+              {i === index && (
+                <div style={{
+                  position: "absolute", inset: 0, borderRadius: 8,
+                  boxShadow: "inset 0 0 0 2px #f97d00, 0 0 12px rgba(249,125,0,0.35)",
+                  pointerEvents: "none",
+                }} />
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Caption */}
-      <p style={{ textAlign: "center", padding: "10px 20px", fontSize: "13px", color: "rgba(244,241,236,0.55)", flexShrink: 0 }}>
-        {image.alt}
-      </p>
-
-      {/* Thumbnail strip */}
-      <div className="no-scrollbar" style={{ display: "flex", gap: "8px", overflowX: "auto", padding: "0 16px 18px", flexShrink: 0 }}>
-        {album.images.map((img, i) => (
-          <button key={img.src} onClick={() => onSelect(i)} style={{ flexShrink: 0 }}>
-            <img
-              src={img.src}
-              alt={img.alt}
-              loading="lazy"
-              decoding="async"
-              style={{
-                height: "48px",
-                width: "72px",
-                objectFit: "cover",
-                borderRadius: "7px",
-                opacity: i === index ? 1 : 0.5,
-                border: i === index ? "2px solid #f97d00" : "2px solid transparent",
-                transition: "all 0.2s",
-                display: "block",
-              }}
-            />
-          </button>
+      {/* ── Dot counter — mobile only ── */}
+      <div className="lb-dots">
+        {album.images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => onSelect(i)}
+            style={{
+              width: i === index ? 20 : 8, height: 8, minWidth: 8,
+              borderRadius: 999,
+              background: i === index ? "#f97d00" : "rgba(255,255,255,0.28)",
+              border: "none", cursor: "pointer", padding: 0,
+              transition: "all 0.25s",
+            }}
+            aria-label={`Photo ${i + 1}`}
+          />
         ))}
       </div>
     </div>
@@ -588,7 +647,7 @@ export default function GalleryClient({ albums }: { albums: Album[] }) {
             Request Coverage →
           </Link>
           <Link
-            href="/#rate-card"
+            href="/advertise"
             style={{
               display: "inline-flex",
               alignItems: "center",

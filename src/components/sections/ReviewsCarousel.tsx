@@ -3,7 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const reviews = [
+interface Review {
+  id: number;
+  name: string;
+  location: string;
+  rating: number;
+  text: string;
+  photo: string;
+  timeDescription?: string;
+}
+
+const FALLBACK_REVIEWS: Review[] = [
   {
     id: 1,
     name: "James Mwangi",
@@ -70,6 +80,41 @@ const reviews = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapGoogleReview(r: any, i: number): Review {
+  return {
+    id: i,
+    name:  r.authorAttribution?.displayName ?? "Google Reviewer",
+    location: "",
+    rating: r.rating ?? 5,
+    text:  r.text?.text ?? r.originalText?.text ?? "",
+    photo: r.authorAttribution?.photoUri ?? "",
+    timeDescription: r.relativePublishTimeDescription,
+  };
+}
+
+function useGoogleReviews() {
+  const [reviews, setReviews]       = useState<Review[]>(FALLBACK_REVIEWS);
+  const [rating, setRating]         = useState<number | null>(null);
+  const [reviewCount, setReviewCount] = useState<number | null>(null);
+  const [isLive, setIsLive]         = useState(false);
+
+  useEffect(() => {
+    fetch("/api/google-reviews")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.error || !data.reviews?.length) return;
+        setReviews(data.reviews.map(mapGoogleReview));
+        if (data.rating)           setRating(data.rating);
+        if (data.userRatingCount)  setReviewCount(data.userRatingCount);
+        setIsLive(true);
+      })
+      .catch(() => {});
+  }, []);
+
+  return { reviews, rating, reviewCount, isLive };
+}
+
 function Stars({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5">
@@ -87,7 +132,7 @@ function ReviewCard({
   position,
   onClick,
 }: {
-  review: (typeof reviews)[0];
+  review: Review;
   position: "center" | "left" | "right";
   onClick: () => void;
 }) {
@@ -118,19 +163,27 @@ function ReviewCard({
       {/* Photo + name */}
       <div className="flex items-center gap-3">
         <div
-          className="shrink-0 rounded-full overflow-hidden"
-          style={{ width: 56, height: 56, border: "2px solid rgba(249,125,0,0.45)" }}
+          className="shrink-0 rounded-full overflow-hidden flex items-center justify-center"
+          style={{ width: 56, height: 56, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.12)" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={review.photo}
-            alt={review.name}
-            className="w-full h-full object-cover object-top"
-          />
+          {review.photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={review.photo}
+              alt={review.name}
+              className="w-full h-full object-cover object-top"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="text-white/60 font-bold text-lg">{review.name[0]}</span>
+          )}
         </div>
         <div>
           <p className="text-white font-bold text-sm leading-tight">{review.name}</p>
-          <p className="text-white/40 text-[11px]">{review.location}</p>
+          {review.location
+            ? <p className="text-white/40 text-[11px]">{review.location}</p>
+            : review.timeDescription && <p className="text-white/40 text-[11px]">{review.timeDescription}</p>
+          }
         </div>
       </div>
 
@@ -146,6 +199,7 @@ function ReviewCard({
 }
 
 export default function ReviewsCarousel() {
+  const { reviews, rating, reviewCount, isLive } = useGoogleReviews();
   const [current, setCurrent] = useState(0);
   const n = reviews.length;
   const touchStartX = useRef(0);
@@ -202,7 +256,15 @@ export default function ReviewsCarousel() {
           {Array.from({ length: 5 }).map((_, i) => (
             <span key={i} className="text-lg" style={{ color: "#FACC15" }}>★</span>
           ))}
-          <span className="text-white/40 text-xs ml-2">4.9 / 5 on Google</span>
+          <span className="text-white/40 text-xs ml-2">
+            {rating !== null ? `${rating.toFixed(1)} / 5` : "4.5 / 5"} on Google
+            {reviewCount !== null && ` · ${reviewCount.toLocaleString()} reviews`}
+          </span>
+          {isLive && (
+            <span className="ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ background: "rgba(34,197,94,0.15)", color: "#22c55e" }}>
+              LIVE
+            </span>
+          )}
         </div>
       </motion.div>
 
@@ -227,19 +289,27 @@ export default function ReviewsCarousel() {
           >
             <div className="flex items-center gap-3">
               <div
-                className="shrink-0 rounded-full overflow-hidden"
-                style={{ width: 52, height: 52, border: "2px solid rgba(249,125,0,0.45)" }}
+                className="shrink-0 rounded-full overflow-hidden flex items-center justify-center"
+                style={{ width: 52, height: 52, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.12)" }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={reviews[current].photo}
-                  alt={reviews[current].name}
-                  className="w-full h-full object-cover object-top"
-                />
+                {reviews[current].photo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={reviews[current].photo}
+                    alt={reviews[current].name}
+                    className="w-full h-full object-cover object-top"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <span className="text-white/60 font-bold text-lg">{reviews[current].name[0]}</span>
+                )}
               </div>
               <div>
                 <p className="text-white font-bold text-sm">{reviews[current].name}</p>
-                <p className="text-white/40 text-[11px]">{reviews[current].location}</p>
+                {reviews[current].location
+                  ? <p className="text-white/40 text-[11px]">{reviews[current].location}</p>
+                  : reviews[current].timeDescription && <p className="text-white/40 text-[11px]">{reviews[current].timeDescription}</p>
+                }
               </div>
             </div>
             <Stars count={reviews[current].rating} />

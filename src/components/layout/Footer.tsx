@@ -13,134 +13,111 @@ const footerLinks = [
 ];
 
 const socials = [
-  { label: "Facebook", href: "https://facebook.com/werutv",  icon: "f"  },
-  { label: "YouTube",  href: "https://youtube.com/@werutvfm3411",  icon: "▶"  },
-  { label: "X",        href: "https://x.com/werutv",         icon: "𝕏"  },
-  { label: "TikTok",   href: "https://tiktok.com/@werutv",   icon: "♪"  },
+  { label: "Facebook", href: "https://facebook.com/werutv",      icon: "f"  },
+  { label: "YouTube",  href: "https://youtube.com/@werutvfm3411", icon: "▶"  },
+  { label: "X",        href: "https://x.com/werutv",             icon: "𝕏"  },
+  { label: "TikTok",   href: "https://tiktok.com/@werutv",       icon: "♪"  },
 ];
 
-// Dark red — matches the shows carousel, gives a cohesive start-to-finish brand feel
 const FOOTER_BG = "#7A1010";
 
 export default function Footer() {
   return (
     <footer style={{ background: FOOTER_BG, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-8">
+      <div className="max-w-6xl mx-auto px-4 py-6 md:py-10">
+
+        {/* Mobile: brand row + 2-col nav/contact — Desktop: 4-col grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
 
           {/* Brand */}
-          <div className="text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
             <Link href="/" className="inline-flex items-center">
-              <Image
-                src="/logo.png"
-                alt="Weru TV"
-                width={100}
-                height={34}
-                className="object-contain"
-              />
+              <Image src="/logo.png" alt="Weru TV" width={90} height={30} className="object-contain" />
             </Link>
-            <p className="text-xs mt-2 max-w-[200px]" style={{ color: "rgba(255,255,255,0.55)" }}>
+            <p className="text-xs mt-1.5 text-center md:text-left" style={{ color: "rgba(255,255,255,0.55)" }}>
               Kenya&apos;s premier broadcast experience.
             </p>
-            <a
-              href="#rate-card"
-              className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl text-white text-xs font-bold transition-all duration-200"
-              style={{ background: "#f97d00", boxShadow: "0 0 14px rgba(249,125,0,0.35)" }}
-            >
-              📋 Get Rate Card
-            </a>
-            <a
-              href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-xl text-white text-xs font-bold transition-all duration-200 hover:opacity-85"
-              style={{ background: "#25D366" }}
-            >
-              💬 WhatsApp Us
-            </a>
-          </div>
-
-          {/* Nav links */}
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <p className="text-[10px] tracking-widest uppercase font-bold mb-1"
-              style={{ color: "rgba(255,255,255,0.40)" }}>
-              Navigate
-            </p>
-            {footerLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium transition-colors duration-150 hover:text-[#FACC15]"
-                style={{ color: "rgba(255,255,255,0.70)" }}
+            {/* Buttons — inline on mobile */}
+            <div className="flex items-center gap-2 mt-3 flex-wrap justify-center md:justify-start">
+              <a
+                href="#rate-card"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
+                style={{ background: "#f97d00" }}
               >
-                {link.label}
-              </Link>
-            ))}
-            <Link
-              href="/quiz"
-              className="text-sm font-bold transition-opacity duration-150 hover:opacity-80 mt-1"
-              style={{ color: "#FACC15" }}
-            >
-              🏆 10 for 10: Castle Escape
-            </Link>
+                📋 Get Rate Card
+              </a>
+              <a
+                href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
+                style={{ background: "#25D366" }}
+              >
+                💬 WhatsApp
+              </a>
+            </div>
           </div>
 
-          {/* Contact */}
-          <div className="flex flex-col items-center md:items-start gap-1.5 text-sm">
-            <p className="text-[10px] tracking-widest uppercase font-bold mb-1"
-              style={{ color: "rgba(255,255,255,0.40)" }}>
-              Contact
-            </p>
+          {/* Mobile: 2-col sub-grid for nav + contact / Desktop: 2 separate columns */}
+          <div className="grid grid-cols-2 md:contents gap-4">
 
-            {/* Reception */}
-            <p className="text-[10px] font-bold tracking-wider uppercase mt-1"
-              style={{ color: "rgba(255,255,255,0.35)" }}>
-              Reception
-            </p>
-            <a href="tel:+254700117026"
-              className="transition-colors duration-150 hover:text-[#f97d00]"
-              style={{ color: "rgba(255,255,255,0.70)" }}>
-              📞 0700 117026
-            </a>
-            <a href="tel:+254738970438"
-              className="transition-colors duration-150 hover:text-[#f97d00]"
-              style={{ color: "rgba(255,255,255,0.70)" }}>
-              📞 0738 970438
-            </a>
+            {/* Navigate */}
+            <div className="flex flex-col gap-1 md:gap-2">
+              <p className="text-[10px] tracking-widest uppercase font-bold mb-0.5" style={{ color: "rgba(255,255,255,0.40)" }}>
+                Navigate
+              </p>
+              {footerLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-xs md:text-sm font-medium hover:text-[#FACC15] transition-colors"
+                  style={{ color: "rgba(255,255,255,0.70)" }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link
+                href="/quiz"
+                className="text-xs font-bold hover:opacity-80 transition-opacity mt-0.5"
+                style={{ color: "#FACC15" }}
+              >
+                🏆 10 for 10
+              </Link>
+            </div>
 
-            {/* Commercials */}
-            <p className="text-[10px] font-bold tracking-wider uppercase mt-2"
-              style={{ color: "rgba(255,255,255,0.35)" }}>
-              Commercials
-            </p>
-            <a href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number" target="_blank" rel="noopener noreferrer"
-              className="transition-colors duration-150 hover:text-[#f97d00]"
-              style={{ color: "rgba(255,255,255,0.70)" }}>
-              💬 0707 065000
-            </a>
+            {/* Contact */}
+            <div className="flex flex-col gap-1 md:gap-1.5 text-xs md:text-sm">
+              <p className="text-[10px] tracking-widest uppercase font-bold mb-0.5" style={{ color: "rgba(255,255,255,0.40)" }}>
+                Contact
+              </p>
 
-            {/* News */}
-            <p className="text-[10px] font-bold tracking-wider uppercase mt-2"
-              style={{ color: "rgba(255,255,255,0.35)" }}>
-              News Hotline
-            </p>
-            <a href="tel:+254703223363"
-              className="transition-colors duration-150 hover:text-[#f97d00]"
-              style={{ color: "rgba(255,255,255,0.70)" }}>
-              📞 0703 223363
-            </a>
+              <p className="text-[9px] font-bold tracking-wider uppercase mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>Reception</p>
+              <a href="tel:+254700117026" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                📞 0700 117026
+              </a>
+              <a href="tel:+254738970438" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                📞 0738 970438
+              </a>
 
-            <a href="mailto:info@werudigital.co.ke"
-              className="mt-1 transition-colors duration-150 hover:text-[#f97d00]"
-              style={{ color: "rgba(255,255,255,0.70)" }}>
-              ✉️ info@werudigital.co.ke
-            </a>
+              <p className="text-[9px] font-bold tracking-wider uppercase mt-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>Commercials</p>
+              <a href="https://wa.me/254793004303" target="_blank" rel="noopener noreferrer" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                💬 0707 065000
+              </a>
+
+              <p className="text-[9px] font-bold tracking-wider uppercase mt-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>News Hotline</p>
+              <a href="tel:+254703223363" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                📞 0703 223363
+              </a>
+
+              <a href="mailto:info@werudigital.co.ke" className="mt-0.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                ✉️ info@werudigital.co.ke
+              </a>
+            </div>
           </div>
 
           {/* Social */}
-          <div className="flex flex-col items-center md:items-start gap-3">
-            <p className="text-[10px] tracking-widest uppercase font-bold"
-              style={{ color: "rgba(255,255,255,0.40)" }}>
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <p className="text-[10px] tracking-widest uppercase font-bold" style={{ color: "rgba(255,255,255,0.40)" }}>
               Follow Us
             </p>
             <div className="flex items-center gap-2">
@@ -151,7 +128,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-11 h-11 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-150 hover:bg-[#f97d00] hover:text-white hover:border-[#f97d00]"
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:bg-[#f97d00] hover:text-white hover:border-[#f97d00]"
                   style={{
                     background: "rgba(255,255,255,0.10)",
                     color: "rgba(255,255,255,0.70)",
@@ -165,14 +142,15 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Bottom bar */}
         <div
-          className="mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]"
+          className="mt-5 pt-4 flex flex-col sm:flex-row items-center justify-between gap-1.5 text-[10px]"
           style={{ borderTop: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.40)" }}
         >
           <span>© {new Date().getFullYear()} Weru Digital. All rights reserved.</span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <a href="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</a>
-            <a href="/terms" className="hover:text-white/60 transition-colors">Terms of Service</a>
+            <a href="/terms"   className="hover:text-white/60 transition-colors">Terms of Service</a>
             <span>werudigital.co.ke</span>
           </div>
         </div>

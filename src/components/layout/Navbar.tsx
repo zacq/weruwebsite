@@ -338,7 +338,7 @@ export default function Navbar() {
               </motion.a>
 
               <motion.a
-                href="#rate-card"
+                href="/advertise"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
                 style={{ background: "#f97d00", boxShadow: "0 0 14px rgba(249,125,0,0.35)" }}
                 whileHover={{ scale: 1.06, boxShadow: "0 0 22px rgba(249,125,0,0.55)" }}

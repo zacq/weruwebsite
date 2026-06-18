@@ -271,6 +271,29 @@ export const presenters: Presenter[] = [
     ],
   },
   {
+    slug: "betty",
+    name: "Betty",
+    show: "Ugima Ni Utonga",
+    role: "Host",
+    imageSrc: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png",
+    tagline: "Bringing health, wellness, and community conversations to Central Kenya.",
+    socialLinks: {
+      facebook: "https://facebook.com",
+    },
+    bio: [
+      "Betty is the host of Ugima Ni Utonga, Weru TV's flagship health and wellness programme. With a warm and engaging on-screen presence, she guides viewers through conversations on nutrition, mental health, preventive care, and community wellbeing — topics that matter deeply to families across Central Kenya.",
+    ],
+    programHistory: [
+      "Betty joined Weru TV as the face of Ugima Ni Utonga, a programme built around the belief that good health is both a personal and community responsibility. Each episode brings together medical professionals, nutritionists, traditional health practitioners, and everyday Kenyans to explore practical approaches to wellbeing.",
+      "Her ability to translate complex health topics into accessible, actionable advice has made the show one of Weru TV's most consistently watched programmes. Betty's interviews balance expert knowledge with lived experience — ensuring the content resonates with viewers from all walks of life.",
+    ],
+    stats: [
+      { value: "Weekly", label: "On air" },
+      { value: "Health", label: "Specialism" },
+      { value: "Community", label: "Focus" },
+    ],
+  },
+  {
     slug: "ntinyari-kinyua",
     name: "Ntinyari Kinyua",
     show: "Kirira News",

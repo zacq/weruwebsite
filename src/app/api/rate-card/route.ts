@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const BASE_ID  = "appXyMV3O6ycSVRAi";
-const TABLE_ID = "tblaRTNBlhZAAfA07";
+const TABLE_ID = process.env.AIRTABLE_RATE_CARD_TABLE_ID ?? "tbliYbLcpLfLal9An";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, company, phone, email, adType, budget, message } = body;
+    const { name, company, phone, email, adType, packages, message } = body;
 
-    if (!name || !phone || !email || !adType) {
+    if (!name || !phone || !adType) {
       return NextResponse.json(
         { success: false, error: "Missing required fields" },
         { status: 400 }
@@ -17,21 +17,21 @@ export async function POST(req: NextRequest) {
 
     const pat = process.env.AIRTABLE_PAT;
     if (!pat) {
-      console.error("[RATE CARD] AIRTABLE_PAT env var not set");
+      console.log("[RATE CARD]", { name, company, phone, email, adType, packages, message });
       return NextResponse.json({ success: true });
     }
 
     const fields: Record<string, unknown> = {
-      Name: name,
-      Phone: phone,
-      Email: email,
-      "Ad Type": adType,
+      Name:           name,
+      Phone:          phone,
+      "Ad Type":      adType,
       "Submitted At": new Date().toISOString(),
-      Status: "New",
+      Status:         "New",
     };
-    if (company)  fields.Company = company;
-    if (budget)   fields.Budget  = budget;
-    if (message)  fields.Message = message;
+    if (email)    fields.Email    = email;
+    if (company)  fields.Company  = company;
+    if (packages) fields.Packages = packages;
+    if (message)  fields.Message  = message;
 
     const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
       method: "POST",

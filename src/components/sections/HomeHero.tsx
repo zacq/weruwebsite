@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { tvSchedule } from "@/data/tvSchedule";
 
 const slides = [
   {
@@ -17,33 +18,187 @@ const slides = [
     emphasis: "Heritage,",
     line2: "Celebrated Daily.",
     sub: "Weru Studios brings the richness of Kikuyu culture and African arts to screens worldwide.",
-    bg: "/heroimages/studio%20area15.png",
+    bg: "/heroimages/studio%20area16.png",
   },
   {
     line1: "Trusted News.",
     emphasis: "Real Stories.",
     line2: "Undeniable Impact.",
     sub: "The most trusted source for Central Kenya and the Mount Kenya region — now broadcast internationally.",
-    bg: "/heroimages/studio%20area13.png",
+    bg: "/heroimages/studio%20area6.png",
   },
   {
     line1: "Reach",
     emphasis: "Millions",
     line2: "Across East Africa.",
     sub: "Kenya's premier regional TV channel — now broadcasting across 6 countries. Partner with us.",
-    bg: "/heroimages/studio%20area16.png",
+    bg: "/heroimages/remove__https___202606181246.jpg",
   },
 ];
 
-const ON_AIR = [
-  { time: "NOW · 7:00 AM", name: "Ntcto Cia",        genre: "News & Current Affairs", img: "/heroimages/studio%20area13.png", live: true  },
-  { time: "10:00 AM",      name: "Kurukuru Bienine",  genre: "Sports Roundup",         img: "/heroimages/studio%20area15.png", live: false },
-  { time: "1:00 PM",       name: "Mugithi Lounge",    genre: "Arts & Culture",          img: "/heroimages/studio%20area16.png", live: false },
+// Presenter name → image path
+const PRESENTER_IMG: Record<string, string> = {
+  "Stella Karimi Kaunty":           "/Presenters/stella-karimi.png",
+  "Stella Karimi":                  "/Presenters/stella-karimi.png",
+  "Martin Gichunge":                "/Presenters/martin-gichunge.png",
+  "Martin Gichunge Dullah":         "/Presenters/martin-gichunge.png",
+  "Makena Wa Matiri":               "/Presenters/makena-wa-matiri.png",
+  "Munene Wa Kagwi":                "/Presenters/munene-wa-kagwi.png",
+  "Edward Mutembei":                "/Presenters/edward-mutembei.png",
+  "Nelly Kithinji":                 "/Presenters/nelly-githinji.png",
+  "Nelly Githinji":                 "/Presenters/nelly-githinji.png",
+  "Empress Rita":                   "/Presenters/empress-rita-natty.png",
+  "Empress Natty":                  "/Presenters/empress-rita-natty.png",
+  "Empress Rita & Empress Natty":   "/Presenters/empress-rita-natty.png",
+  "MC Tash":                        "/Presenters/mc-tash.png",
+  "Mwenda H Pilot":                 "/Presenters/mwenda-h-pilot.png",
+  "Ajelyne George":                 "/Presenters/ajelyne-george.png",
+  "Betty":                          "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png",
+  "Ntinyari Kinyua":                "/Presenters/nelly-githinji.png",
+};
+
+// Cycle through these when no specific presenter image is available
+const ALL_PRESENTER_IMAGES = [
+  "/Presenters/stella-karimi.png",
+  "/Presenters/martin-gichunge.png",
+  "/Presenters/ajelyne-george.png",
+  "/Presenters/munene-wa-kagwi.png",
+  "/Presenters/makena-wa-matiri.png",
+  "/Presenters/nelly-githinji.png",
+  "/Presenters/empress-rita-natty.png",
+  "/Presenters/edward-mutembei.png",
+  "/Presenters/mc-tash.png",
+  "/Presenters/mwenda-h-pilot.png",
+  "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png",
 ];
 
+function getPresenterImages(presenter: string): string[] {
+  if (PRESENTER_IMG[presenter]) return [PRESENTER_IMG[presenter]];
+  // Split compound names ("A & B", "A, B, C")
+  const names = presenter.split(/\s*[&,]\s*/).map(n => n.trim());
+  const imgs = names.flatMap(name => {
+    if (PRESENTER_IMG[name]) return [PRESENTER_IMG[name]];
+    const key = Object.keys(PRESENTER_IMG).find(
+      k => k.toLowerCase().includes(name.toLowerCase()) || name.toLowerCase().includes(k.toLowerCase())
+    );
+    return key ? [PRESENTER_IMG[key]] : [];
+  });
+  return [...new Set(imgs)];
+}
+
+// Pick one unique photo per card — no two cards ever share the same image
+function pickUniquePhotos(programs: ReturnType<typeof getOnAirPrograms>): string[] {
+  const used = new Set<string>();
+  return programs.map((prog) => {
+    const candidates = [...getPresenterImages(prog.presenter), ...ALL_PRESENTER_IMAGES];
+    for (const img of candidates) {
+      if (!used.has(img)) {
+        used.add(img);
+        return img;
+      }
+    }
+    return ALL_PRESENTER_IMAGES[0];
+  });
+}
+
+function parseMinutes(time: string): number {
+  const [rawTime, period] = time.split(" ");
+  const [h, m = 0] = rawTime.split(":").map(Number);
+  let hours = h;
+  if (period === "AM" && h === 12) hours = 0;
+  if (period === "PM" && h !== 12) hours += 12;
+  return hours * 60 + m;
+}
+
+function getOnAirPrograms() {
+  const now = new Date();
+  const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"] as const;
+  const todayName = DAY_NAMES[now.getDay()];
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+  const todayPrograms = tvSchedule.find(d => d.day === todayName)?.programs ?? [];
+  if (!todayPrograms.length) return [];
+
+  let currentIdx = 0;
+  for (let i = 0; i < todayPrograms.length; i++) {
+    if (parseMinutes(todayPrograms[i].time) <= nowMinutes) currentIdx = i;
+  }
+
+  return [0, 1, 2].map(offset => {
+    const prog = todayPrograms[(currentIdx + offset) % todayPrograms.length];
+    return { ...prog, isNow: offset === 0 };
+  });
+}
+
+// Card — image is fixed per program, only changes when the program itself changes
+function ShowCard({ prog, photo }: { prog: ReturnType<typeof getOnAirPrograms>[0]; photo: string }) {
+  const timeLabel = prog.isNow ? `NOW · ${prog.time}` : prog.time;
+
+  return (
+    <div
+      className="shrink-0 rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1"
+      style={{
+        flex: "0 0 clamp(160px,42vw,230px)",
+        border: `1px solid ${prog.isNow ? "rgba(255,122,0,.55)" : "rgba(255,255,255,0.12)"}`,
+        background: "#111",
+      }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,122,0,.6)"; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = prog.isNow ? "rgba(255,122,0,.55)" : "rgba(255,255,255,0.12)"; }}
+    >
+      {/* Image area — presenter photo, updates only when program changes */}
+      <div className="relative overflow-hidden" style={{ height: "clamp(80px,20vw,110px)" }}>
+        <AnimatePresence mode="sync">
+          <motion.img
+            key={photo}
+            src={photo}
+            alt={prog.presenter}
+            className="absolute inset-0 w-full h-full object-cover object-top"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7 }}
+          />
+        </AnimatePresence>
+        {/* Dark gradient at bottom */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 55%)" }}
+        />
+        {prog.isNow && (
+          <div
+            className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-white text-[11px] font-extrabold tracking-wide"
+            style={{ background: "rgba(255,59,48,.92)" }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="live-dot absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+            </span>
+            LIVE
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="px-3 py-2.5" style={{ background: "linear-gradient(180deg,rgba(17,17,19,.2),#0e0e10)" }}>
+        <p className="font-display text-[10px] font-bold tracking-wide mb-0.5" style={{ color: "#FF7A00" }}>{timeLabel}</p>
+        <p className="font-display font-bold text-white text-[15px] leading-snug tracking-tight mb-0.5">{prog.name}</p>
+        <p className="text-[11px]" style={{ color: "rgba(244,241,236,.62)" }}>{prog.tag}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function HomeHero() {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent]   = useState(0);
+  const [onAir, setOnAir]       = useState<ReturnType<typeof getOnAirPrograms>>([]);
   const n = slides.length;
+
+  // Compute schedule on mount and refresh every minute
+  useEffect(() => {
+    setOnAir(getOnAirPrograms());
+    const t = setInterval(() => setOnAir(getOnAirPrograms()), 60_000);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     const t = setInterval(() => setCurrent((c) => (c + 1) % n), 9000);
@@ -53,6 +208,8 @@ export default function HomeHero() {
   const slide = slides[current];
   const prev  = () => setCurrent((c) => (c - 1 + n) % n);
   const next  = () => setCurrent((c) => (c + 1) % n);
+
+  const liveShow = onAir[0];
 
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100dvh" }}>
@@ -66,13 +223,16 @@ export default function HomeHero() {
             backgroundImage: `url(${slide.bg})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            animation: "kenburns 26s ease-in-out infinite alternate",
             zIndex: -3,
           }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.2 }}
+          initial={{ opacity: 0, scale: 1.0, filter: "blur(0px)" }}
+          animate={{ opacity: 1, scale: 1.08, filter: "blur(0px)" }}
+          exit={{ opacity: 0, filter: "blur(20px)" }}
+          transition={{
+            opacity: { duration: 1.1, ease: "easeInOut" },
+            filter:  { duration: 0.75, ease: "easeIn" },
+            scale:   { duration: 10, ease: "linear" },
+          }}
         />
       </AnimatePresence>
 
@@ -128,11 +288,12 @@ export default function HomeHero() {
                   Live Now
                 </span>
                 <span className="text-xs" style={{ color: "rgba(244,241,236,.62)" }}>
-                  <b className="text-white font-semibold">Ntcto Cia</b> · Morning Show
+                  <b className="text-white font-semibold">{liveShow?.name ?? "Nteto Cia Weru"}</b>
+                  {" · "}{liveShow?.tag ?? "Morning Show"}
                 </span>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/heroimages/studio%20area11.png"
+                  src="/heroimages/studio%20area17.png"
                   alt=""
                   className="hidden sm:block w-16 h-9 object-cover rounded-lg shrink-0"
                   style={{ border: "1px solid rgba(255,255,255,0.12)" }}
@@ -219,66 +380,36 @@ export default function HomeHero() {
         </div>
 
         {/* ON AIR & UP NEXT rail */}
-        <motion.div
-          className="px-4 sm:px-10 md:px-12 pb-5 sm:pb-6"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <div className="flex items-baseline gap-4 mb-2">
-            <span
-              className="font-bold text-xs tracking-[1.6px] uppercase"
-              style={{ color: "rgba(244,241,236,.62)" }}
-            >
-              On Air &amp; Up Next
-            </span>
-            <Link
-              href="/tv#tv-schedule"
-              className="ml-auto text-sm font-semibold transition-opacity hover:opacity-80"
-              style={{ color: "#FF7A00" }}
-            >
-              Full schedule →
-            </Link>
-          </div>
-
-          <div className="flex gap-3.5 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-            {ON_AIR.map((show, i) => (
-              <div
-                key={i}
-                className="shrink-0 rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1"
-                style={{
-                  flex: "0 0 clamp(160px,42vw,230px)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  background: "#111",
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,122,0,.6)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.12)"; }}
+        {onAir.length > 0 && (
+          <motion.div
+            className="px-4 sm:px-10 md:px-12 pb-5 sm:pb-6"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            <div className="flex items-baseline gap-4 mb-2">
+              <span
+                className="font-bold text-xs tracking-[1.6px] uppercase"
+                style={{ color: "rgba(244,241,236,.62)" }}
               >
-                <div className="relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={show.img} alt={show.name} className="w-full object-cover" style={{ height: "clamp(80px,20vw,110px)" }} />
-                  {show.live && (
-                    <div
-                      className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-white text-[11px] font-extrabold tracking-wide"
-                      style={{ background: "rgba(255,59,48,.92)" }}
-                    >
-                      <span className="relative flex h-2 w-2">
-                        <span className="live-dot absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-                      </span>
-                      LIVE
-                    </div>
-                  )}
-                </div>
-                <div className="px-3 py-2.5" style={{ background: "linear-gradient(180deg,rgba(17,17,19,.2),#0e0e10)" }}>
-                  <p className="font-display text-[10px] font-bold tracking-wide mb-0.5" style={{ color: "#FF7A00" }}>{show.time}</p>
-                  <p className="font-display font-bold text-white text-[15px] leading-snug tracking-tight mb-0.5">{show.name}</p>
-                  <p className="text-[11px]" style={{ color: "rgba(244,241,236,.62)" }}>{show.genre}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+                On Air &amp; Up Next
+              </span>
+              <Link
+                href="/tv#tv-schedule"
+                className="ml-auto text-sm font-semibold transition-opacity hover:opacity-80"
+                style={{ color: "#FF7A00" }}
+              >
+                Full schedule →
+              </Link>
+            </div>
+
+            <div className="flex gap-3.5 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+              {pickUniquePhotos(onAir).map((photo, i) => (
+                <ShowCard key={onAir[i].id} prog={onAir[i]} photo={photo} />
+              ))}
+            </div>
+          </motion.div>
+        )}
       </div>
 
       {/* Quiz floating bar */}

@@ -3,7 +3,6 @@ import LiveStream from "@/components/sections/LiveStream";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
 import TVScheduleSection from "@/components/sections/TVScheduleSection";
 import ShowsCarousel from "@/components/sections/ShowsCarousel";
-import VideoGrid from "@/components/sections/VideoGrid";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
 import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
@@ -63,7 +62,6 @@ export default async function TVPage() {
       <ShowsCarousel />
 
       {/* Latest Videos */}
-      <VideoGrid />
 
       {/* Latest Headlines */}
       <NewsGrid articles={toNewsArticles(feed)} />

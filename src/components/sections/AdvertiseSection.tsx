@@ -1,15 +1,34 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import AdvertisingModal from "@/components/ui/AdvertisingModal";
 
 const stats = [
-  { value: "1.97M+", label: "Monthly Viewers",  icon: "👥" },
-  { value: "483K+",  label: "Radio Listeners",   icon: "📻" },
-  { value: "1.2M+",  label: "Social Followers",  icon: "📱" },
-  { value: "24/7",   label: "On Air Coverage",   icon: "🎙️" },
-];
+  { target: 1.97, decimals: 2, suffix: "M+", label: "Monthly Viewers",  icon: "👥" },
+  { target: 483,  decimals: 0, suffix: "K+", label: "Radio Listeners",   icon: "📻" },
+  { target: 1.2,  decimals: 1, suffix: "M+", label: "Social Followers",  icon: "📱" },
+  { target: null, display: "24/7",            label: "On Air Coverage",   icon: "🎙️" },
+] as const;
+
+function CountUp({ target, decimals = 0, suffix = "" }: { target: number; decimals?: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const count = useMotionValue(0);
+  const [display, setDisplay] = useState("0");
+
+  useEffect(() => {
+    if (!isInView) return;
+    const controls = animate(count, target, {
+      duration: 2,
+      ease: "easeOut",
+      onUpdate: (latest) => setDisplay(latest.toFixed(decimals)),
+    });
+    return controls.stop;
+  }, [isInView, count, target, decimals]);
+
+  return <span ref={ref}>{display}{suffix}</span>;
+}
 
 const platforms = [
   {
@@ -114,7 +133,7 @@ function MiniAdStrip() {
 }
 
 export default function AdvertiseSection() {
-  const [openModal, setOpenModal] = useState<"rate-card" | "booking" | null>(null);
+  const [openModal, setOpenModal] = useState<"rate-card" | null>(null);
 
   return (
     <>
@@ -170,7 +189,9 @@ export default function AdvertiseSection() {
               >
                 <div className="text-2xl mb-1">{s.icon}</div>
                 <div className="text-2xl font-extrabold" style={{ color: "#f97d00", fontVariantNumeric: "tabular-nums" }}>
-                  {s.value}
+                  {"target" in s && s.target !== null
+                    ? <CountUp target={s.target} decimals={s.decimals} suffix={s.suffix} />
+                    : ("display" in s ? s.display : null)}
                 </div>
                 <div className="text-white/50 text-xs mt-1 font-medium">{s.label}</div>
               </motion.div>
@@ -222,8 +243,8 @@ export default function AdvertiseSection() {
                 </div>
               </div>
 
-              {/* Right: scrolling ad carousel — hidden on small screens to avoid cramped layout */}
-              <div className="hidden sm:block shrink-0">
+              {/* Right: scrolling ad carousel */}
+              <div className="shrink-0">
                 <MiniAdStrip />
               </div>
             </motion.div>
@@ -272,8 +293,10 @@ export default function AdvertiseSection() {
             >
               📋 Request Rate Card
             </motion.button>
-            <motion.button
-              onClick={() => setOpenModal("booking")}
+            <motion.a
+              href="https://calendar.app.google/CBpfjwacRRN7hzKm6"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white font-extrabold text-sm"
               style={{
                 background: "rgba(200,16,46,0.85)",
@@ -283,7 +306,7 @@ export default function AdvertiseSection() {
               whileTap={{ scale: 0.95 }}
             >
               📅 Book Advertising Slot
-            </motion.button>
+            </motion.a>
           </motion.div>
         </div>
       </section>
@@ -292,11 +315,6 @@ export default function AdvertiseSection() {
       <AdvertisingModal
         isOpen={openModal === "rate-card"}
         title="Request Rate Card"
-        onClose={() => setOpenModal(null)}
-      />
-      <AdvertisingModal
-        isOpen={openModal === "booking"}
-        title="Book Advertising Slot"
         onClose={() => setOpenModal(null)}
       />
     </>
