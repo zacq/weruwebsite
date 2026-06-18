@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const BASE_ID  = "appXyMV3O6ycSVRAi";
+const TABLE_ID = process.env.AIRTABLE_AD_TABLE_ID ?? "tblifCk8Mp05lyyVo";
 const DURATIONS = [15, 30, 45, 60, 90];
 
 export async function POST(req: NextRequest) {
@@ -20,10 +21,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const pat     = process.env.AIRTABLE_PAT;
-    const tableId = process.env.AIRTABLE_AD_TABLE_ID;
+    const pat = process.env.AIRTABLE_PAT;
 
-    if (!pat || !tableId) {
+    if (!pat) {
       console.log("[AD SUBMISSION]", {
         contactName, company, phone, email, adType,
         adDuration: `${DURATIONS[adDurationIndex] ?? 30} seconds`,
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     if (documentsLink) fields["Documents Link"] = documentsLink;
     if (instructions)  fields["Instructions"]   = instructions;
 
-    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${tableId}`, {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${pat}`,
