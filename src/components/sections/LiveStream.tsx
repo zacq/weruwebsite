@@ -2,20 +2,21 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import type { StreamResponse } from "@/app/api/youtube-live/route";
+import type { StreamResponse } from "@/lib/getStreamSource";
 
 const CHANNEL_ID = "UCKf9xsi0uL1mwdrq7PmZsQA";
 
-export default function LiveStream() {
-  const [stream, setStream] = useState<StreamResponse | null>(null);
+export default function LiveStream({ initialStream }: { initialStream?: StreamResponse }) {
+  const [stream, setStream] = useState<StreamResponse | null>(initialStream ?? null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    if (initialStream) return;
     fetch("/api/youtube-live")
       .then((r) => r.json())
       .then(setStream)
       .catch(() => setStream({ type: "none" }));
-  }, []);
+  }, [initialStream]);
 
   useEffect(() => {
     if (stream?.type !== "hls" || !videoRef.current) return;
@@ -31,7 +32,15 @@ export default function LiveStream() {
     let hlsInstance: import("hls.js").default | null = null;
     import("hls.js").then(({ default: Hls }) => {
       if (!Hls.isSupported()) return;
-      hlsInstance = new Hls({ lowLatencyMode: true });
+      hlsInstance = new Hls({
+        lowLatencyMode:           true,
+        liveSyncDuration:         1,
+        liveMaxLatencyDuration:   4,
+        maxBufferLength:          4,
+        maxMaxBufferLength:       8,
+        backBufferLength:         0,
+        highBufferWatchdogPeriod: 1,
+      });
       hlsInstance.loadSource(url);
       hlsInstance.attachMedia(video);
       hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -181,7 +190,7 @@ export default function LiveStream() {
               <sup className="text-[9px] font-bold" style={{ color: "#f97d00" }}>TV</sup>
             </div>
             <a
-              href="#rate-card"
+              href="/advertise"
               className="text-xs font-bold px-3 py-1 rounded-lg transition-all"
               style={{ background: "rgba(249,125,0,0.85)", color: "#fff" }}
             >

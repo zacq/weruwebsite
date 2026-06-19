@@ -6,6 +6,7 @@ import ShowsCarousel from "@/components/sections/ShowsCarousel";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
 import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
+import { getStreamSource } from "@/lib/getStreamSource";
 
 const AdvertiseSection = lazyImport(
   () => import("@/components/sections/AdvertiseSection"),
@@ -45,12 +46,12 @@ function toNewsArticles(feed: Headline[]) {
 }
 
 export default async function TVPage() {
-  const feed = await getNewsFeed();
+  const [feed, initialStream] = await Promise.all([getNewsFeed(), getStreamSource()]);
 
   return (
     <>
       {/* Live stream hero */}
-      <LiveStream />
+      <LiveStream initialStream={initialStream} />
 
       {/* Scrolling headlines ticker */}
       <HeadlineTicker headlines={feed} />
