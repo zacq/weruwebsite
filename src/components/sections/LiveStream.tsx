@@ -51,10 +51,24 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
     return () => { hlsInstance?.destroy(); };
   }, [stream]);
 
-  const embedSrc    = "https://player.restream.io/?token=644baa7151274e01b9ab045719866498";
-  const isStreamLive = true;
-  const hasVideo    = true;
-  const statusLabel = "Live from Weru Digital";
+  const isLive      = stream?.type === "youtube" && stream.isLive;
+  const isStreamLive = stream?.type === "embed" || stream?.type === "hls" || isLive;
+  const hasVideo    = stream !== null && stream.type !== "none";
+
+  const embedSrc = (() => {
+    if (!stream) return null;
+    if (stream.type === "embed")   return stream.url;
+    if (stream.type === "youtube") return `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+    return null;
+  })();
+
+  const statusLabel = stream === null
+    ? "Loading stream…"
+    : stream.type === "embed" || stream.type === "hls"
+    ? "Live from Weru Digital"
+    : isLive
+    ? "Streaming live from Weru Digital"
+    : "Latest from Weru TV";
 
   return (
     <section id="live" className="px-4 py-10" style={{ background: "#f97d00" }}>
