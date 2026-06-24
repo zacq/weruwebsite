@@ -54,7 +54,7 @@ function TVCard({ style, delay = 0.35, compact = false }: { style?: React.CSSPro
       <div className={`px-3 ${compact ? "pb-2 gap-1.5" : "pb-3 gap-2"} flex flex-col items-center`}>
         <Link
           href="/tv"
-          className={`w-full inline-flex items-center justify-center gap-2 px-4 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1.5" : "py-2"}`}
+          className={`w-full inline-flex items-center justify-center gap-1.5 px-3 rounded-lg font-bold transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1 text-xs" : "py-2 text-sm"}`}
           style={{ background: "linear-gradient(180deg,#FF9425,#FF7A00)", color: "#1a1003", boxShadow: "0 4px 14px rgba(255,122,0,.30)" }}
         >
           ▶ Watch Live
@@ -134,7 +134,7 @@ function FMCard({ style, delay = 0.55, compact = false }: { style?: React.CSSPro
             <audio ref={audioRef} src={streamUrl} preload="none" />
             <button
               onClick={toggle}
-              className={`w-full inline-flex items-center justify-center gap-1.5 px-4 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1.5" : "py-2"}`}
+              className={`w-full inline-flex items-center justify-center gap-1.5 px-3 rounded-lg font-bold transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1 text-xs" : "py-2 text-sm"}`}
               style={
                 playing
                   ? { background: "rgba(255,255,255,0.12)", color: "#fff", border: "1px solid rgba(255,255,255,0.18)" }
@@ -147,7 +147,7 @@ function FMCard({ style, delay = 0.55, compact = false }: { style?: React.CSSPro
         ) : (
           <Link
             href="/radio"
-            className={`w-full inline-flex items-center justify-center gap-1.5 px-4 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1.5" : "py-2"}`}
+            className={`w-full inline-flex items-center justify-center gap-1.5 px-3 rounded-lg font-bold transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1 text-xs" : "py-2 text-sm"}`}
             style={{ background: "linear-gradient(180deg,#FF9425,#FF7A00)", color: "#1a1003" }}
           >
             ▶ Listen Live
@@ -159,28 +159,30 @@ function FMCard({ style, delay = 0.55, compact = false }: { style?: React.CSSPro
 }
 
 /* ─── Quiz bar (shared JSX) ───────────────────────────────────────────────── */
-function QuizBar() {
+function QuizBar({ compact = false }: { compact?: boolean }) {
   return (
     <a
       href="/quiz"
-      className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl w-full"
+      className={`inline-flex items-center gap-2 rounded-2xl w-full ${compact ? "px-3 py-1.5" : "px-4 py-2.5"}`}
       style={{
         background: "linear-gradient(145deg,#4A2000 0%,#7A3A00 55%,#5C2A00 100%)",
         border: "1px solid rgba(250,180,50,0.28)",
         boxShadow: "0 8px 28px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06)",
       }}
     >
-      <div className="shrink-0 w-8 h-8 rounded-full grid place-items-center text-base" style={{ background: "rgba(0,0,0,.35)" }}>
+      <div className={`shrink-0 rounded-full grid place-items-center ${compact ? "w-6 h-6 text-sm" : "w-8 h-8 text-base"}`} style={{ background: "rgba(0,0,0,.35)" }}>
         🎯
       </div>
       <div className="min-w-0 flex-1">
-        <p className="font-display font-bold text-white text-sm leading-snug">10 for 10: Castle Escape</p>
-        <p className="text-xs" style={{ color: "rgba(244,241,236,.58)" }}>
-          10 questions for 10 years – win a night at Tafaria
-        </p>
+        <p className={`font-display font-bold text-white leading-snug ${compact ? "text-xs" : "text-sm"}`}>10 for 10: Castle Escape</p>
+        {!compact && (
+          <p className="text-xs" style={{ color: "rgba(244,241,236,.58)" }}>
+            10 questions for 10 years – win a night at Tafaria
+          </p>
+        )}
       </div>
-      <span className="shrink-0 px-3 py-1.5 rounded-full font-bold text-xs whitespace-nowrap" style={{ background: "#FACC15", color: "#1a1003" }}>
-        Start Quiz →
+      <span className={`shrink-0 rounded-full font-bold whitespace-nowrap ${compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs"}`} style={{ background: "#FACC15", color: "#1a1003" }}>
+        Start →
       </span>
     </a>
   );
@@ -306,9 +308,9 @@ export default function HomeHero() {
         style={{ height: "18%", background: "linear-gradient(to bottom, transparent 0%, #060608 100%)", zIndex: 1 }}
       />
 
-      {/* ── MOBILE layout (< sm): LIVE pill → Title → TV card → FM card → Quiz ── */}
+      {/* ── MOBILE layout (< sm): LIVE pill → Title → [spacer] → TV → FM → Quiz ── */}
       <div
-        className="sm:hidden relative z-10 flex flex-col px-4 gap-2.5"
+        className="sm:hidden relative z-10 flex flex-col px-4"
         style={{ paddingTop: "3.5rem", height: "100dvh", paddingBottom: "18%" }}
       >
         {/* LIVE pill */}
@@ -317,23 +319,26 @@ export default function HomeHero() {
         </div>
 
         {/* Title */}
-        <div className="shrink-0">
+        <div className="shrink-0 mt-2">
           <Headline fontSize="clamp(30px, 9.5vw, 46px)" />
         </div>
+
+        {/* Spacer — pushes cards toward bottom */}
+        <div className="flex-1" />
 
         {/* TV card — full width, compact */}
         <div className="shrink-0">
           <TVCard style={{ width: "100%" }} delay={0.2} compact />
         </div>
 
-        {/* FM card — slightly narrower + compact */}
-        <div className="shrink-0" style={{ width: "88%" }}>
+        {/* FM card — slightly narrower, tight gap above quiz */}
+        <div className="shrink-0 mt-2" style={{ width: "88%" }}>
           <FMCard style={{ width: "100%" }} delay={0.32} compact />
         </div>
 
-        {/* Quiz bar */}
-        <div className="shrink-0 mt-auto">
-          <QuizBar />
+        {/* Quiz bar — slightly smaller than FM card */}
+        <div className="shrink-0 mt-1.5" style={{ width: "82%" }}>
+          <QuizBar compact />
         </div>
       </div>
 
