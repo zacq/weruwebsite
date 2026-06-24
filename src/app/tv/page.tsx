@@ -1,4 +1,5 @@
 import lazyImport from "next/dynamic";
+import ScrollToTop from "@/components/ui/ScrollToTop";
 import LiveStream from "@/components/sections/LiveStream";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
 import TVScheduleSection from "@/components/sections/TVScheduleSection";
@@ -7,11 +8,6 @@ import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
 import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
 import { getStreamSource } from "@/lib/getStreamSource";
-
-const AdvertiseSection = lazyImport(
-  () => import("@/components/sections/AdvertiseSection"),
-  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
-);
 
 const NewsGrid = lazyImport(
   () => import("@/components/sections/NewsGrid"),
@@ -50,6 +46,7 @@ export default async function TVPage() {
 
   return (
     <>
+      <ScrollToTop />
       {/* Live stream hero */}
       <LiveStream initialStream={initialStream} />
 
@@ -67,7 +64,6 @@ export default async function TVPage() {
       {/* Latest Headlines */}
       <NewsGrid articles={toNewsArticles(feed)} />
 
-      <AdvertiseSection />
       <RateCardForm />
       <Footer />
     </>

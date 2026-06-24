@@ -8,12 +8,9 @@ import { useState, useEffect, useRef } from "react";
 
 const navLinks = [
   { label: "Home",       href: "/" },
-  { label: "TV",         href: "/tv",         dropdown: true },
+  { label: "TV",         href: "/tv#tv-schedule" },
   { label: "Radio",      href: "/radio" },
   { label: "Presenters", href: "/presenters" },
-  { label: "Shows",      href: "/tv" },
-  { label: "News",       href: "/blog" },
-  { label: "Sports",     href: "/tv#sports" },
   { label: "Studios",    href: "/studios" },
   { label: "Gallery",    href: "/gallery" },
   { label: "Contact",    href: "#contact",    dropdown: true },
@@ -54,7 +51,7 @@ function ContactDropdown() {
       {/* Trigger */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
+        className="flex items-center gap-1 px-3 py-1.5 text-sm font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
         style={{ color: open ? "#f97d00" : "rgba(255,255,255,0.65)" }}
       >
         Contact
@@ -90,12 +87,12 @@ function ContactDropdown() {
                 <p className="text-[9px] font-extrabold tracking-widest uppercase mb-1.5"
                   style={{ color: "#f97d00" }}>Reception</p>
                 <a href="tel:+254700117026"
-                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left"
                   style={{ color: "#ffffff" }}>
                   📞 0700 117026
                 </a>
                 <a href="tel:+254738970438"
-                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left"
                   style={{ color: "#ffffff" }}>
                   📞 0738 970438
                 </a>
@@ -108,7 +105,7 @@ function ContactDropdown() {
                 <p className="text-[9px] font-extrabold tracking-widest uppercase mb-1.5"
                   style={{ color: "#f97d00" }}>Commercials</p>
                 <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#25D366] transition-colors"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#25D366] transition-all duration-150 hover:scale-105 origin-left"
                   style={{ color: "#ffffff" }}>
                   💬 0793 004303
                 </a>
@@ -121,7 +118,7 @@ function ContactDropdown() {
                 <p className="text-[9px] font-extrabold tracking-widest uppercase mb-1.5"
                   style={{ color: "#f97d00" }}>News Hotline</p>
                 <a href="tel:+254703223363"
-                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+                  className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left"
                   style={{ color: "#ffffff" }}>
                   📞 0703 223363
                 </a>
@@ -130,10 +127,10 @@ function ContactDropdown() {
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)" }} />
 
               {/* Email */}
-              <a href="mailto:info@werudigital.co.ke"
-                className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-colors"
+              <a href="mailto:weruofficial@gmail.com"
+                className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left"
                 style={{ color: "#ffffff" }}>
-                ✉️ info@werudigital.co.ke
+                ✉️ weruofficial@gmail.com
               </a>
 
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }} />
@@ -144,7 +141,7 @@ function ContactDropdown() {
                   href={WHATSAPP}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-85"
+                  className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold transition-all duration-150 hover:scale-[1.04] hover:opacity-90"
                   style={{ background: "#25D366" }}
                 >
                   💬 WhatsApp Us
@@ -153,7 +150,7 @@ function ContactDropdown() {
                   href={MAPS}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-85"
+                  className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-white text-xs font-bold transition-all duration-150 hover:scale-[1.04] hover:opacity-90"
                   style={{ background: "#4285F4" }}
                 >
                   📍 Find Us on Google Maps
@@ -190,7 +187,7 @@ function TVDropdown({ pathname }: { pathname: string }) {
     <div ref={ref} className="relative" onMouseEnter={show} onMouseLeave={hide}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
+        className="flex items-center gap-1 px-3 py-1.5 text-sm font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
         style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.65)" }}
       >
         TV
@@ -238,45 +235,14 @@ function TVDropdown({ pathname }: { pathname: string }) {
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-  const lastScrollY = useRef(0);
-  const menuOpenRef = useRef(false);
-
-  useEffect(() => { menuOpenRef.current = menuOpen; }, [menuOpen]);
-
-  useEffect(() => {
-    const handler = () => {
-      if (menuOpenRef.current) return;
-      const currentY = window.scrollY;
-      if (currentY < 10) {
-        setVisible(true);
-      } else if (currentY < lastScrollY.current) {
-        setVisible(true);
-      } else if (currentY > lastScrollY.current + 6) {
-        setVisible(false);
-      }
-      lastScrollY.current = currentY;
-    };
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.nav
-          key="navbar"
-          className="fixed top-0 left-0 right-0 z-50"
-          initial={{ y: -80, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -80, opacity: 0 }}
-          transition={{ duration: 0.28, ease: "easeInOut" }}
-        >
-          <div
-            className="glass-strong w-full px-4 h-14 flex items-center justify-between gap-4 transition-all duration-300"
-            style={{ borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}
-          >
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      <div
+        className="glass-strong w-full px-4 h-14 flex items-center justify-between gap-4"
+        style={{ borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}
+      >
             {/* Logo */}
             <Link href="/" className="shrink-0 flex items-center">
               <Image
@@ -301,7 +267,7 @@ export default function Navbar() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="px-3 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
+                    className="px-3 py-1.5 text-sm font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
                     style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.65)" }}
                   >
                     {link.label}
@@ -327,21 +293,27 @@ export default function Navbar() {
                 <span>LIVE RADIO</span>
               </motion.a>
 
+              {/* Watch Live — primary CTA, visible on all screen sizes */}
               <motion.a
                 href="/tv"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-black text-xs font-bold"
-                style={{ background: "#ffffff" }}
-                whileHover={{ scale: 1.05, background: "#f5f5f5" }}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold"
+                style={{
+                  background: "linear-gradient(180deg,#FF9425,#FF7A00)",
+                  color: "#1a1003",
+                  boxShadow: "0 4px 14px rgba(255,122,0,.35)",
+                }}
+                whileHover={{ scale: 1.05, boxShadow: "0 6px 22px rgba(255,122,0,.55)" }}
                 whileTap={{ scale: 0.95 }}
               >
-                📺 LIVE TV
+                ▶ Watch Live
               </motion.a>
 
+              {/* Advertise — desktop only on mobile to keep navbar clean */}
               <motion.a
                 href="/advertise"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
-                style={{ background: "#f97d00", boxShadow: "0 0 14px rgba(249,125,0,0.35)" }}
-                whileHover={{ scale: 1.06, boxShadow: "0 0 22px rgba(249,125,0,0.55)" }}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
+                style={{ background: "rgba(249,125,0,0.18)", border: "1px solid rgba(249,125,0,0.35)" }}
+                whileHover={{ scale: 1.06, background: "rgba(249,125,0,0.28)" }}
                 whileTap={{ scale: 0.95 }}
               >
                 <span className="hidden lg:inline">📢 Advertise</span>
@@ -351,9 +323,7 @@ export default function Navbar() {
               <MobileMenu pathname={pathname} open={menuOpen} setOpen={setMenuOpen} />
             </div>
           </div>
-        </motion.nav>
-      )}
-    </AnimatePresence>
+    </nav>
   );
 }
 
@@ -436,7 +406,7 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                             <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>💬 0793 004303</a>
                             <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>News Hotline</p>
                             <a href="tel:+254703223363" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>📞 0703 223363</a>
-                            <a href="mailto:info@werudigital.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold mt-1 active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>✉️ info@werudigital.co.ke</a>
+                            <a href="mailto:weruofficial@gmail.com" className="flex items-center gap-2 py-1 text-sm font-semibold mt-1 active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>✉️ weruofficial@gmail.com</a>
                             <div className="flex flex-col gap-2 mt-3">
                               <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
                                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-white text-sm font-bold active:scale-95 transition-transform"

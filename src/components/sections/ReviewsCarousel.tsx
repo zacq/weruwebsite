@@ -14,70 +14,10 @@ interface Review {
 }
 
 const FALLBACK_REVIEWS: Review[] = [
-  {
-    id: 1,
-    name: "James Mwangi",
-    location: "Nyeri, Kenya",
-    rating: 5,
-    text: "Weru TV is the best Kikuyu channel! Always informative and entertaining. I never miss the evening news.",
-    photo: "/Presenters/munene-wa-kagwi.png",
-  },
-  {
-    id: 2,
-    name: "Grace Wanjiku",
-    location: "Nairobi, Kenya",
-    rating: 5,
-    text: "The radio programs are amazing. Tutharimwe Morning Show sets the perfect tone for my day. God bless Weru FM!",
-    photo: "/Presenters/stella-karimi.png",
-  },
-  {
-    id: 3,
-    name: "Peter Kariuki",
-    location: "Thika, Kenya",
-    rating: 5,
-    text: "I advertised my business on Weru TV and saw incredible results within the first week. Highly recommended!",
-    photo: "/Presenters/martin-gichunge.png",
-  },
-  {
-    id: 4,
-    name: "Mary Njeri",
-    location: "Muranga, Kenya",
-    rating: 5,
-    text: "Gichunki is my favourite show! Martin Gichunge brings so much energy and cultural pride to every episode.",
-    photo: "/Presenters/nelly-githinji.png",
-  },
-  {
-    id: 5,
-    name: "Samuel Gitau",
-    location: "Kirinyaga, Kenya",
-    rating: 4,
-    text: "Really good coverage of local news in the Mount Kenya region. Keeps me updated even when I'm away from home.",
-    photo: "/Presenters/edward-mutembei.png",
-  },
-  {
-    id: 6,
-    name: "Agnes Kamau",
-    location: "Meru, Kenya",
-    rating: 5,
-    text: "The Uria Ndagitari show has helped me so much with health knowledge. Thank you Weru TV for this kind of content.",
-    photo: "/Presenters/makena-wa-matiri.png",
-  },
-  {
-    id: 7,
-    name: "David Ngugi",
-    location: "Nakuru, Kenya",
-    rating: 5,
-    text: "Best community media platform in Kenya. Weru TV truly represents the voice of our people.",
-    photo: "/Presenters/mwenda-h-pilot.png",
-  },
-  {
-    id: 8,
-    name: "Ruth Muthoni",
-    location: "Embu, Kenya",
-    rating: 5,
-    text: "Reggaemani with Empress Rita is on another level! Perfect weekend vibes. I listen every Saturday.",
-    photo: "/Presenters/empress-rita-natty.png",
-  },
+  { id: 1, name: "James Mwangi",  location: "Nyeri, Kenya",   rating: 5, text: "Weru TV is the best Kikuyu channel! Always informative and entertaining. I never miss the evening news.", photo: "" },
+  { id: 2, name: "Grace Wanjiku", location: "Nairobi, Kenya", rating: 5, text: "The radio programs are amazing. Tutharimwe Morning Show sets the perfect tone for my day. God bless Weru FM!", photo: "" },
+  { id: 3, name: "Peter Kariuki", location: "Thika, Kenya",   rating: 5, text: "I advertised my business on Weru TV and saw incredible results within the first week. Highly recommended!", photo: "" },
+  { id: 4, name: "Mary Njeri",    location: "Muranga, Kenya", rating: 5, text: "Gichunki is my favourite show! Martin Gichunge brings so much energy and cultural pride to every episode.", photo: "" },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -160,24 +100,12 @@ function ReviewCard({
           : "none",
       }}
     >
-      {/* Photo + name */}
+      {/* Avatar (blank) + name */}
       <div className="flex items-center gap-3">
         <div
-          className="shrink-0 rounded-full overflow-hidden flex items-center justify-center"
-          style={{ width: 56, height: 56, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.12)" }}
-        >
-          {review.photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={review.photo}
-              alt={review.name}
-              className="w-full h-full object-cover object-top"
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <span className="text-white/60 font-bold text-lg">{review.name[0]}</span>
-          )}
-        </div>
+          className="shrink-0 rounded-full"
+          style={{ width: 56, height: 56, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.08)" }}
+        />
         <div>
           <p className="text-white font-bold text-sm leading-tight">{review.name}</p>
           {review.location
@@ -289,21 +217,9 @@ export default function ReviewsCarousel() {
           >
             <div className="flex items-center gap-3">
               <div
-                className="shrink-0 rounded-full overflow-hidden flex items-center justify-center"
-                style={{ width: 52, height: 52, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.12)" }}
-              >
-                {reviews[current].photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={reviews[current].photo}
-                    alt={reviews[current].name}
-                    className="w-full h-full object-cover object-top"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <span className="text-white/60 font-bold text-lg">{reviews[current].name[0]}</span>
-                )}
-              </div>
+                className="shrink-0 rounded-full"
+                style={{ width: 52, height: 52, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.08)" }}
+              />
               <div>
                 <p className="text-white font-bold text-sm">{reviews[current].name}</p>
                 {reviews[current].location

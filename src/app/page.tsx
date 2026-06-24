@@ -16,24 +16,14 @@ export const metadata = {
   },
 };
 
-const PlatformsSection = lazyImport(
-  () => import("@/components/sections/PlatformsSection"),
-  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
-);
-
-const WhyWeruSection = lazyImport(
-  () => import("@/components/sections/WhyWeruSection"),
-  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
-);
-
 const CultureSection = lazyImport(
   () => import("@/components/sections/CultureSection"),
   { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
-const AdvertiseSection = lazyImport(
-  () => import("@/components/sections/AdvertiseSection"),
-  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
+const PlatformsSection = lazyImport(
+  () => import("@/components/sections/PlatformsSection"),
+  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
 const ReviewsCarousel = lazyImport(
@@ -56,30 +46,39 @@ const Footer = lazyImport(() => import("@/components/layout/Footer"));
 export default function HomePage() {
   return (
     <>
-      {/* 1. Full-screen hero — image carousel */}
       <HomeHero />
 
-      {/* 2. Watch Weru TV Everywhere — platforms & international coverage */}
-      <PlatformsSection />
+      {/* Quiz bar — desktop only; mobile version lives inside HomeHero */}
+      <div className="hidden sm:flex justify-center px-4 py-4" style={{ background: "#060608" }}>
+        <a
+          href="/quiz"
+          className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl"
+          style={{
+            background: "linear-gradient(145deg,#4A2000 0%,#7A3A00 55%,#5C2A00 100%)",
+            border: "1px solid rgba(250,180,50,0.28)",
+            boxShadow: "0 8px 28px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06)",
+          }}
+        >
+          <div className="shrink-0 w-8 h-8 rounded-full grid place-items-center text-base" style={{ background: "rgba(0,0,0,.35)" }}>
+            🎯
+          </div>
+          <div className="min-w-0">
+            <p className="font-display font-bold text-white text-sm leading-snug">10 for 10: Castle Escape</p>
+            <p className="text-xs whitespace-nowrap" style={{ color: "rgba(244,241,236,.58)" }}>
+              10 questions for 10 years – win a night at Tafaria
+            </p>
+          </div>
+          <span className="shrink-0 px-4 py-1.5 rounded-full font-bold text-sm whitespace-nowrap" style={{ background: "#FACC15", color: "#1a1003" }}>
+            Start Quiz →
+          </span>
+        </a>
+      </div>
 
-      {/* 3. Why Weru TV — premium differentiators */}
-      <WhyWeruSection />
-
-      {/* 4. Arts, Culture & Studios */}
       <CultureSection />
-
-      {/* 5. Grow Your Brand */}
-      <AdvertiseSection />
-
-      {/* 6. What Our Viewers Say */}
+      <PlatformsSection />
       <ReviewsCarousel />
-
-      {/* 7. Trusted by Leading Brands */}
       <PartnersCarousel />
-
-      {/* 8. Rate Card Enquiry */}
       <RateCardForm />
-
       <Footer />
     </>
   );

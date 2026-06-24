@@ -57,50 +57,26 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
   const statusLabel = "Live from Weru Digital";
 
   return (
-    <section id="live" className="px-4 py-10" style={{ background: "#f97d00" }}>
-      <div className="max-w-4xl mx-auto">
+    <section
+      id="live"
+      className="px-0"
+      style={{
+        background: "#000",
+        paddingTop: "3.5rem",   /* clear fixed navbar */
+        height: "100dvh",
+      }}
+    >
+      <div style={{ height: "calc(100dvh - 3.5rem)", position: "relative" }}>
 
-        {/* Header */}
+        {/* Player — fills remaining viewport height, letter-boxes to 16:9 */}
         <motion.div
-          className="flex items-center justify-between mb-5"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          className="relative overflow-hidden w-full h-full"
+          style={{ background: "#000" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
         >
-          <div>
-            <h2 className="text-white font-extrabold text-xl sm:text-2xl">Live TV</h2>
-            <p className="text-white/65 text-xs mt-0.5">{statusLabel}</p>
-          </div>
-
-          <div
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors duration-300"
-            style={{ background: isStreamLive ? "#C8102E" : "rgba(0,0,0,0.30)" }}
-          >
-            {isStreamLive && (
-              <span className="w-2 h-2 rounded-full bg-white live-dot inline-block" />
-            )}
-            <span className="text-white text-[11px] font-extrabold tracking-wider uppercase">
-              {isStreamLive ? "LIVE" : "LATEST"}
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Player */}
-        <motion.div
-          className="relative overflow-hidden rounded-2xl"
-          style={{
-            background: "rgba(0,0,0,0.55)",
-            backdropFilter: "blur(20px)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            boxShadow: "0 16px 56px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)",
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1, duration: 0.5 }}
-        >
-          <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+          <div className="relative w-full h-full">
 
             {/* Loading skeleton */}
             {stream === null && (
@@ -117,7 +93,7 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
               <video
                 ref={videoRef}
                 className="absolute inset-0 w-full h-full"
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "contain", background: "#000" }}
                 autoPlay
                 muted
                 controls
@@ -133,7 +109,7 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                 allowFullScreen
                 className="absolute inset-0 w-full h-full"
-                style={{ border: "none" }}
+                style={{ border: "none", background: "#000" }}
               />
             )}
 

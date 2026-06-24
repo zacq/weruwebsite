@@ -109,8 +109,8 @@ export default function Footer() {
                 📞 0703 223363
               </a>
 
-              <a href="mailto:info@werudigital.co.ke" className="mt-0.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
-                ✉️ info@werudigital.co.ke
+              <a href="mailto:weruofficial@gmail.com" className="mt-0.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                ✉️ weruofficial@gmail.com
               </a>
             </div>
           </div>
