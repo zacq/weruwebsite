@@ -232,31 +232,6 @@ export default function RateCardForm() {
       className="px-4 py-16 sm:py-20"
       style={{ background: "#0D1117" }}
     >
-      {/* Section header */}
-      <motion.div
-        className="text-center mb-10 sm:mb-12"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.55 }}
-      >
-        <p
-          className="text-[11px] font-bold tracking-widest uppercase mb-3"
-          style={{ color: "#f97d00" }}
-        >
-          ADVERTISING PACKAGES
-        </p>
-        <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-white">
-          Grow Your Brand{" "}
-          <span className="font-headline italic" style={{ color: "#f97d00" }}>
-            on Air
-          </span>
-        </h2>
-        <p className="text-sm sm:text-base mt-3 max-w-lg mx-auto" style={{ color: "rgba(244,241,236,0.50)" }}>
-          Browse our packages, select what interests you, and we&apos;ll WhatsApp you the pricing directly.
-        </p>
-      </motion.div>
-
       <div className="max-w-6xl mx-auto">
         <AnimatePresence mode="wait">
           {!submitted ? (
