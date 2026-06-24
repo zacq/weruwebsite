@@ -19,7 +19,7 @@ const CARD_BASE: React.CSSProperties = {
 };
 
 /* ─── TV card ─────────────────────────────────────────────────────────────── */
-function TVCard({ style, delay = 0.35 }: { style?: React.CSSProperties; delay?: number }) {
+function TVCard({ style, delay = 0.35, compact = false }: { style?: React.CSSProperties; delay?: number; compact?: boolean }) {
   const controls = useAnimation();
 
   useEffect(() => {
@@ -48,13 +48,13 @@ function TVCard({ style, delay = 0.35 }: { style?: React.CSSProperties; delay?: 
       animate={controls}
       whileHover={{ y: -4, boxShadow: "0 16px 40px rgba(255,122,0,0.35)" }}
     >
-      <div className="flex items-center justify-center px-3 py-2.5">
-        <span className="font-display font-extrabold text-white text-sm tracking-wide">WERU TV</span>
+      <div className={`flex items-center justify-center px-3 ${compact ? "py-1.5" : "py-2.5"}`}>
+        <span className={`font-display font-extrabold text-white tracking-wide ${compact ? "text-base" : "text-sm"}`}>WERU TV</span>
       </div>
-      <div className="px-3 pb-3 flex flex-col items-center gap-2">
+      <div className={`px-3 ${compact ? "pb-2 gap-1.5" : "pb-3 gap-2"} flex flex-col items-center`}>
         <Link
           href="/tv"
-          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95"
+          className={`w-full inline-flex items-center justify-center gap-2 px-4 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1.5" : "py-2"}`}
           style={{ background: "linear-gradient(180deg,#FF9425,#FF7A00)", color: "#1a1003", boxShadow: "0 4px 14px rgba(255,122,0,.30)" }}
         >
           ▶ Watch Live
@@ -66,7 +66,7 @@ function TVCard({ style, delay = 0.35 }: { style?: React.CSSProperties; delay?: 
               href={p.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 inline-flex items-center gap-1 px-1.5 py-1.5 rounded-lg transition-all hover:bg-white/10 active:scale-95"
+              className="shrink-0 inline-flex items-center gap-1 px-1.5 py-1 rounded-lg transition-all hover:bg-white/10 active:scale-95"
               style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
             >
               <span
@@ -85,7 +85,7 @@ function TVCard({ style, delay = 0.35 }: { style?: React.CSSProperties; delay?: 
 }
 
 /* ─── FM card ─────────────────────────────────────────────────────────────── */
-function FMCard({ style, delay = 0.55 }: { style?: React.CSSProperties; delay?: number }) {
+function FMCard({ style, delay = 0.55, compact = false }: { style?: React.CSSProperties; delay?: number; compact?: boolean }) {
   const controls = useAnimation();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -124,17 +124,17 @@ function FMCard({ style, delay = 0.55 }: { style?: React.CSSProperties; delay?: 
       animate={controls}
       whileHover={{ y: -4, boxShadow: "0 16px 40px rgba(255,122,0,0.25)" }}
     >
-      <div className="flex items-center justify-center px-3 py-2.5">
-        <span className="font-display font-extrabold text-white text-sm tracking-wide">WERU FM</span>
-        <span className="ml-1.5 text-xs font-extrabold" style={{ color: "#FF7A00" }}>96.4</span>
+      <div className={`flex items-center justify-center px-3 ${compact ? "py-1.5" : "py-2.5"}`}>
+        <span className={`font-display font-extrabold text-white tracking-wide ${compact ? "text-sm" : "text-sm"}`}>WERU FM</span>
+        <span className={`ml-1.5 font-extrabold ${compact ? "text-[11px]" : "text-xs"}`} style={{ color: "#FF7A00" }}>96.4</span>
       </div>
-      <div className="flex flex-col items-center gap-2 px-3 pb-3">
+      <div className={`flex flex-col items-center px-3 ${compact ? "pb-2 gap-1" : "pb-3 gap-2"}`}>
         {streamUrl ? (
           <>
             <audio ref={audioRef} src={streamUrl} preload="none" />
             <button
               onClick={toggle}
-              className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95"
+              className={`w-full inline-flex items-center justify-center gap-1.5 px-4 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1.5" : "py-2"}`}
               style={
                 playing
                   ? { background: "rgba(255,255,255,0.12)", color: "#fff", border: "1px solid rgba(255,255,255,0.18)" }
@@ -147,7 +147,7 @@ function FMCard({ style, delay = 0.55 }: { style?: React.CSSProperties; delay?: 
         ) : (
           <Link
             href="/radio"
-            className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95"
+            className={`w-full inline-flex items-center justify-center gap-1.5 px-4 rounded-lg font-bold text-sm transition-all hover:opacity-90 active:scale-95 ${compact ? "py-1.5" : "py-2"}`}
             style={{ background: "linear-gradient(180deg,#FF9425,#FF7A00)", color: "#1a1003" }}
           >
             ▶ Listen Live
@@ -306,33 +306,33 @@ export default function HomeHero() {
         style={{ height: "18%", background: "linear-gradient(to bottom, transparent 0%, #060608 100%)", zIndex: 1 }}
       />
 
-      {/* ── MOBILE layout (< sm): TV → FM → Title → Quiz ─────────────────── */}
+      {/* ── MOBILE layout (< sm): LIVE pill → Title → TV card → FM card → Quiz ── */}
       <div
-        className="sm:hidden relative z-10 flex flex-col px-4 gap-3"
+        className="sm:hidden relative z-10 flex flex-col px-4 gap-2.5"
         style={{ paddingTop: "3.5rem", height: "100dvh", paddingBottom: "18%" }}
       >
         {/* LIVE pill */}
-        <div className="pt-3 shrink-0">
+        <div className="pt-2 shrink-0">
           <LivePill liveShow={liveShow} />
         </div>
 
-        {/* TV card */}
+        {/* Title */}
         <div className="shrink-0">
-          <TVCard style={{ width: "100%" }} delay={0.2} />
+          <Headline fontSize="clamp(30px, 9.5vw, 46px)" />
         </div>
 
-        {/* FM card */}
+        {/* TV card — full width, compact */}
         <div className="shrink-0">
-          <FMCard style={{ width: "100%" }} delay={0.35} />
+          <TVCard style={{ width: "100%" }} delay={0.2} compact />
         </div>
 
-        {/* Title — fills remaining space, vertically centered */}
-        <div className="flex-1 flex flex-col justify-center">
-          <Headline fontSize="clamp(28px, 9vw, 44px)" />
+        {/* FM card — slightly narrower + compact */}
+        <div className="shrink-0" style={{ width: "88%" }}>
+          <FMCard style={{ width: "100%" }} delay={0.32} compact />
         </div>
 
-        {/* Quiz bar — pinned above bleed */}
-        <div className="shrink-0">
+        {/* Quiz bar */}
+        <div className="shrink-0 mt-auto">
           <QuizBar />
         </div>
       </div>
