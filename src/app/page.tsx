@@ -36,11 +36,6 @@ const PartnersCarousel = lazyImport(
   { loading: () => <div className="h-24 mx-4 my-6 rounded-2xl bg-black/20" /> }
 );
 
-const RateCardForm = lazyImport(
-  () => import("@/components/sections/RateCardForm"),
-  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
-);
-
 const Footer = lazyImport(() => import("@/components/layout/Footer"));
 
 export default function HomePage() {
@@ -78,7 +73,6 @@ export default function HomePage() {
       <PlatformsSection />
       <ReviewsCarousel />
       <PartnersCarousel />
-      <RateCardForm />
       <Footer />
     </>
   );
