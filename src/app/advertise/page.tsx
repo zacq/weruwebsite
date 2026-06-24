@@ -1,26 +1,25 @@
-import type { Metadata } from "next";
-import AdSubmissionForm from "@/components/sections/AdSubmissionForm";
+import AdvertiseSection from "@/components/sections/AdvertiseSection";
 import Footer from "@/components/layout/Footer";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Submit Your Ad — Weru TV & Weru FM 96.4",
+export const metadata = {
+  title: "Advertise with Weru TV & FM — Reach Millions Across East Africa",
   description:
-    "Submit your TV or radio ad materials to Weru Digital. Specify your schedule, duration, and booking details — our team confirms within 24 hours.",
+    "Grow your brand on air. TV spots, radio jingles, digital placements and live coverage across Weru TV and Weru FM 96.4. Get pricing via WhatsApp.",
   openGraph: {
-    title: "Advertise on Weru TV & Weru FM 96.4",
+    title: "Advertise with Weru TV & FM",
     description:
-      "Ad submission portal — upload materials, choose your schedule, and book airtime on Kenya's leading Kikuyu-language broadcaster.",
-    siteName: "Weru Digital",
+      "Reach 1.97M+ monthly viewers and 483K+ radio listeners. Prime time spots, sponsorships, digital & social — one trusted media partner.",
+    images: ["/Werulogo.jpeg"],
   },
 };
 
 export default function AdvertisePage() {
   return (
     <>
-      <AdSubmissionForm />
+      <AdvertiseSection />
       <Footer />
     </>
   );
