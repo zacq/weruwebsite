@@ -279,15 +279,7 @@ export default function HomeHero() {
     <section className="relative w-full overflow-hidden" style={{ height: "100dvh" }}>
 
       {/* Background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: "url('/heroimages/HomePage.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
-          zIndex: -3,
-        }}
-      />
+      <div className="absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{

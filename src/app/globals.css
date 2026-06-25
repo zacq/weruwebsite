@@ -43,6 +43,21 @@ body::after {
 .font-headline { font-family: var(--font-serif), Georgia, "Times New Roman", serif; }
 .font-display  { font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif; }
 
+/* Hero background — wide composite image (studio left + heritage garden right).
+   On mobile portrait the image is scaled to fill height, showing only a center
+   slice. Shifting left (20%) reveals both studio and garden on narrow viewports.
+   On sm+ the image is wide enough that center shows both halves naturally. */
+.hero-bg {
+  background-image: url('/heroimages/HomePage.png');
+  background-size: cover;
+  background-position: 20% top;
+}
+@media (min-width: 640px) {
+  .hero-bg {
+    background-position: center top;
+  }
+}
+
 /* iOS auto-zoom prevention */
 input, select, textarea { font-size: 16px; }
 
