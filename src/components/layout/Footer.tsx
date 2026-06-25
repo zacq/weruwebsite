@@ -118,30 +118,18 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Social */}
+          {/* Listener CTA */}
           <div className="flex flex-col items-center md:items-start gap-2">
-            <p className="text-[10px] tracking-widest uppercase font-bold" style={{ color: "rgba(255,255,255,0.40)" }}>
-              Follow Us
-            </p>
-            <div className="flex items-center gap-2">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:bg-[#f97d00] hover:text-white hover:border-[#f97d00]"
-                  style={{
-                    background: "rgba(255,255,255,0.10)",
-                    color: "rgba(255,255,255,0.70)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                  }}
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
+            <a
+              href="https://wa.me/254707065000"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-bold leading-snug hover:text-[#FACC15] transition-colors"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+            >
+              Share your thoughts on<br />
+              <span style={{ color: "#FACC15" }}>0707 065000</span>
+            </a>
           </div>
         </div>
 
