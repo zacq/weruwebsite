@@ -47,7 +47,7 @@ export default function Footer() {
                 📋 Get Rate Card
               </a>
               <a
-                href="https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number"
+                href="https://wa.me/254707065000?text=Weru%20TV%20Digital%20Hotline%20Number"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
@@ -100,7 +100,7 @@ export default function Footer() {
               </a>
 
               <p className="text-[9px] font-bold tracking-wider uppercase mt-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>Commercials</p>
-              <a href="https://wa.me/254793004303" target="_blank" rel="noopener noreferrer" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+              <a href="https://wa.me/254707065000" target="_blank" rel="noopener noreferrer" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
                 💬 0707 065000
               </a>
 

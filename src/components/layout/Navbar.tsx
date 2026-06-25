@@ -16,7 +16,7 @@ const navLinks = [
   { label: "Contact",    href: "#contact",    dropdown: true },
 ];
 
-const WHATSAPP = "https://wa.me/254793004303?text=Weru%20TV%20Digital%20Hotline%20Number";
+const WHATSAPP = "https://wa.me/254707065000?text=Weru%20TV%20Digital%20Hotline%20Number";
 const MAPS     = "https://www.google.com/maps/search/Weru+TV+Meru+Kenya";
 
 function ContactDropdown() {
@@ -107,7 +107,7 @@ function ContactDropdown() {
                 <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#25D366] transition-all duration-150 hover:scale-105 origin-left"
                   style={{ color: "#ffffff" }}>
-                  💬 0793 004303
+                  💬 0707 065000
                 </a>
               </div>
 
@@ -403,7 +403,7 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                             <a href="tel:+254700117026" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>📞 0700 117026</a>
                             <a href="tel:+254738970438" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>📞 0738 970438</a>
                             <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>Commercials</p>
-                            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>💬 0793 004303</a>
+                            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>💬 0707 065000</a>
                             <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>News Hotline</p>
                             <a href="tel:+254703223363" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>📞 0703 223363</a>
                             <a href="mailto:weruofficial@gmail.com" className="flex items-center gap-2 py-1 text-sm font-semibold mt-1 active:opacity-60 transition-opacity" style={{ color: "#ffffff" }}>✉️ weruofficial@gmail.com</a>

@@ -36,7 +36,7 @@ const QUESTIONS = [
   },
   {
     q: "Who paired with Phineas Imaana for news bulletins in 2017?",
-    options: ["Mary Wanjiku", "Grace Wanjiru", "Anne Wairimu"],
+    options: ["Kelvin Kimathi", "Maureen Kinya", "Doreen Kathambi"],
     correct: 2,
   },
   {
@@ -46,13 +46,13 @@ const QUESTIONS = [
   },
   {
     q: "Who hosts Gichunki Gia Ciaca?",
-    options: ["Samuel Gitau", "Joseph Mwangi", "David Kamau"],
-    correct: 1,
+    options: ["Martin Gichunge", "Edward Mutembei", "Christine Wanjeru"],
+    correct: 0,
   },
   {
     q: "Where is Weru TV located?",
-    options: ["Nairobi CBD", "Nyeri Town", "Meru Town"],
-    correct: 1,
+    options: ["Maua", "Meru Town", "Kirogine, Meru"],
+    correct: 2,
   },
   {
     q: "Name the first two hosts of Reggamania.",

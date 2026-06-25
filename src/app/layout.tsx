@@ -64,7 +64,7 @@ const jsonLd = {
   ],
   contactPoint: [
     { "@type": "ContactPoint", telephone: "+254700117026", contactType: "customer support" },
-    { "@type": "ContactPoint", telephone: "+254793004303", contactType: "sales" },
+    { "@type": "ContactPoint", telephone: "+254707065000", contactType: "sales" },
     { "@type": "ContactPoint", email: "weruofficial@gmail.com", contactType: "general" },
   ],
 };

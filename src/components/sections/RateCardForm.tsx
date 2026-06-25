@@ -489,7 +489,7 @@ export default function RateCardForm() {
                 WhatsApp you the pricing details shortly.
               </p>
               <motion.a
-                href="https://wa.me/254793004303?text=Hi%2C%20I%20just%20submitted%20a%20rate%20card%20enquiry%20on%20your%20website"
+                href="https://wa.me/254707065000?text=Hi%2C%20I%20just%20submitted%20a%20rate%20card%20enquiry%20on%20your%20website"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

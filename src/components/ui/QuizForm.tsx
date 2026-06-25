@@ -35,7 +35,7 @@ const QUESTIONS = [
   },
   {
     q: "Who paired with Phineas Imaana for news bulletins in 2017?",
-    options: ["Mary Wanjiku", "Maureen Kinya", "Anne Wairimu"],
+    options: ["Kelvin Kimathi", "Maureen Kinya", "Doreen Kathambi"],
     correct: 1,
   },
   {
@@ -45,12 +45,12 @@ const QUESTIONS = [
   },
   {
     q: "Who hosts Gichunki Gia Ciaca?",
-    options: ["Martin Gichunge", "Joseph Mwangi", "David Kamau"],
+    options: ["Martin Gichunge", "Edward Mutembei", "Christine Wanjeru"],
     correct: 0,
   },
   {
     q: "Where is Weru TV located?",
-    options: ["Nairobi CBD", "Nyeri Town", "Kirogine, Meru"],
+    options: ["Maua", "Meru Town", "Kirogine, Meru"],
     correct: 2,
   },
   {

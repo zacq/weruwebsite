@@ -428,7 +428,7 @@ export default function AdSubmissionForm() {
                     >
                       💬 Don&apos;t have cloud storage?{" "}
                       <a
-                        href="https://wa.me/254793004303?text=Hi%2C%20I%27d%20like%20to%20send%20my%20ad%20materials"
+                        href="https://wa.me/254707065000?text=Hi%2C%20I%27d%20like%20to%20send%20my%20ad%20materials"
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ color: "#25D366", fontWeight: 700 }}
@@ -678,7 +678,7 @@ export default function AdSubmissionForm() {
                 <div className="lg:hidden mt-6 text-center">
                   <p style={{ fontSize: 12, color: "rgba(244,241,236,0.40)", marginBottom: 8 }}>Questions? Chat with us</p>
                   <a
-                    href="https://wa.me/254793004303"
+                    href="https://wa.me/254707065000"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -735,7 +735,7 @@ export default function AdSubmissionForm() {
                     Need help with the form or have questions about specifications?
                   </p>
                   <a
-                    href="https://wa.me/254793004303?text=Hi%2C%20I%20need%20help%20with%20my%20ad%20submission"
+                    href="https://wa.me/254707065000?text=Hi%2C%20I%20need%20help%20with%20my%20ad%20submission"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -787,7 +787,7 @@ export default function AdSubmissionForm() {
               </p>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
                 <motion.a
-                  href="https://wa.me/254793004303?text=Hi%2C%20I%20just%20submitted%20my%20ad%20booking%20on%20werutv.co.ke"
+                  href="https://wa.me/254707065000?text=Hi%2C%20I%20just%20submitted%20my%20ad%20booking%20on%20werutv.co.ke"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
