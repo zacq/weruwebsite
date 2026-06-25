@@ -14,4 +14,4 @@ Disallow: /
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://werutv.co.ke/sitemap.xml
+Sitemap: https://werudigital.co.ke/sitemap.xml

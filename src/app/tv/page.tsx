@@ -18,8 +18,21 @@ export const dynamic    = "force-static";
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Weru TV — Live Television",
-  description: "Watch Weru TV live stream and browse the latest TV shows and videos.",
+  title: "Weru TV — Watch Live Television Online | DStv 368 · Azam 342",
+  description:
+    "Watch Weru TV live online and on DStv 368, Azam TV 342 & Startimes 440. Kenya's leading Kikuyu-language channel covering news, culture, agriculture and entertainment across East Africa.",
+  openGraph: {
+    title: "Weru TV — Watch Live Television Online",
+    description: "Live Kikuyu-language TV from Nyeri, Kenya. Watch on DStv 368, Azam TV 342, Startimes 440 or stream free online.",
+    url: "https://werudigital.co.ke/tv",
+    siteName: "Weru Digital",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Watch Weru TV Live — DStv 368 · Azam 342",
+    description: "Kenya's premier Kikuyu-language TV channel. Stream live or watch on DStv, Azam TV and Startimes.",
+  },
 };
 
 const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];

@@ -81,6 +81,8 @@ export default function CultureSection() {
               <img
                 src={img.src}
                 alt={img.caption}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
               />
               {/* Bottom gradient + caption */}
