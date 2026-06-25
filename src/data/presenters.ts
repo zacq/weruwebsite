@@ -298,7 +298,7 @@ export const presenters: Presenter[] = [
     name: "Ntinyari Kinyua",
     show: "Kirira News",
     role: "News Anchor & Reporter",
-    imageSrc: "/placeholder-presenter.svg",
+    imageSrc: "/Presenters/Ntinyari%20Kinyua.jpeg",
     tagline: "The news, straight — every evening.",
     socialLinks: {
       facebook: "https://facebook.com",
