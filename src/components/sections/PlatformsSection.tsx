@@ -70,11 +70,11 @@ const countries = [
 ];
 
 const socials = [
-  { label: "TikTok",    handle: "@Werutv.fm96.4",  href: "#" },
-  { label: "Facebook",  handle: "@Weru TV",         href: "#" },
+  { label: "TikTok",    handle: "@Werutv.fm96.4",  href: "https://tiktok.com/@werutv" },
+  { label: "Facebook",  handle: "@Weru TV",         href: "https://facebook.com/werutv" },
   { label: "YouTube",   handle: "@WERU TV & FM",    href: "https://www.youtube.com/@werutvfm3411" },
-  { label: "Instagram", handle: "@werutv",           href: "#" },
-  { label: "X",         handle: "@WeruTV",           href: "#" },
+  { label: "Instagram", handle: "@werutv",           href: "https://instagram.com/werutv" },
+  { label: "X",         handle: "@WeruTV",           href: "https://x.com/werutv" },
 ];
 
 export default function PlatformsSection() {
@@ -101,8 +101,8 @@ export default function PlatformsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
         >
-          <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#f97d00" }}>
-            WERU TV GOES INTERNATIONAL
+          <p className="text-[11px] font-bold tracking-wider mb-3" style={{ color: "#f97d00" }}>
+            Weru TV goes international
           </p>
           <h2 className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl mb-4">
             Watch Weru TV{" "}

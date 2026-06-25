@@ -57,8 +57,8 @@ export default function PartnersCarousel() {
         viewport={{ once: true }}
         transition={{ duration: 0.45 }}
       >
-        <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-1">
-          Brands That Trust Weru
+        <p className="text-white/30 text-[10px] font-bold tracking-wider mb-1">
+          Brands that trust Weru
         </p>
         <h2 className="text-white font-extrabold text-xl sm:text-2xl">
           Our{" "}

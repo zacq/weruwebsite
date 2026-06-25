@@ -37,8 +37,8 @@ export default function CultureSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
         >
-          <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#FACC15" }}>
-            ARTS · CULTURE · COMMUNITY
+          <p className="text-[11px] font-bold tracking-wider mb-3" style={{ color: "#FACC15" }}>
+            Arts · Culture · Community
           </p>
           <h2 className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl mb-5">
             Weru Studios —{" "}

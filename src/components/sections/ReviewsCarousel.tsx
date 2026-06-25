@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 interface Review {
   id: number;
@@ -34,10 +34,10 @@ function mapGoogleReview(r: any, i: number): Review {
 }
 
 function useGoogleReviews() {
-  const [reviews, setReviews]       = useState<Review[]>(FALLBACK_REVIEWS);
-  const [rating, setRating]         = useState<number | null>(null);
+  const [reviews, setReviews]         = useState<Review[]>(FALLBACK_REVIEWS);
+  const [rating, setRating]           = useState<number | null>(null);
   const [reviewCount, setReviewCount] = useState<number | null>(null);
-  const [isLive, setIsLive]         = useState(false);
+  const [isLive, setIsLive]           = useState(false);
 
   useEffect(() => {
     fetch("/api/google-reviews")
@@ -45,8 +45,8 @@ function useGoogleReviews() {
       .then((data) => {
         if (data.error || !data.reviews?.length) return;
         setReviews(data.reviews.map(mapGoogleReview));
-        if (data.rating)           setRating(data.rating);
-        if (data.userRatingCount)  setReviewCount(data.userRatingCount);
+        if (data.rating)          setRating(data.rating);
+        if (data.userRatingCount) setReviewCount(data.userRatingCount);
         setIsLive(true);
       })
       .catch(() => {});
@@ -55,222 +55,143 @@ function useGoogleReviews() {
   return { reviews, rating, reviewCount, isLive };
 }
 
+function getInitials(name: string) {
+  const parts = name.replace(/'/g, "").split(" ").filter(Boolean);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
+const AVATAR_PALETTE = [
+  { bg: "rgba(249,125,0,0.14)",  border: "rgba(249,125,0,0.42)",  text: "#f97d00" },
+  { bg: "rgba(250,204,21,0.10)", border: "rgba(250,204,21,0.38)", text: "#FACC15" },
+  { bg: "rgba(34,197,94,0.10)",  border: "rgba(34,197,94,0.30)",  text: "#4ade80" },
+  { bg: "rgba(139,92,246,0.12)", border: "rgba(139,92,246,0.32)", text: "#a78bfa" },
+];
+
 function Stars({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i} className="text-sm" style={{ color: i < count ? "#FACC15" : "rgba(255,255,255,0.18)" }}>
-          ★
-        </span>
+        <span key={i} style={{ color: i < count ? "#FACC15" : "rgba(255,255,255,0.18)", fontSize: "13px" }}>★</span>
       ))}
     </div>
   );
 }
 
-function ReviewCard({
-  review,
-  position,
-  onClick,
-}: {
-  review: Review;
-  position: "center" | "left" | "right";
-  onClick: () => void;
-}) {
-  const isCenter = position === "center";
+function ReviewCard({ review, index }: { review: Review; index: number }) {
+  const palette  = AVATAR_PALETTE[index % AVATAR_PALETTE.length];
+  const initials = getInitials(review.name);
 
   return (
     <motion.div
-      onClick={!isCenter ? onClick : undefined}
-      animate={{
-        scale: isCenter ? 1 : 0.88,
-        opacity: isCenter ? 1 : 0.45,
-        x: position === "left" ? "-42%" : position === "right" ? "42%" : "0%",
-        zIndex: isCenter ? 10 : 5,
-      }}
-      transition={{ type: "spring", stiffness: 220, damping: 28 }}
-      className={`absolute top-0 rounded-2xl p-6 flex flex-col gap-4 ${isCenter ? "glass-card" : "glass"}`}
+      className="flex flex-col gap-4 rounded-2xl p-5 sm:p-6"
       style={{
-        width: "clamp(260px, 32vw, 340px)",
-        left: "50%",
-        marginLeft: "clamp(-130px, -16vw, -170px)",
-        cursor: isCenter ? "default" : "pointer",
-        border: isCenter ? "1px solid rgba(249,125,0,0.28)" : "1px solid rgba(255,255,255,0.07)",
-        boxShadow: isCenter
-          ? "0 0 60px rgba(249,125,0,0.10), inset 0 1px 0 rgba(249,125,0,0.18), inset 0 -1px 0 rgba(0,0,0,0.12)"
-          : "none",
+        background:    "rgba(255,255,255,0.04)",
+        border:        "1px solid rgba(255,255,255,0.08)",
+        boxShadow:     "0 4px 24px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.07)",
+        backdropFilter:"blur(16px)",
       }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.09, duration: 0.50, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Avatar (blank) + name */}
-      <div className="flex items-center gap-3">
-        <div
-          className="shrink-0 rounded-full"
-          style={{ width: 56, height: 56, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.08)" }}
-        />
-        <div>
-          <p className="text-white font-bold text-sm leading-tight">{review.name}</p>
-          {review.location
-            ? <p className="text-white/40 text-[11px]">{review.location}</p>
-            : review.timeDescription && <p className="text-white/40 text-[11px]">{review.timeDescription}</p>
-          }
-        </div>
-      </div>
-
       <Stars count={review.rating} />
 
-      <p className="text-white/70 text-sm leading-relaxed line-clamp-4">
+      <p className="text-white/70 text-sm leading-relaxed flex-1">
         &ldquo;{review.text}&rdquo;
       </p>
 
-      <p className="text-white/30 text-[10px] font-bold tracking-wide">Google Review</p>
+      <div
+        className="flex items-center gap-3 pt-3"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+      >
+        {/* Squircle avatar with initials */}
+        <div
+          className="shrink-0 flex items-center justify-center text-[11px] font-extrabold"
+          style={{
+            width: 38, height: 38,
+            borderRadius: "28%",
+            background: palette.bg,
+            border: `1.5px solid ${palette.border}`,
+            color: palette.text,
+            letterSpacing: "0.03em",
+          }}
+        >
+          {initials}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-white font-bold text-sm leading-tight truncate">{review.name}</p>
+          <p className="text-white/40 text-[11px] mt-0.5">
+            {review.location || review.timeDescription || "Kenya"}
+          </p>
+        </div>
+        <span className="shrink-0 text-white/22 text-[10px] font-semibold">Google</span>
+      </div>
     </motion.div>
   );
 }
 
 export default function ReviewsCarousel() {
   const { reviews, rating, reviewCount, isLive } = useGoogleReviews();
-  const [current, setCurrent] = useState(0);
-  const n = reviews.length;
-  const touchStartX = useRef(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setCurrent((c) => (c + 1) % n), 4800);
-    return () => clearInterval(t);
-  }, [n]);
-
-  const prev = () => setCurrent((c) => (c - 1 + n) % n);
-  const next = () => setCurrent((c) => (c + 1) % n);
-
-  const leftIdx  = (current - 1 + n) % n;
-  const rightIdx = (current + 1) % n;
-
-  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
-  const handleTouchEnd   = (e: React.TouchEvent) => {
-    const delta = touchStartX.current - e.changedTouches[0].clientX;
-    if (delta > 45) next();
-    else if (delta < -45) prev();
-  };
-
-  // Card height — clamp between 220px (tight tablets) and 260px (desktop)
-  const CARD_H = 240;
+  const displayed = reviews.slice(0, 4);
 
   return (
     <section
-      className="py-14 sm:py-20 overflow-hidden relative"
+      className="py-14 sm:py-20 px-4 sm:px-8 relative overflow-hidden"
       style={{ background: "#0D1117" }}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
-      {/* Ambient glow behind cards */}
+      {/* Ambient glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at center, rgba(249,125,0,0.06) 0%, transparent 65%)" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse at center, rgba(249,125,0,0.05) 0%, transparent 70%)" }}
       />
-      {/* Header */}
-      <motion.div
-        className="text-center mb-10 px-4"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <p className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: "#f97d00" }}>
-          VIEWER REVIEWS
-        </p>
-        <h2 className="font-display text-white font-extrabold text-2xl sm:text-3xl md:text-4xl">
-          What Our Viewers{" "}
-          <span className="font-headline italic" style={{ color: "#FACC15" }}>Say</span>
-        </h2>
-        <div className="flex items-center justify-center gap-1 mt-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i} className="text-lg" style={{ color: "#FACC15" }}>★</span>
-          ))}
-          <span className="text-white/40 text-xs ml-2">
-            {rating !== null ? `${rating.toFixed(1)} / 5` : "4.5 / 5"} on Google
-            {reviewCount !== null && ` · ${reviewCount.toLocaleString()} reviews`}
-          </span>
-          {isLive && (
-            <span className="ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ background: "rgba(34,197,94,0.15)", color: "#22c55e" }}>
-              LIVE
-            </span>
-          )}
-        </div>
-      </motion.div>
 
-      {/* 3-card track — hidden on mobile, shown on sm+ */}
-      <div className="hidden sm:block relative w-full" style={{ height: CARD_H + 32 }}>
-        <ReviewCard review={reviews[leftIdx]}  position="left"   onClick={prev} />
-        <ReviewCard review={reviews[current]}  position="center" onClick={() => {}} />
-        <ReviewCard review={reviews[rightIdx]} position="right"  onClick={next} />
-      </div>
+      <div className="max-w-5xl mx-auto relative z-10">
 
-      {/* Single card — mobile only */}
-      <div className="sm:hidden px-4">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={reviews[current].id}
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -40 }}
-            transition={{ duration: 0.35 }}
-            className="glass rounded-2xl p-6 flex flex-col gap-4"
-            style={{ border: "1px solid rgba(249,125,0,0.20)" }}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className="shrink-0 rounded-full"
-                style={{ width: 52, height: 52, border: "2px solid rgba(249,125,0,0.45)", background: "rgba(249,125,0,0.08)" }}
-              />
-              <div>
-                <p className="text-white font-bold text-sm">{reviews[current].name}</p>
-                {reviews[current].location
-                  ? <p className="text-white/40 text-[11px]">{reviews[current].location}</p>
-                  : reviews[current].timeDescription && <p className="text-white/40 text-[11px]">{reviews[current].timeDescription}</p>
-                }
-              </div>
+        {/* Header */}
+        <motion.div
+          className="text-center mb-10 sm:mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="text-[11px] font-bold tracking-wider mb-3" style={{ color: "#f97d00" }}>
+            Viewer reviews
+          </p>
+          <h2 className="font-display text-white font-extrabold text-2xl sm:text-3xl md:text-4xl mb-3">
+            What our viewers{" "}
+            <span className="font-headline italic" style={{ color: "#FACC15" }}>say</span>
+          </h2>
+          <div className="flex items-center justify-center gap-2">
+            <div className="flex gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i} style={{ color: "#FACC15", fontSize: "15px" }}>★</span>
+              ))}
             </div>
-            <Stars count={reviews[current].rating} />
-            <p className="text-white/70 text-sm leading-relaxed">
-              &ldquo;{reviews[current].text}&rdquo;
-            </p>
-            <p className="text-white/30 text-[10px] font-bold tracking-wide">Google Review</p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+            <span className="text-white/40 text-xs">
+              {rating !== null ? `${rating.toFixed(1)}` : "4.5"}/5 on Google
+              {reviewCount !== null && ` · ${reviewCount.toLocaleString()} reviews`}
+            </span>
+            {isLive && (
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded"
+                style={{ background: "rgba(34,197,94,0.15)", color: "#22c55e" }}
+              >
+                LIVE
+              </span>
+            )}
+          </div>
+        </motion.div>
 
-      {/* Arrow buttons + dots */}
-      <div className="flex items-center justify-center gap-6 mt-8 px-4">
-        <button
-          onClick={prev}
-          className="w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all text-lg"
-          style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)" }}
-          aria-label="Previous review"
-        >
-          ‹
-        </button>
-        <div className="flex gap-2 items-center">
-          {reviews.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              className="rounded-full transition-all duration-300"
-              style={{
-                width: i === current ? 20 : 8,
-                height: 8,
-                minWidth: 8,
-                background: i === current ? "#f97d00" : "rgba(255,255,255,0.18)",
-              }}
-              aria-label={`Go to review ${i + 1}`}
-            />
+        {/* 2×2 review grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {displayed.map((review, i) => (
+            <ReviewCard key={review.id} review={review} index={i} />
           ))}
         </div>
-        <button
-          onClick={next}
-          className="w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all text-lg"
-          style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)" }}
-          aria-label="Next review"
-        >
-          ›
-        </button>
+
       </div>
     </section>
   );
