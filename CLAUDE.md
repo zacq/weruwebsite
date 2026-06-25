@@ -254,6 +254,7 @@ Add the new route to the routing table in this file under `### Routing`. Current
 | `/blog` | `src/app/blog/page.tsx` |
 | `/presenters` | `src/app/presenters/page.tsx` |
 | `/presenters/[slug]` | `src/app/presenters/[slug]/page.tsx` |
+| `/podcast` | `src/app/podcast/page.tsx` |
 
 ### Step 4 — Navbar update (follow the dropdown rule)
 

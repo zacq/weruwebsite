@@ -2,14 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 
 const footerLinks = [
-  { label: "Home",        href: "/" },
-  { label: "TV",          href: "/tv" },
-  { label: "Radio",       href: "/radio" },
-  { label: "Politics",    href: "/politics" },
-  { label: "Sports",      href: "/sports" },
-  { label: "Technology",  href: "/technology" },
-  { label: "Agriculture", href: "/agriculture" },
-  { label: "Weather",     href: "/weather" },
+  { label: "Home",       href: "/" },
+  { label: "TV",         href: "/tv" },
+  { label: "Radio",      href: "/radio" },
+  { label: "Podcast",    href: "/podcast" },
+  { label: "Studios",    href: "/studios" },
+  { label: "Presenters", href: "/presenters" },
 ];
 
 const socials = [
