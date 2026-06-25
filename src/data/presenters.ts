@@ -318,4 +318,29 @@ export const presenters: Presenter[] = [
       { value: "Mentor", label: "Junior journalists" },
     ],
   },
+  {
+    slug: "njumaa-sacco-squad",
+    name: "Njumaa Sacco Squad",
+    show: "Njumaa Sacco",
+    role: "Hosts",
+    imageSrc: "/Presenters/Njumaa%20sacco.png",
+    tagline: "Celebrating the pulse of Central Kenya — every week.",
+    socialLinks: {
+      facebook: "https://facebook.com/werutv",
+      instagram: "https://instagram.com/werutv",
+    },
+    bio: [
+      "The Njumaa Sacco Squad are the lively presenting team behind Njumaa Sacco, Weru TV's flagship weekend entertainment and lifestyle show. Known for their energy, humour, and deep connection with the Central Kenya audience, the squad brings together music, community stories, fashion, and audience participation into one of the most-watched weekend programmes on the channel.",
+    ],
+    programHistory: [
+      "Njumaa Sacco grew from a simple weekend variety slot into one of Weru TV's signature entertainment formats, driven by the chemistry and crowd energy that the squad brings to every episode. The show has evolved to include live performances, audience games, cultural showcases, and community spotlights — content that keeps viewers tuned in from the opening segment to the final sign-off.",
+      "The squad's ability to connect with audiences of all ages — from young viewers drawn to the music and energy, to older audiences who appreciate the cultural programming — has given Njumaa Sacco a broad and loyal viewership. Social media clips from the show regularly outperform other Weru TV content, extending the programme's reach well beyond its live broadcast.",
+      "The Njumaa Sacco Squad have also represented Weru TV at several community events and roadshows, bringing the show's signature energy to live audiences across the Mount Kenya region and beyond.",
+    ],
+    stats: [
+      { value: "Weekly", label: "On air" },
+      { value: "Top rated", label: "Weekend slot" },
+      { value: "Live energy", label: "Every episode" },
+    ],
+  },
 ];

@@ -5,7 +5,7 @@ const BASE = "https://werudigital.co.ke";
 const PRESENTER_SLUGS = [
   "nelly-githinji", "martin-gichunge", "mc-tash", "makena-wa-matiri",
   "edward-mutembei", "munene-wa-kagwi", "mwenda-h-pilot", "ajelyne-george",
-  "stella-karimi", "empress-rita-natty", "betty", "ntinyari-kinyua",
+  "stella-karimi", "empress-rita-natty", "betty", "ntinyari-kinyua", "njumaa-sacco-squad",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
