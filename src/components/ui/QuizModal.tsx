@@ -31,8 +31,8 @@ const QUESTIONS = [
   },
   {
     q: "Who hosts the Gikaro show on Weru TV?",
-    options: ["James Mwangi", "John Kamau", "Peter Njoroge"],
-    correct: 1,
+    options: ["Edward Mutembei", "Eston Gitonga", "Stella Karimi Kaunty"],
+    correct: 2,
   },
   {
     q: "Who paired with Phineas Imaana for news bulletins in 2017?",

@@ -30,7 +30,7 @@ const QUESTIONS = [
   },
   {
     q: "Who hosts the Gikaro show on Weru TV?",
-    options: ["James Mwangi", "John Kamau", "Stella Karimi Kaunty"],
+    options: ["Edward Mutembei", "Eston Gitonga", "Stella Karimi Kaunty"],
     correct: 2,
   },
   {
