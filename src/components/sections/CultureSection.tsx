@@ -12,7 +12,7 @@ const presenterImages = [
   { src: "/Presenters/mwenda-h-pilot.png",    caption: "Mwenda H Pilot",               slug: "mwenda-h-pilot" },
   { src: "/Presenters/nelly-githinji.png",    caption: "Nelly Githinji",               slug: "nelly-githinji" },
   { src: "/Presenters/stella-karimi.png",     caption: "Stella Karimi",                slug: "stella-karimi" },
-  { src: "/Presenters/empress-rita-natty.png",caption: "Empress Ritta & Empress Natty",slug: "empress-rita-natty" },
+  { src: "/Presenters/empress-rita-natty.png", caption: "Empress Ritta & Empress Natty", slug: "empress-rita-natty" },
   { src: "/Presenters/edward-mutembei.png",   caption: "Edward Mutembei",              slug: "edward-mutembei" },
   { src: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png", caption: "Betty",            slug: "betty" },
 ];

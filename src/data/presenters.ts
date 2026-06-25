@@ -246,9 +246,9 @@ export const presenters: Presenter[] = [
   },
   {
     slug: "empress-rita-natty",
-    name: "Empress Rita Natty",
+    name: "Empress Ritta and Empress Natty",
     show: "ReggaeMania",
-    role: "Host & Cultural Ambassador",
+    role: "Empress Ritta and Empress Natty",
     imageSrc: "/Presenters/empress-rita-natty.png",
     tagline: "Roots, culture, and the rhythms that unite us.",
     socialLinks: {
@@ -257,10 +257,10 @@ export const presenters: Presenter[] = [
       youtube: "https://youtube.com",
     },
     bio: [
-      "Empress Rita Natty is the host of ReggaeMania, Weru TV's weekend reggae and African culture programme. A musician, cultural activist, and broadcaster in one, Empress Rita has elevated what might have been a simple music show into a celebration of African identity, conscious messaging, and community solidarity that resonates far beyond Meru County.",
+      "Empress Ritta and Empress Natty are the co-hosts of ReggaeMania, Weru TV's weekend reggae and African culture programme. Musicians, cultural activists, and broadcasters in one, the duo have elevated what might have been a simple music show into a celebration of African identity, conscious messaging, and community solidarity that resonates far beyond Meru County.",
     ],
     programHistory: [
-      "ReggaeMania launched as a weekend music block but quickly evolved under Empress Rita's creative direction into something more significant — a programme that used reggae as a lens through which to examine African history, current events, and community values. Rita's own musical background gave her credibility with artists and audiences alike, and her editorial vision shaped a format that was simultaneously entertaining and educational.",
+      "ReggaeMania launched as a weekend music block but quickly evolved under Empress Ritta and Empress Natty's creative direction into something more significant — a programme that used reggae as a lens through which to examine African history, current events, and community values. Their musical backgrounds gave them credibility with artists and audiences alike, and their combined editorial vision shaped a format that is simultaneously entertaining and educational.",
       "The show has hosted major reggae and afro-fusion artists from across East Africa, providing a platform that few regional television channels were offering. Artists have praised the show's production values and the seriousness with which it treats their music — a respect that has generated goodwill and enabled bookings that would be out of reach for most broadcasters at this scale.",
       "ReggaeMania has also served as a community gathering point during major cultural moments, livestreaming performances and facilitating viewer conversations around music and identity. Its weekend timeslot has become one of the most-watched on the channel, with social media engagement during broadcasts consistently outperforming most other Weru TV programmes on a per-episode basis.",
     ],
