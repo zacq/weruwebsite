@@ -282,9 +282,9 @@ export default function HomeHero() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "url('/heroimages/Studio%20image.png')",
+          backgroundImage: "url('/heroimages/HomePage.png')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center top",
           zIndex: -3,
         }}
       />
