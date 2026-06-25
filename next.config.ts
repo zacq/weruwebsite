@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
         source: "/KRA Roadshow/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
       },
+      {
+        source: "/Greenlife Crop Protection Africa Ltd Roadshow/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      },
     ];
   },
   images: {
