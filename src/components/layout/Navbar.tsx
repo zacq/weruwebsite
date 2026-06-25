@@ -132,6 +132,11 @@ function ContactDropdown() {
                 style={{ color: "#ffffff" }}>
                 ✉️ weruofficial@gmail.com
               </a>
+              <a href="mailto:news@werutv.co.ke"
+                className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left"
+                style={{ color: "#ffffff" }}>
+                ✉️ news@werutv.co.ke
+              </a>
 
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }} />
 

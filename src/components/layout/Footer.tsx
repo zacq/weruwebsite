@@ -112,6 +112,9 @@ export default function Footer() {
               <a href="mailto:weruofficial@gmail.com" className="mt-0.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
                 ✉️ weruofficial@gmail.com
               </a>
+              <a href="mailto:news@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                ✉️ news@werutv.co.ke
+              </a>
             </div>
           </div>
 
