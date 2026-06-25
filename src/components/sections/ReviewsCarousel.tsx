@@ -83,18 +83,14 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
   const initials = getInitials(review.name);
 
   return (
-    <motion.div
-      className="flex flex-col gap-4 rounded-2xl p-5 sm:p-6"
+    <div
+      className="flex flex-col gap-4 rounded-2xl p-5 sm:p-6 h-full"
       style={{
-        background:    "rgba(255,255,255,0.04)",
-        border:        "1px solid rgba(255,255,255,0.08)",
-        boxShadow:     "0 4px 24px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.07)",
-        backdropFilter:"blur(16px)",
+        background:     "rgba(255,255,255,0.04)",
+        border:         "1px solid rgba(255,255,255,0.08)",
+        boxShadow:      "0 4px 24px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.07)",
+        backdropFilter: "blur(16px)",
       }}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.09, duration: 0.50, ease: [0.22, 1, 0.36, 1] }}
     >
       <Stars count={review.rating} />
 
@@ -106,7 +102,6 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
         className="flex items-center gap-3 pt-3"
         style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
       >
-        {/* Squircle avatar with initials */}
         <div
           className="shrink-0 flex items-center justify-center text-[11px] font-extrabold"
           style={{
@@ -128,13 +123,41 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
         </div>
         <span className="shrink-0 text-white/22 text-[10px] font-semibold">Google</span>
       </div>
-    </motion.div>
+    </div>
+  );
+}
+
+function NavBtn({ dir, onClick }: { dir: "prev" | "next"; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={dir === "prev" ? "Previous" : "Next"}
+      className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+      style={{
+        background: "rgba(255,255,255,0.08)",
+        border: "1px solid rgba(255,255,255,0.14)",
+        color: "rgba(255,255,255,0.75)",
+        fontSize: "20px",
+        lineHeight: 1,
+      }}
+    >
+      {dir === "prev" ? "‹" : "›"}
+    </button>
   );
 }
 
 export default function ReviewsCarousel() {
   const { reviews, rating, reviewCount, isLive } = useGoogleReviews();
   const displayed = reviews.slice(0, 4);
+
+  // Shared index 0-3. Desktop uses Math.floor(current/2) as page index.
+  const [current, setCurrent] = useState(0);
+
+  function mobilePrev() { setCurrent((c) => (c - 1 + displayed.length) % displayed.length); }
+  function mobileNext() { setCurrent((c) => (c + 1) % displayed.length); }
+  function desktopToggle() { setCurrent((c) => (c >= 2 ? 0 : 2)); }
+
+  const desktopPage = Math.floor(current / 2); // 0 or 1
 
   return (
     <section
@@ -185,11 +208,98 @@ export default function ReviewsCarousel() {
           </div>
         </motion.div>
 
-        {/* 2×2 review grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {displayed.map((review, i) => (
-            <ReviewCard key={review.id} review={review} index={i} />
-          ))}
+        {/* ── MOBILE: 1-card swipeable carousel ──────────────── */}
+        <div className="sm:hidden">
+          <div className="overflow-hidden rounded-2xl">
+            <motion.div
+              className="flex"
+              animate={{ x: `-${current * 100}%` }}
+              transition={{ type: "spring", stiffness: 280, damping: 28 }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.08}
+              onDragEnd={(_, { offset, velocity }) => {
+                if (offset.x < -40 || velocity.x < -400) mobileNext();
+                else if (offset.x > 40 || velocity.x > 400) mobilePrev();
+              }}
+            >
+              {displayed.map((review, i) => (
+                <div key={review.id} className="w-full shrink-0">
+                  <ReviewCard review={review} index={i} />
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Mobile nav — arrows + dot strip */}
+          <div className="flex items-center justify-center gap-4 mt-5">
+            <NavBtn dir="prev" onClick={mobilePrev} />
+            <div className="flex gap-2 items-center">
+              {displayed.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  aria-label={`Review ${i + 1}`}
+                  style={{
+                    width:  i === current ? 24 : 8,
+                    height: 8,
+                    borderRadius: 999,
+                    background: i === current ? "#f97d00" : "rgba(255,255,255,0.22)",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    transition: "all 0.25s",
+                  }}
+                />
+              ))}
+            </div>
+            <NavBtn dir="next" onClick={mobileNext} />
+          </div>
+        </div>
+
+        {/* ── DESKTOP: 2-cards-at-a-time carousel ────────────── */}
+        <div className="hidden sm:block">
+          <div className="overflow-hidden">
+            <motion.div
+              className="flex"
+              animate={{ x: `-${desktopPage * 100}%` }}
+              transition={{ type: "spring", stiffness: 280, damping: 28 }}
+            >
+              {/* Two panels, each holds 2 cards side by side */}
+              {[0, 2].map((pairStart) => (
+                <div key={pairStart} className="w-full shrink-0 grid grid-cols-2 gap-4">
+                  {displayed.slice(pairStart, pairStart + 2).map((review, j) => (
+                    <ReviewCard key={review.id} review={review} index={pairStart + j} />
+                  ))}
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Desktop nav — arrows + 2 page dots */}
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <NavBtn dir="prev" onClick={desktopToggle} />
+            <div className="flex gap-2 items-center">
+              {[0, 1].map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrent(page * 2)}
+                  aria-label={`Page ${page + 1}`}
+                  style={{
+                    width:  desktopPage === page ? 24 : 8,
+                    height: 8,
+                    borderRadius: 999,
+                    background: desktopPage === page ? "#f97d00" : "rgba(255,255,255,0.22)",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    transition: "all 0.25s",
+                  }}
+                />
+              ))}
+            </div>
+            <NavBtn dir="next" onClick={desktopToggle} />
+          </div>
         </div>
 
       </div>
