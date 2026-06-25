@@ -3,16 +3,19 @@
 import { motion } from "framer-motion";
 
 const partners = [
-  { name: "Safaricom"   },
-  { name: "KCB Bank"    },
-  { name: "Equity Bank" },
-  { name: "Nation Media"},
-  { name: "NCBA Bank"   },
-  { name: "Kenya Airways"},
-  { name: "Twiga Foods" },
-  { name: "Jambojet"    },
-  { name: "Co-op Bank"  },
-  { name: "EABL"        },
+  { name: "Joy Millers"                      },
+  { name: "Rhino Mabati"                     },
+  { name: "Nice Rice Millers"                },
+  { name: "Duralong Mabati"                  },
+  { name: "Paleah Millers"                   },
+  { name: "Yetu Sacco"                       },
+  { name: "Imperial College"                 },
+  { name: "The Kambakia Christian Centre"    },
+  { name: "Betika"                           },
+  { name: "Coca Cola"                        },
+  { name: "Safaricom PLC"                    },
+  { name: "Greenlife Crop Protection Africa" },
+  { name: "Osho Chemical Industries"         },
 ];
 
 function LogoTile({ name }: { name: string }) {
@@ -55,12 +58,12 @@ export default function PartnersCarousel() {
         transition={{ duration: 0.45 }}
       >
         <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-1">
-          Trusted by Leading Brands
+          Brands That Trust Weru
         </p>
         <h2 className="text-white font-extrabold text-xl sm:text-2xl">
-          Our Partners &{" "}
+          Our{" "}
           <span className="font-headline italic" style={{ color: "#f97d00" }}>
-            Advertisers
+            Trusted Brands
           </span>
         </h2>
       </motion.div>
