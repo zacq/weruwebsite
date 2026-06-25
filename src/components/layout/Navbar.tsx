@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 
 const navLinks = [
   { label: "Home",               href: "/" },
-  { label: "TV",                 href: "/tv#tv-schedule",  dropdown: true },
+  { label: "TV",                 href: "/tv" },
   { label: "Radio",              href: "/radio" },
   { label: "Portfolio",          href: "/gallery",          dropdown: true },
   { label: "Podcast",            href: "/podcast" },
@@ -48,39 +48,6 @@ function useDropdown() {
     return () => document.removeEventListener("mousedown", h);
   }, []);
   return { open, setOpen, ref, show, hide };
-}
-
-// ── TVDropdown ─────────────────────────────────────────────────────────────────
-function TVDropdown({ pathname }: { pathname: string }) {
-  const { open, setOpen, ref, show, hide } = useDropdown();
-  const active = pathname.startsWith("/tv");
-  return (
-    <div ref={ref} className="relative" onMouseEnter={show} onMouseLeave={hide}>
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 px-3 py-1.5 text-sm font-bold tracking-widest rounded-lg transition-all duration-150 hover:bg-white/[0.06]"
-        style={{ color: active ? "#f97d00" : "rgba(255,255,255,0.65)" }}
-      >
-        TV
-        <svg className="w-3 h-3 transition-transform duration-200" style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }} viewBox="0 0 12 12" fill="none">
-          {CHEVRON}
-        </svg>
-      </button>
-      <AnimatePresence>
-        {open && (
-          <motion.div className="absolute top-full left-0 mt-2 rounded-2xl overflow-hidden" style={{ width: "180px", ...DROPDOWN_STYLE }} {...DROPDOWN_MOTION}>
-            <div className="px-3 py-3 flex flex-col gap-1">
-              <Link href="/tv#tv-schedule" onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors hover:text-[#f97d00]"
-                style={{ color: "rgba(255,255,255,0.85)" }}>
-                <span className="text-base">📅</span> Program
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
 }
 
 // ── PortfolioDropdown ──────────────────────────────────────────────────────────
@@ -243,7 +210,6 @@ export default function Navbar() {
         {/* Desktop nav links */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
-            if (link.label === "TV")                 return <TVDropdown key={link.label} pathname={pathname} />;
             if (link.label === "Portfolio")          return <PortfolioDropdown key={link.label} pathname={pathname} />;
             if (link.label === "Join Our Community") return <CommunityDropdown key={link.label} />;
             if (link.label === "Contacts")           return <ContactDropdown key={link.label} />;
@@ -311,7 +277,6 @@ export default function Navbar() {
 
 // ── MobileMenu ─────────────────────────────────────────────────────────────────
 function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boolean; setOpen: (v: boolean) => void }) {
-  const [tvOpen,        setTvOpen]        = useState(false);
   const [portfolioOpen, setPortfolioOpen] = useState(false);
   const [communityOpen, setCommunityOpen] = useState(false);
   const [contactOpen,   setContactOpen]   = useState(false);
@@ -371,27 +336,6 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                   </Link>
                 );
               })}
-
-              {/* TV accordion */}
-              <div>
-                <button onClick={() => setTvOpen((o) => !o)}
-                  className="w-full flex items-center justify-between py-3.5 text-base font-semibold tracking-wide transition-colors duration-150"
-                  style={{ color: pathname.startsWith("/tv") ? "#f97d00" : "rgba(255,255,255,0.70)" }}>
-                  <span className="flex items-center gap-3">
-                    {pathname.startsWith("/tv") && <span className="w-1 h-4 rounded-full bg-[#f97d00]" />}
-                    TV
-                  </span>
-                  <svg className="w-4 h-4 transition-transform duration-200" style={{ transform: tvOpen ? "rotate(180deg)" : "rotate(0deg)" }} viewBox="0 0 12 12" fill="none">{CHEVRON}</svg>
-                </button>
-                <AnimatePresence>
-                  {tvOpen && (
-                    <motion.div className="flex flex-col gap-1 pb-2 pl-4" style={{ borderLeft: "2px solid rgba(249,125,0,0.35)" }}
-                      initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}>
-                      <Link href="/tv#tv-schedule" onClick={() => setOpen(false)} className="flex items-center gap-2 py-2.5 text-sm font-medium active:opacity-60" style={{ color: "rgba(255,255,255,0.75)" }}>📅 Program</Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
 
               {/* Portfolio accordion */}
               <div>
