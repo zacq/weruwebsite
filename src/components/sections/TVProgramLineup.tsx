@@ -65,6 +65,7 @@ const TAG_COLORS: Record<string, string> = {
   News: "#3b82f6", Morning: "#f59e0b", Health: "#10b981", Business: "#8b5cf6",
   Entertainment: "#ec4899", Music: "#06b6d4", Sports: "#22c55e",
   Culture: "#f97d00", Kids: "#fbbf24", Documentary: "#6366f1", Magazine: "#d97706",
+  Agriculture: "#22c55e", Political: "#ef4444", Culinary: "#fb923c", Youth: "#a78bfa",
 };
 
 export default function TVProgramLineup() {
