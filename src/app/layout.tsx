@@ -77,7 +77,10 @@ const jsonLd = [
     contactPoint: [
       { "@type": "ContactPoint", telephone: "+254700117026", contactType: "customer support" },
       { "@type": "ContactPoint", telephone: "+254707065000", contactType: "sales" },
-      { "@type": "ContactPoint", email: "weruofficial@gmail.com", contactType: "general" },
+      { "@type": "ContactPoint", email: "news@werutv.co.ke", contactType: "editorial" },
+      { "@type": "ContactPoint", email: "commercials@werutv.co.ke", contactType: "commercials" },
+      { "@type": "ContactPoint", email: "sales@werutv.co.ke", contactType: "sales" },
+      { "@type": "ContactPoint", email: "officeoftheceo@werutv.co.ke", contactType: "customer support" },
     ],
   },
   {
@@ -87,7 +90,7 @@ const jsonLd = [
     description: "Kenya's premier Kikuyu-language broadcaster based in Nyeri, reaching 6 East African countries.",
     url: "https://werudigital.co.ke",
     telephone: "+254700117026",
-    email: "weruofficial@gmail.com",
+    email: "officeoftheceo@werutv.co.ke",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Nyeri",

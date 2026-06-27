@@ -116,12 +116,11 @@ export default function Footer() {
                 📞 0703 223363
               </a>
 
-              <a href="mailto:weruofficial@gmail.com" className="mt-0.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
-                ✉️ weruofficial@gmail.com
-              </a>
-              <a href="mailto:news@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
-                ✉️ news@werutv.co.ke
-              </a>
+              <p className="text-[9px] font-bold tracking-wider uppercase mt-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>Email</p>
+              <a href="mailto:news@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ news@werutv.co.ke</a>
+              <a href="mailto:commercials@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ commercials@werutv.co.ke</a>
+              <a href="mailto:sales@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ sales@werutv.co.ke</a>
+              <a href="mailto:officeoftheceo@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ officeoftheceo@werutv.co.ke</a>
             </div>
           </div>
 

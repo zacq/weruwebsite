@@ -172,8 +172,13 @@ function ContactDropdown() {
                 <a href="tel:+254703223363" className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left" style={{ color: "#ffffff" }}>📞 0703 223363</a>
               </div>
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)" }} />
-              <a href="mailto:weruofficial@gmail.com" className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left" style={{ color: "#ffffff" }}>✉️ weruofficial@gmail.com</a>
-              <a href="mailto:news@werutv.co.ke" className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left" style={{ color: "#ffffff" }}>✉️ news@werutv.co.ke</a>
+              <div>
+                <p className="text-[9px] font-extrabold tracking-widest uppercase mb-1.5" style={{ color: "#f97d00" }}>Email</p>
+                <a href="mailto:news@werutv.co.ke" className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left" style={{ color: "#ffffff" }}>✉️ news@werutv.co.ke</a>
+                <a href="mailto:commercials@werutv.co.ke" className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left" style={{ color: "#ffffff" }}>✉️ commercials@werutv.co.ke</a>
+                <a href="mailto:sales@werutv.co.ke" className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left" style={{ color: "#ffffff" }}>✉️ sales@werutv.co.ke</a>
+                <a href="mailto:officeoftheceo@werutv.co.ke" className="flex items-center gap-2 py-1 text-xs font-semibold hover:text-[#f97d00] transition-all duration-150 hover:scale-105 origin-left" style={{ color: "#ffffff" }}>✉️ officeoftheceo@werutv.co.ke</a>
+              </div>
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }} />
               <div className="flex flex-col gap-2 pb-1">
                 <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
@@ -403,7 +408,11 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                       <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60" style={{ color: "#ffffff" }}>💬 0707 065000</a>
                       <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>News Hotline</p>
                       <a href="tel:+254703223363" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60" style={{ color: "#ffffff" }}>📞 0703 223363</a>
-                      <a href="mailto:weruofficial@gmail.com" className="flex items-center gap-2 py-1 text-sm font-semibold mt-1 active:opacity-60" style={{ color: "#ffffff" }}>✉️ weruofficial@gmail.com</a>
+                      <p className="text-[9px] font-extrabold tracking-widest uppercase mt-1" style={{ color: "#f97d00" }}>Email</p>
+                      <a href="mailto:news@werutv.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60" style={{ color: "#ffffff" }}>✉️ news@werutv.co.ke</a>
+                      <a href="mailto:commercials@werutv.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60" style={{ color: "#ffffff" }}>✉️ commercials@werutv.co.ke</a>
+                      <a href="mailto:sales@werutv.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60" style={{ color: "#ffffff" }}>✉️ sales@werutv.co.ke</a>
+                      <a href="mailto:officeoftheceo@werutv.co.ke" className="flex items-center gap-2 py-1 text-sm font-semibold active:opacity-60" style={{ color: "#ffffff" }}>✉️ officeoftheceo@werutv.co.ke</a>
                       <div className="flex flex-col gap-2 mt-3">
                         <a href={WHATSAPP} target="_blank" rel="noopener noreferrer"
                           className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-white text-sm font-bold active:scale-95 transition-transform"
