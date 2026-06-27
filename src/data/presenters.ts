@@ -1,3 +1,5 @@
+export type PresenterCategory = "News Anchors" | "Program Presenters" | "Reporters";
+
 export interface SocialLinks {
   facebook?: string;
   twitter?: string;
@@ -10,6 +12,7 @@ export interface Presenter {
   name: string;
   show: string;
   role: string;
+  category: PresenterCategory;
   imageSrc: string;
   socialLinks: SocialLinks;
   tagline: string;
@@ -24,6 +27,7 @@ export const presenters: Presenter[] = [
     name: "Nelly Githinji",
     show: "Murimi Caruruku",
     role: "Host & Producer",
+    category: "Program Presenters",
     imageSrc: "/Presenters/nelly-githinji.png",
     tagline: "The voice that wakes up Central Kenya every morning.",
     socialLinks: {
@@ -49,6 +53,7 @@ export const presenters: Presenter[] = [
     name: "Martin Gichunge",
     show: "Gichunki gia Ciaca",
     role: "Host",
+    category: "Program Presenters",
     imageSrc: "/Presenters/martin-gichunge.png",
     tagline: "Entertainment, community, and the stories that matter.",
     socialLinks: {
@@ -74,6 +79,7 @@ export const presenters: Presenter[] = [
     name: "MC Tash",
     show: "Tuburuke na Tash",
     role: "Host & Entertainer",
+    category: "Program Presenters",
     imageSrc: "/Presenters/mc-tash.png",
     tagline: "Afternoon energy, non-stop vibes.",
     socialLinks: {
@@ -100,6 +106,7 @@ export const presenters: Presenter[] = [
     name: "Makena wa Matiri",
     show: "Nkatha Cietu & Tutharimwe",
     role: "Host & Producer",
+    category: "Program Presenters",
     imageSrc: "/Presenters/makena-wa-matiri.png",
     tagline: "Celebrating the women who build our communities.",
     socialLinks: {
@@ -125,6 +132,7 @@ export const presenters: Presenter[] = [
     name: "Edward Mutembei",
     show: "Gaaru ya Ciaca",
     role: "Host",
+    category: "Program Presenters",
     imageSrc: "/Presenters/edward-mutembei.png",
     tagline: "The conversation your family needs to have.",
     socialLinks: {
@@ -149,6 +157,7 @@ export const presenters: Presenter[] = [
     name: "Munene wa Kagwi",
     show: "Tiira Muuru & Tunthunkume",
     role: "Host & Agricultural Expert",
+    category: "Program Presenters",
     imageSrc: "/Presenters/munene-wa-kagwi.png",
     tagline: "Farming knowledge that grows communities.",
     socialLinks: {
@@ -174,6 +183,7 @@ export const presenters: Presenter[] = [
     name: "Mwenda H Pilot",
     show: "Nyontoka",
     role: "Host",
+    category: "Program Presenters",
     imageSrc: "/Presenters/mwenda-h-pilot.png",
     tagline: "Nyontoka — where culture and performance collide.",
     socialLinks: {
@@ -199,6 +209,7 @@ export const presenters: Presenter[] = [
     name: "Ajelyne George",
     show: "Mantu Kimenchu",
     role: "Host & Lifestyle Presenter",
+    category: "Program Presenters",
     imageSrc: "/Presenters/ajelyne-george.png",
     tagline: "Style, health, and the good life — Meru's way.",
     socialLinks: {
@@ -224,6 +235,7 @@ export const presenters: Presenter[] = [
     name: "Stella Karimi",
     show: "Gikaro na Kaunty",
     role: "Host & Political Analyst",
+    category: "Program Presenters",
     imageSrc: "/Presenters/stella-karimi.png",
     tagline: "Holding power to account — one question at a time.",
     socialLinks: {
@@ -249,6 +261,7 @@ export const presenters: Presenter[] = [
     name: "Empress Ritta and Empress Natty",
     show: "ReggaeMania",
     role: "Empress Ritta and Empress Natty",
+    category: "Program Presenters",
     imageSrc: "/Presenters/empress-rita-natty.png",
     tagline: "Roots, culture, and the rhythms that unite us.",
     socialLinks: {
@@ -275,6 +288,7 @@ export const presenters: Presenter[] = [
     name: "Betty",
     show: "Ugima Ni Utonga",
     role: "Host",
+    category: "Program Presenters",
     imageSrc: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png",
     tagline: "Bringing health, wellness, and community conversations to Central Kenya.",
     socialLinks: {
@@ -296,9 +310,10 @@ export const presenters: Presenter[] = [
   {
     slug: "ntinyari-kinyua",
     name: "Ntinyari Kinyua",
-    show: "Kirira News",
-    role: "News Anchor & Reporter",
-    imageSrc: "/Presenters/Ntinyari%20Kinyua.jpeg",
+    show: "Njumaa Sacco",
+    role: "Host",
+    category: "Program Presenters",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "The news, straight — every evening.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -323,6 +338,7 @@ export const presenters: Presenter[] = [
     name: "Njumaa Sacco Squad",
     show: "Njumaa Sacco",
     role: "Hosts",
+    category: "Program Presenters",
     imageSrc: "/Presenters/Njumaa%20sacco.png",
     tagline: "Celebrating the pulse of Central Kenya — every week.",
     socialLinks: {
@@ -341,6 +357,438 @@ export const presenters: Presenter[] = [
       { value: "Weekly", label: "On air" },
       { value: "Top rated", label: "Weekend slot" },
       { value: "Live energy", label: "Every episode" },
+    ],
+  },
+
+  // ── NEWS ANCHORS ──────────────────────────────────────────────────────────
+
+  {
+    slug: "betty-ntinyari",
+    name: "Betty Ntinyari",
+    show: "Weru Njumaa",
+    role: "News Anchor",
+    category: "News Anchors",
+    imageSrc: "/Presenters/News%20Anchors/Betty%20Ntinyari%20-Weru%20Njumaa.jpeg",
+    tagline: "Delivering the week's closing news with clarity and authority.",
+    socialLinks: {},
+    bio: [
+      "Betty Ntinyari anchors Weru Njumaa, the station's flagship Friday night bulletin. With a composed on-screen presence and meticulous preparation, she closes out the week's news cycle for Central Kenya audiences — covering politics, community developments, and breaking stories with the precision that prime-time viewers expect.",
+    ],
+    programHistory: [
+      "Betty joined Weru TV's news team as the anchor of the Friday bulletin, a timeslot that demands both breadth and depth — viewers expect a comprehensive wrap of the week's biggest stories alongside fresh developments. She has consistently delivered, building a loyal Friday-night audience that trusts her to put the week's events in clear perspective.",
+      "Her anchoring style balances authority with accessibility, making complex stories digestible without losing their weight. She has covered county elections, regional security developments, and major public health events from the desk, coordinating seamlessly with field reporters across the Mount Kenya region.",
+    ],
+    stats: [
+      { value: "Friday", label: "Prime bulletin" },
+      { value: "News", label: "Specialisation" },
+      { value: "Weru Njumaa", label: "Show" },
+    ],
+  },
+  {
+    slug: "dorcas-wa-kaaria",
+    name: "Dorcas wa Kaaria",
+    show: "Nteto cia Weru",
+    role: "News Anchor",
+    category: "News Anchors",
+    imageSrc: "/Presenters/News%20Anchors/Dorcas%20wa%20Kaaria%20-%20Nteto%20cia%20Weru%20Wednesday.jpeg",
+    tagline: "Midweek news — clear, accurate, and on time.",
+    socialLinks: {},
+    bio: [
+      "Dorcas wa Kaaria anchors the Wednesday edition of Nteto cia Weru, Weru TV's weekday evening bulletin. Her sharp delivery and thorough understanding of the Central Kenya news landscape make her one of the newsroom's most dependable anchors, trusted by viewers to bring them the day's events with accuracy and calm authority.",
+    ],
+    programHistory: [
+      "Dorcas established herself as a reliable presence on the Wednesday bulletin, a day that often carries significant policy, governance, and county council news. Her ability to navigate complex stories — from budget announcements to community disputes — and present them clearly in both Kimeru and Swahili has earned her strong audience trust.",
+      "Beyond anchoring, Dorcas contributes to the newsroom's story selection and script review process, helping ensure that Wednesday's bulletin consistently reflects the full breadth of the day's events across Meru, Tharaka-Nithi, and Isiolo counties.",
+    ],
+    stats: [
+      { value: "Wednesday", label: "Bulletin" },
+      { value: "Bilingual", label: "Kimeru & Swahili" },
+      { value: "News", label: "Specialisation" },
+    ],
+  },
+  {
+    slug: "maureen-kinya",
+    name: "Maureen Kinya",
+    show: "Weru Wikendi",
+    role: "News Anchor",
+    category: "News Anchors",
+    imageSrc: "/Presenters/News%20Anchors/Maureen%20Kinya%20-%20Weru%20Wikendi(Sat).jpeg",
+    tagline: "Keeping Central Kenya informed through the weekend.",
+    socialLinks: {},
+    bio: [
+      "Maureen Kinya anchors the Saturday edition of Weru Wikendi, the station's weekend news bulletin. Bringing energy and precision to the start of the weekend bulletin, Maureen ensures that audiences who have been away from the news during the day catch up on all major stories — from county governance to community events — in a format that is informative without being heavy.",
+    ],
+    programHistory: [
+      "The Saturday bulletin presents a unique editorial challenge — viewers are in a different mindset than during the working week, yet important stories continue to break. Maureen has mastered the balance, delivering substantive news coverage while keeping the tone accessible and the pacing brisk.",
+      "Her weekend anchoring has made her a recognisable face for viewers who rely on Saturday evening as their primary news checkpoint. She has anchored several significant weekend breaking stories, including county government announcements, regional sporting events, and community milestones.",
+    ],
+    stats: [
+      { value: "Saturday", label: "Bulletin" },
+      { value: "Weekend", label: "Edition" },
+      { value: "Weru Wikendi", label: "Show" },
+    ],
+  },
+  {
+    slug: "nelly-wa-githinji",
+    name: "Nelly wa Githinji",
+    show: "Weru Wikendi",
+    role: "News Anchor",
+    category: "News Anchors",
+    imageSrc: "/Presenters/News%20Anchors/Nelly%20wa%20Githinji%20-%20Weru%20Wikendi%20(Sunday).jpeg",
+    tagline: "Closing the weekend with the news that matters.",
+    socialLinks: {},
+    bio: [
+      "Nelly wa Githinji anchors the Sunday edition of Weru Wikendi, rounding out the weekend news cycle for Central Kenya audiences. Her calm, measured delivery is well suited to Sunday's viewing rhythm, providing a thoughtful and thorough wrap of the weekend's events before the working week begins.",
+    ],
+    programHistory: [
+      "Nelly took on the Sunday bulletin at a time when the station was investing in strengthening its weekend news presence. She has since built a loyal Sunday-evening audience that trusts her to deliver a comprehensive and balanced account of developments across the region and beyond.",
+      "Her Sunday bulletin frequently includes in-depth county features and community spotlights that go beyond the headlines — giving the weekend edition a distinctive character that differentiates it from the weekday bulletins.",
+    ],
+    stats: [
+      { value: "Sunday", label: "Bulletin" },
+      { value: "Weekend", label: "Edition" },
+      { value: "Weru Wikendi", label: "Show" },
+    ],
+  },
+  {
+    slug: "phineas-imaana",
+    name: "Phineas Imaana",
+    show: "Nteto cia Weru",
+    role: "News Anchor & Presenter",
+    category: "News Anchors",
+    imageSrc: "/Presenters/News%20Anchors/Phineas%20Imaana%20-%20Nteto%20cia%20Weru%20Monday.jpeg",
+    tagline: "Setting the week's news tone — every Monday.",
+    socialLinks: {},
+    bio: [
+      "Phineas Imaana anchors the Monday edition of Nteto cia Weru and also co-hosts Woi Wene on Saturday evenings, making him one of the most versatile members of Weru TV's on-screen team. His confident delivery and broad editorial knowledge make Monday's bulletin — which must capture the week's opening energy — one of the most watched of the weekday editions.",
+    ],
+    programHistory: [
+      "The Monday bulletin sets the tone for the week's news coverage, and Phineas brings the discipline and editorial judgement that the slot demands. His preparation is thorough, and his ability to handle late-breaking stories without losing composure has made him a trusted anchor for viewers starting their week with Weru TV.",
+      "His dual role as a news anchor and evening entertainment show host reflects the breadth of his broadcasting skills. On Woi Wene, he demonstrates a warmer, more conversational presenting style — a versatility that has made him one of the channel's most recognisable and respected on-screen personalities.",
+    ],
+    stats: [
+      { value: "Monday", label: "Bulletin" },
+      { value: "2 shows", label: "Hosted" },
+      { value: "Versatile", label: "Anchor & Host" },
+    ],
+  },
+  {
+    slug: "win-shiro-kingeru",
+    name: "Win Shiro King'eru",
+    show: "Nteto Cia Weru",
+    role: "News Anchor",
+    category: "News Anchors",
+    imageSrc: "/Presenters/News%20Anchors/Win%20Shiro%20King%27eru%20%20-%20Nteto%20Cia%20Weru%20(Tues%20).jpeg",
+    tagline: "Tuesday's news — delivered with confidence and precision.",
+    socialLinks: {},
+    bio: [
+      "Win Shiro King'eru anchors the Tuesday edition of Nteto Cia Weru, bringing poise and editorial sharpness to the mid-week bulletin. A trusted voice in Weru TV's newsroom, she ensures viewers receive accurate, well-contextualised coverage of the day's most important stories across Central Kenya and beyond.",
+    ],
+    programHistory: [
+      "Win Shiro joined the news team as the anchor of Tuesday's bulletin, quickly establishing a reputation for thorough preparation and a delivery style that balances authority with warmth. Her ability to handle both hard news and community stories within a single bulletin has made Tuesday one of the more consistent editions in the weekly news lineup.",
+      "Her newsroom contributions extend beyond anchoring — she is actively involved in story development and script review, helping to shape the editorial direction of the Tuesday edition and maintain the high standards Weru TV's audiences have come to expect.",
+    ],
+    stats: [
+      { value: "Tuesday", label: "Bulletin" },
+      { value: "News", label: "Specialisation" },
+      { value: "Editorial", label: "Contributor" },
+    ],
+  },
+
+  // ── REPORTERS ────────────────────────────────────────────────────────────
+
+  {
+    slug: "anthony-kathenya",
+    name: "Anthony Kathenya",
+    show: "Nairobi County Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Anthony%20Kathenya%20%20Nairobi%20County.png",
+    tagline: "Weru TV's eyes and ears in the capital.",
+    socialLinks: {},
+    bio: [
+      "Anthony Kathenya is Weru TV's Nairobi County correspondent, providing the channel with on-the-ground coverage from Kenya's capital. From national assembly proceedings to diaspora community stories, Anthony bridges the gap between Central Kenya and the country's political and economic nerve centre.",
+    ],
+    programHistory: [
+      "Based in Nairobi, Anthony covers stories with direct relevance to Central Kenya audiences — parliamentary debates, national government policy, and the lives of Meru and Tharaka-Nithi residents living and working in the city. His access to national institutions gives Weru TV a Nairobi dateline on the stories that matter most to the region.",
+    ],
+    stats: [
+      { value: "Nairobi", label: "Beat" },
+      { value: "National", label: "Coverage" },
+      { value: "Parliament", label: "Accredited" },
+    ],
+  },
+  {
+    slug: "bantam-murangiri",
+    name: "Bantam Murangiri",
+    show: "Isiolo County Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Bantam%20Murangiri-%20Isiolo%20County.png",
+    tagline: "Reporting from the gateway to Northern Kenya.",
+    socialLinks: {},
+    bio: [
+      "Bantam Murangiri covers Isiolo County for Weru TV, reporting on the county's unique intersection of pastoralist communities, wildlife conservation, and infrastructure development. His local knowledge and community connections give Weru TV's Isiolo coverage the depth and authenticity that the region deserves.",
+    ],
+    programHistory: [
+      "Isiolo County's diverse communities — spanning Borana, Meru, Somali, and Turkana populations — present rich and complex stories that require careful, respectful reporting. Bantam navigates this landscape with experience, delivering stories on devolution, land rights, security, and community development that keep Central Kenya audiences informed about their northern neighbour.",
+    ],
+    stats: [
+      { value: "Isiolo", label: "Beat" },
+      { value: "Pastoralist", label: "Community focus" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "brian-kimathi",
+    name: "Brian Kimathi",
+    show: "Tigania Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Brian%20Kimathi%20%20Tigania%20Central%20%26East.png",
+    tagline: "Ground-level reporting from Tigania Central and East.",
+    socialLinks: {},
+    bio: [
+      "Brian Kimathi is Weru TV's correspondent for Tigania Central and East subcounties, covering community news, development projects, and local governance from one of Meru County's most active agricultural and commercial zones. His reporting gives these subcounties a consistent and credible voice on the channel.",
+    ],
+    programHistory: [
+      "Brian's beat spans Tigania Central and East — areas known for their tea farming, dairy cooperatives, and active local politics. He covers ward and subcounty administration, infrastructure development, and the everyday stories that affect residents, delivering reports that connect the community to the broader Weru TV audience.",
+    ],
+    stats: [
+      { value: "Tigania C&E", label: "Beat" },
+      { value: "Agriculture", label: "Focus area" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "dancan-mwathi",
+    name: "Dancan Mwathi",
+    show: "Igembe Central Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Dancan%20Mwathi%20%20Igembe%20Central%20Subcounty.png",
+    tagline: "Telling the stories of Igembe Central with accuracy.",
+    socialLinks: {},
+    bio: [
+      "Dancan Mwathi covers Igembe Central Subcounty for Weru TV, providing consistent coverage of the area's community affairs, development news, and local governance. His reporting ensures that Igembe Central — a region with significant miraa farming, trade, and cross-border activity — has a credible broadcast voice.",
+    ],
+    programHistory: [
+      "Dancan's coverage area sits at the heart of Kenya's miraa (khat) trade, making his beat economically significant and often politically charged. He covers the full spectrum of community life — from cooperative society meetings to security matters along the Isiolo border — keeping Weru TV's audience informed about this strategically important region.",
+    ],
+    stats: [
+      { value: "Igembe Central", label: "Beat" },
+      { value: "Trade & Economy", label: "Focus area" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "dennis-mugendi",
+    name: "Dennis Mugendi",
+    show: "Igembe South Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Dennis%20Mugendi%20_%20Igembe%20South%20subcounty.png",
+    tagline: "Reporting from the heart of Igembe South.",
+    socialLinks: {},
+    bio: [
+      "Dennis Mugendi is Weru TV's correspondent for Igembe South Subcounty, delivering field reports on community development, local governance, agriculture, and social affairs from an area that is central to Meru County's economic and cultural life.",
+    ],
+    programHistory: [
+      "Dennis covers the full breadth of Igembe South's community life — from ward development fund projects and school construction to local market dynamics and county health initiatives. His on-the-ground presence ensures that subcounty stories that might otherwise go unreported reach the broader Weru TV audience.",
+    ],
+    stats: [
+      { value: "Igembe South", label: "Beat" },
+      { value: "Community", label: "Focus area" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "edwin-gatobu",
+    name: "Edwin Gatobu",
+    show: "Igembe North Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Edwin%20Gatobu%20%20Igembe%20North%20Subcounty.png",
+    tagline: "On the ground in Igembe North — every story counts.",
+    socialLinks: {},
+    bio: [
+      "Edwin Gatobu covers Igembe North Subcounty for Weru TV, reporting on an area that borders Isiolo and Marsabit counties and carries significant stories about cross-border trade, pastoralist-farmer relations, security, and infrastructure. His field reporting keeps viewers informed about this frontier region.",
+    ],
+    programHistory: [
+      "Igembe North's unique geography and demographics make it one of the more challenging and rewarding beats in Weru TV's correspondent network. Edwin navigates the area's complexities with experience and community trust, delivering reports that inform Meru County audiences about developments that directly affect livelihoods and security in the north.",
+    ],
+    stats: [
+      { value: "Igembe North", label: "Beat" },
+      { value: "Border region", label: "Coverage" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "elsie-gakii",
+    name: "Elsie Gakii",
+    show: "Buuri Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Elsie%20Gakii%20-%20Buuri%20Subcounty.png",
+    tagline: "Giving Buuri Subcounty a strong broadcast voice.",
+    socialLinks: {},
+    bio: [
+      "Elsie Gakii is Weru TV's Buuri Subcounty correspondent, covering a region that includes the slopes of Mount Kenya and communities involved in tea farming, horticulture, and tourism. Her reporting highlights both the opportunities and challenges facing one of Meru County's most scenic and productive subcounties.",
+    ],
+    programHistory: [
+      "Buuri Subcounty's stories range from small-scale farmer cooperatives to county conservation partnerships along the Mount Kenya forest boundary. Elsie covers this range with diligence and a genuine connection to the community, producing field reports that give Buuri residents reliable representation on Weru TV's bulletins.",
+    ],
+    stats: [
+      { value: "Buuri", label: "Beat" },
+      { value: "Agriculture", label: "Focus area" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "john-nthiga",
+    name: "John Nthiga",
+    show: "Tigania West & East Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/John%20Nthiga%20Tigania%20West%20%26Tigania%20East%20%20Subcounties.png",
+    tagline: "Comprehensive coverage across Tigania West and East.",
+    socialLinks: {},
+    bio: [
+      "John Nthiga covers both Tigania West and Tigania East subcounties for Weru TV, making him responsible for one of the widest geographic beats in the correspondent network. His reporting spans agriculture, local governance, education, and community affairs across two subcounties with distinct but interrelated stories.",
+    ],
+    programHistory: [
+      "John's dual-subcounty beat demands efficient newsgathering and strong community relationships across a broad area. He has developed a reliable network of sources in both Tigania West and East, enabling him to break local stories quickly and provide the contextual depth that distinguishes strong field reporting from routine coverage.",
+    ],
+    stats: [
+      { value: "Tigania W&E", label: "Beat" },
+      { value: "Dual subcounty", label: "Coverage" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "makena-mbaabu",
+    name: "Makena Mbaabu",
+    show: "Tharaka Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Makena%20Mbaabu%20%20Tharaka%20Subcounty.png",
+    tagline: "Amplifying the voices of Tharaka Subcounty.",
+    socialLinks: {},
+    bio: [
+      "Makena Mbaabu is Weru TV's Tharaka Subcounty correspondent, reporting from one of the most culturally rich and agriculturally important areas of Tharaka-Nithi County. Her coverage brings the stories of Tharaka's farming communities, conservation areas, and local governance to a wider audience.",
+    ],
+    programHistory: [
+      "Tharaka Subcounty sits in a transitional zone between the highlands and the lowland savannah, giving it a unique ecological and agricultural profile. Makena covers the full spectrum of community life here — from irrigation projects and honey cooperative societies to ward governance and cultural events — providing consistent and credible field reporting from the region.",
+    ],
+    stats: [
+      { value: "Tharaka", label: "Beat" },
+      { value: "Tharaka-Nithi", label: "County" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "martin-mugambi",
+    name: "Martin Mugambi",
+    show: "Maara Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Martin%20Mugambi-%20Maara%20Subcounty.png",
+    tagline: "On the ground in Maara — news from the tea belt.",
+    socialLinks: {},
+    bio: [
+      "Martin Mugambi covers Maara Subcounty for Weru TV, reporting from an area known for its thriving tea sector, vibrant market towns, and active local politics. His field reports connect Maara's communities to Weru TV's broader audience, ensuring the subcounty's stories receive the prominence they deserve.",
+    ],
+    programHistory: [
+      "Maara's tea and coffee belt generates some of the most economically significant stories in the region, and Martin covers them alongside governance, social development, and community news. His access to farmers, cooperative officials, and ward representatives gives Weru TV's Maara coverage both depth and credibility.",
+    ],
+    stats: [
+      { value: "Maara", label: "Beat" },
+      { value: "Tea belt", label: "Coverage area" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "mutugi-karee",
+    name: "Mutugi Karee",
+    show: "South & Central Imenti Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Mutugi%20Karee%20%20South%20Imenti%20%26%20Central%20Imenti%20subcounties.png",
+    tagline: "Covering the commercial heartland of Meru County.",
+    socialLinks: {},
+    bio: [
+      "Mutugi Karee covers South Imenti and Central Imenti subcounties for Weru TV — a dual beat that includes Meru town, the county's commercial and administrative hub. His reporting spans county government, urban development, business, and community affairs at the centre of the region's economic life.",
+    ],
+    programHistory: [
+      "South Imenti and Central Imenti are home to Meru town and its surrounding commercial zones, making Mutugi's beat one of the busiest in the correspondent network. He covers county assembly proceedings, business developments, social affairs, and urban infrastructure with a pace and depth that reflects the dynamism of the area he reports from.",
+    ],
+    stats: [
+      { value: "S&C Imenti", label: "Beat" },
+      { value: "Meru Town", label: "Hub coverage" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "nicholas-chabari",
+    name: "Nicholas Chabari",
+    show: "Chuka / Igambang'ombe Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Nicholas%20Chabari%20%20Chuka%20%20Igambang%27ombe%20Subcounty.png",
+    tagline: "Reporting from Chuka and Igambang'ombe for Weru TV.",
+    socialLinks: {},
+    bio: [
+      "Nicholas Chabari covers Chuka and Igambang'ombe Subcounty for Weru TV, reporting from a region that includes Chuka town — one of Tharaka-Nithi County's major commercial centres. His field reports cover local governance, agriculture, trade, and community development across both areas.",
+    ],
+    programHistory: [
+      "Chuka and Igambang'ombe have a rich mix of stories — from university town dynamics and youth employment to agricultural co-ops and county devolution implementation. Nicholas covers this range with thoroughness, ensuring the area's communities have consistent and reliable representation on Weru TV's bulletins.",
+    ],
+    stats: [
+      { value: "Chuka/Igambang'ombe", label: "Beat" },
+      { value: "Tharaka-Nithi", label: "County" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "muthuri-muriuki",
+    name: "Muthuri Muriuki",
+    show: "Imenti North Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Reporters%20%20Muthuri%20Muriuki%20-Imenti%20North.png",
+    tagline: "Keeping Imenti North on the Weru TV map.",
+    socialLinks: {},
+    bio: [
+      "Muthuri Muriuki is Weru TV's Imenti North Subcounty correspondent, covering a region that runs from Meru's northern highlands down toward the Nyambene Hills. His reporting spans agriculture, community development, local governance, and the area's distinctive cultural and ecological stories.",
+    ],
+    programHistory: [
+      "Imenti North's stories range from miraa farming dynamics and highland tea zones to subcounty development fund projects and local political affairs. Muthuri covers this range with consistency and community trust, giving Imenti North a regular and credible broadcast presence on Weru TV.",
+    ],
+    stats: [
+      { value: "Imenti North", label: "Beat" },
+      { value: "Nyambene", label: "Region" },
+      { value: "Field", label: "Reporter" },
+    ],
+  },
+  {
+    slug: "rita-mwaniki",
+    name: "Rita Mwaniki",
+    show: "Embu County Correspondent",
+    role: "Reporter",
+    category: "Reporters",
+    imageSrc: "/Presenters/Reporters/Rita%20Mwaniki%20%20Embu%20County.png",
+    tagline: "Weru TV's link to Embu and the lower Mount Kenya region.",
+    socialLinks: {},
+    bio: [
+      "Rita Mwaniki is Weru TV's Embu County correspondent, covering a neighbouring county with deep historical, cultural, and economic ties to the Meru region. Her reporting keeps Weru TV's Central Kenya audience informed about governance, agriculture, business, and community affairs in Embu.",
+    ],
+    programHistory: [
+      "Embu County shares strong community and commercial bonds with Meru, and Rita's reporting reflects those connections — covering stories on cross-county infrastructure, shared agricultural markets, and the area's growing urban economy. Her presence in Embu gives Weru TV broader regional reach and a credible voice beyond its core Meru catchment.",
+    ],
+    stats: [
+      { value: "Embu", label: "Beat" },
+      { value: "Regional", label: "Coverage" },
+      { value: "Field", label: "Reporter" },
     ],
   },
 ];

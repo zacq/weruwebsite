@@ -3,9 +3,18 @@ import { MetadataRoute } from "next";
 const BASE = "https://werudigital.co.ke";
 
 const PRESENTER_SLUGS = [
+  // Program Presenters
   "nelly-githinji", "martin-gichunge", "mc-tash", "makena-wa-matiri",
   "edward-mutembei", "munene-wa-kagwi", "mwenda-h-pilot", "ajelyne-george",
   "stella-karimi", "empress-rita-natty", "betty", "ntinyari-kinyua", "njumaa-sacco-squad",
+  // News Anchors
+  "betty-ntinyari", "dorcas-wa-kaaria", "maureen-kinya", "nelly-wa-githinji",
+  "phineas-imaana", "win-shiro-kingeru",
+  // Reporters
+  "anthony-kathenya", "bantam-murangiri", "brian-kimathi", "dancan-mwathi",
+  "dennis-mugendi", "edwin-gatobu", "elsie-gakii", "john-nthiga",
+  "makena-mbaabu", "martin-mugambi", "mutugi-karee", "nicholas-chabari",
+  "muthuri-muriuki", "rita-mwaniki",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

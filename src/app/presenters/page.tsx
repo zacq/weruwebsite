@@ -1,7 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
-import { presenters } from "@/data/presenters";
+import PresenterTabs from "@/components/sections/PresenterTabs";
 import type { Metadata } from "next";
 
 export const dynamic    = "force-static";
@@ -65,59 +64,10 @@ export default function PresentersPage() {
         </div>
       </section>
 
-      {/* Grid */}
-      <section
-        className="px-4 py-16"
-        style={{ background: "#0D0D0D" }}
-      >
+      {/* Tabbed grid */}
+      <section className="px-4 py-16" style={{ background: "#0D0D0D" }}>
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-            {presenters.map((presenter, i) => (
-              <Link
-                key={presenter.slug}
-                href={`/presenters/${presenter.slug}`}
-                className="group flex flex-col rounded-2xl overflow-hidden transition-transform duration-200 hover:scale-[1.02]"
-                style={{
-                  background: "#161616",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
-                {/* 1:1 image */}
-                <div className="relative w-full" style={{ aspectRatio: "1/1" }}>
-                  <Image
-                    src={presenter.imageSrc}
-                    alt={presenter.name}
-                    fill
-                    className="object-cover object-top"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    priority={i < 4}
-                    loading={i < 4 ? "eager" : "lazy"}
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)",
-                    }}
-                  />
-                </div>
-
-                {/* Info */}
-                <div className="p-4 flex-1 flex flex-col gap-1">
-                  <p
-                    className="text-[10px] font-extrabold tracking-widest uppercase"
-                    style={{ color: "#f97d00" }}
-                  >
-                    {presenter.show}
-                  </p>
-                  <p className="text-white text-sm font-bold leading-snug">{presenter.name}</p>
-                  <p className="text-white/45 text-xs mt-auto pt-2 group-hover:text-[#f97d00] transition-colors">
-                    Read profile →
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <PresenterTabs />
         </div>
       </section>
 
