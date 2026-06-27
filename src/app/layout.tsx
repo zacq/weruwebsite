@@ -72,7 +72,7 @@ const jsonLd = [
       "https://www.youtube.com/@werutvfm3411",
       "https://www.facebook.com/WeruTV",
       "https://x.com/werutv",
-      "https://tiktok.com/@werutv",
+      "https://tiktok.com/@werutv.fm96.4",
     ],
     contactPoint: [
       { "@type": "ContactPoint", telephone: "+254700117026", contactType: "customer support" },

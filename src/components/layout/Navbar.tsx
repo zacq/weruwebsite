@@ -99,7 +99,7 @@ function CommunityDropdown() {
     { icon: "📘", label: "Facebook", handle: "/werutv",       href: "https://facebook.com/werutv" },
     { icon: "▶️", label: "YouTube",  handle: "@werutvfm3411", href: "https://youtube.com/@werutvfm3411" },
     { icon: "𝕏",  label: "X",        handle: "@werutv",       href: "https://x.com/werutv" },
-    { icon: "♪",  label: "TikTok",   handle: "@werutv",       href: "https://tiktok.com/@werutv" },
+    { icon: "♪",  label: "TikTok",   handle: "@werutv.fm96.4", href: "https://tiktok.com/@werutv.fm96.4" },
   ];
   return (
     <div ref={ref} className="relative" onMouseEnter={show} onMouseLeave={hide}>
@@ -369,7 +369,7 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                         { icon: "📘", label: "Facebook", href: "https://facebook.com/werutv" },
                         { icon: "▶️", label: "YouTube",  href: "https://youtube.com/@werutvfm3411" },
                         { icon: "𝕏",  label: "X (Twitter)", href: "https://x.com/werutv" },
-                        { icon: "♪",  label: "TikTok",   href: "https://tiktok.com/@werutv" },
+                        { icon: "♪",  label: "TikTok",   href: "https://tiktok.com/@werutv.fm96.4" },
                       ].map((s) => (
                         <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer"
                           className="flex items-center gap-2 py-2.5 text-sm font-medium active:opacity-60" style={{ color: "rgba(255,255,255,0.75)" }}>

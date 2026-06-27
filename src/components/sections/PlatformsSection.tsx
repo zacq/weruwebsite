@@ -70,7 +70,7 @@ const countries = [
 ];
 
 const socials = [
-  { label: "TikTok",    handle: "@Werutv.fm96.4",  href: "https://tiktok.com/@werutv" },
+  { label: "TikTok",    handle: "@werutv.fm96.4",  href: "https://tiktok.com/@werutv.fm96.4" },
   { label: "Facebook",  handle: "@Weru FM 96.4",    href: "https://facebook.com/werutv" },
   { label: "YouTube",   handle: "@WERU TV & FM",    href: "https://www.youtube.com/@werutvfm3411" },
   { label: "Instagram", handle: "@werutv",           href: "https://instagram.com/werutv" },

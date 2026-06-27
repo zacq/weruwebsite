@@ -23,7 +23,7 @@ const socials = [
   { label: "Instagram", href: "https://instagram.com/werutv" },
   { label: "YouTube",   href: "https://youtube.com/@werutvfm3411" },
   { label: "X",         href: "https://x.com/werutv" },
-  { label: "TikTok",    href: "https://tiktok.com/@werutv" },
+  { label: "TikTok",    href: "https://tiktok.com/@werutv.fm96.4" },
 ];
 
 const FOOTER_BG = "#7A1010";
