@@ -73,27 +73,44 @@ export default function RadioSection() {
     } catch { /* ignore */ }
   }, []);
 
+  // Initialise audio and attempt autoplay on mount
+  useEffect(() => {
+    const audio = new Audio(RADIO_STREAM_URL);
+    audio.preload = "none";
+    audio.volume = 0.8;
+    audioRef.current = audio;
+
+    const scheduleReconnect = (delayMs: number) => {
+      if (!playingRef.current) return;
+      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+      reconnectTimerRef.current = setTimeout(() => {
+        if (!playingRef.current || !audioRef.current) return;
+        audioRef.current.src = RADIO_STREAM_URL;
+        audioRef.current.load();
+        audioRef.current.play().catch(() => {});
+      }, delayMs);
+    };
+
+    audio.addEventListener("error",   () => scheduleReconnect(3000));
+    audio.addEventListener("stalled", () => scheduleReconnect(5000));
+    audio.addEventListener("ended",   () => scheduleReconnect(1000));
+
+    audio.play().then(() => {
+      playingRef.current = true;
+      setPlaying(true);
+    }).catch(() => {
+      // Browser blocked autoplay — user must press play
+    });
+
+    return () => {
+      audio.pause();
+      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const togglePlay = () => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(RADIO_STREAM_URL);
-      audioRef.current.preload = "none";
-      audioRef.current.volume = volume;
-
-      const scheduleReconnect = (delayMs: number) => {
-        if (!playingRef.current) return;
-        if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
-        reconnectTimerRef.current = setTimeout(() => {
-          if (!playingRef.current || !audioRef.current) return;
-          audioRef.current.src = RADIO_STREAM_URL;
-          audioRef.current.load();
-          audioRef.current.play().catch(() => {});
-        }, delayMs);
-      };
-
-      audioRef.current.addEventListener("error",   () => scheduleReconnect(3000));
-      audioRef.current.addEventListener("stalled", () => scheduleReconnect(5000));
-      audioRef.current.addEventListener("ended",   () => scheduleReconnect(1000));
-    }
+    if (!audioRef.current) return;
 
     if (playingRef.current) {
       if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
