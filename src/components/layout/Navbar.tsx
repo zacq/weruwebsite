@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 const navLinks = [
@@ -192,6 +192,10 @@ function ContactDropdown() {
 export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { scrollY } = useScroll();
+  const rawLogoRotate = useTransform(scrollY, (v) => v * 0.6);
+  // Springed so fast/jerky touch-scroll flicks on mobile settle smoothly instead of snapping
+  const logoRotate = useSpring(rawLogoRotate, { stiffness: 120, damping: 20, mass: 0.5 });
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
@@ -199,9 +203,18 @@ export default function Navbar() {
         className="glass-strong w-full px-4 h-14 flex items-center justify-between gap-4"
         style={{ borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}
       >
-        {/* Logo */}
+        {/* Logo — rotates in step with page scroll */}
         <Link href="/" className="shrink-0 flex items-center">
-          <Image src="/logo.png" alt="Weru TV" width={110} height={38} className="object-contain" priority />
+          <motion.div style={{ rotateY: logoRotate, transformPerspective: 800, willChange: "transform" }}>
+            <Image
+              src="/logo.png"
+              alt="Weru TV"
+              width={110}
+              height={38}
+              className="h-7 w-auto sm:h-[38px] object-contain"
+              priority
+            />
+          </motion.div>
         </Link>
 
         {/* Desktop nav links */}

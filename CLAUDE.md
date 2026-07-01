@@ -52,7 +52,9 @@ Three routes, all page-level compositions of shared section components:
 |-------|------|
 | `/` | `src/app/page.tsx` |
 | `/tv` | `src/app/tv/page.tsx` |
+| `/tv/about` | `src/app/tv/about/page.tsx` |
 | `/radio` | `src/app/radio/page.tsx` |
+| `/radio/about` | `src/app/radio/about/page.tsx` |
 | `/blog` | `src/app/blog/page.tsx` |
 
 ### Component layout
@@ -250,7 +252,9 @@ Add the new route to the routing table in this file under `### Routing`. Current
 |-------|------|
 | `/` | `src/app/page.tsx` |
 | `/tv` | `src/app/tv/page.tsx` |
+| `/tv/about` | `src/app/tv/about/page.tsx` |
 | `/radio` | `src/app/radio/page.tsx` |
+| `/radio/about` | `src/app/radio/about/page.tsx` |
 | `/blog` | `src/app/blog/page.tsx` |
 | `/presenters` | `src/app/presenters/page.tsx` |
 | `/presenters/[slug]` | `src/app/presenters/[slug]/page.tsx` |

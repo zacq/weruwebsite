@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Link from "next/link";
 
 const platforms = [
   {
@@ -110,7 +111,7 @@ export default function PlatformsSection() {
           transition={{ duration: 0.55 }}
         >
           <p className="text-[11px] font-bold tracking-wider mb-3" style={{ color: "#f97d00" }}>
-            Weru TV goes international
+            Weru TV
           </p>
           <h2 className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl mb-4">
             Watch Weru TV{" "}
@@ -235,6 +236,23 @@ export default function PlatformsSection() {
               ))}
             </div>
           </div>
+        </motion.div>
+
+        {/* About CTA */}
+        <motion.div
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45 }}
+        >
+          <Link
+            href="/tv/about"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 hover:bg-white/[0.06] hover:scale-[1.03]"
+            style={{ border: "1px solid rgba(249,125,0,0.40)", color: "#f97d00" }}
+          >
+            About
+          </Link>
         </motion.div>
 
         {/* Social handles */}

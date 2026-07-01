@@ -26,6 +26,11 @@ const PlatformsSection = lazyImport(
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
+const RadioPlatformsSection = lazyImport(
+  () => import("@/components/sections/RadioPlatformsSection"),
+  { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
 const ReviewsCarousel = lazyImport(
   () => import("@/components/sections/ReviewsCarousel"),
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
@@ -71,6 +76,7 @@ export default function HomePage() {
 
       <CultureSection />
       <PlatformsSection />
+      <RadioPlatformsSection />
       <ReviewsCarousel />
       <PartnersCarousel />
       <Footer />

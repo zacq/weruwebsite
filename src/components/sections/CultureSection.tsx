@@ -15,7 +15,6 @@ const presenterImages = [
   { src: "/Presenters/empress-rita-natty.png", caption: "Empress Ritta & Empress Natty", slug: "empress-rita-natty" },
   { src: "/Presenters/edward-mutembei.png",   caption: "Edward Mutembei",              slug: "edward-mutembei" },
   { src: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png", caption: "Betty",            slug: "betty" },
-  { src: "/Presenters/Ntinyari%20Kinyua.jpeg",          caption: "Ntinyari Kinyua",  slug: "ntinyari-kinyua" },
   { src: "/Presenters/Njumaa%20sacco.png",              caption: "Njumaa Sacco Squad", slug: "njumaa-sacco-squad" },
 ];
 
