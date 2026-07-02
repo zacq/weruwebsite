@@ -257,10 +257,10 @@ function Headline({ fontSize }: { fontSize: string }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
-      <span>Reach Millions</span>
-      <span>Across</span>
-      <em style={{ fontStyle: "italic", color: "#FF7A00" }}>East</em>
-      <span>Africa.</span>
+      <span>Not TV.</span>
+      <span>Not Radio.</span>
+      <em style={{ fontStyle: "italic", color: "#FF7A00" }}>Not Digital.</em>
+      <span>A Movement.</span>
     </motion.h1>
   );
 }
@@ -344,6 +344,9 @@ export default function HomeHero() {
             <LivePill liveShow={liveShow} />
           </div>
           <Headline fontSize="clamp(34px, 6.5vw, 76px)" />
+          <p className="mt-5 sm:mt-6 text-white/45 text-sm sm:text-base max-w-lg leading-relaxed">
+            We don&apos;t just broadcast — we activate. We don&apos;t just reach audiences — we build communities.
+          </p>
         </div>
       </div>
 

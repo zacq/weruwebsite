@@ -1,7 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+
+const philosophyQuotes = [
+  {
+    label: "The Weru 100% Philosophy",
+    text: "“96.4 FM. 96 + 4 = 100. We don’t just broadcast – we give 100%. We don’t just reach audiences – we complete the circle. Weru is 100% entertainment. 100% information. 100% community. 100% movement. From the studio to the farm, from the mall to the campus, from TV to radio to digital – we are 100% Weru.”",
+  },
+  {
+    label: "The Weru 100% Complete Package",
+    text: "“TV + Radio + Digital + Farm + On-Ground + QR Code = Complete. This is not just advertising. This is total immersion. Your brand, everywhere the Weru movement lives. On screen. On air. Online. On farm. On ground. On demand. That’s the Weru 100% Complete Package. And it’s yours.”",
+  },
+];
 
 const listenOptions = [
   {
@@ -27,6 +39,13 @@ const listenOptions = [
 const counties = ["Nyeri", "Meru", "Tharaka-Nithi", "Embu", "Kirinyaga", "Murang'a"];
 
 export default function RadioPlatformsSection() {
+  const [quoteIndex, setQuoteIndex] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setQuoteIndex((i) => (i + 1) % philosophyQuotes.length), 7000);
+    return () => clearInterval(t);
+  }, []);
+
   return (
     <section className="py-16 sm:py-24 px-4 sm:px-8 relative overflow-hidden" style={{ background: "#0D1117" }}>
       {/* Ambient glow */}
@@ -49,23 +68,46 @@ export default function RadioPlatformsSection() {
           transition={{ duration: 0.55 }}
         >
           <p className="text-[11px] font-bold tracking-wider mb-3" style={{ color: "#f97d00" }}>
-            Weru FM
+            Weru FM{" "}
+            <span className="text-sm sm:text-base" style={{ color: "#FACC15" }}>
+              96.4
+            </span>
           </p>
           <h2 className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl mb-4">
-            Listen to Weru FM{" "}
-            <span className="font-headline italic" style={{ color: "#f97d00" }}>
-              Everywhere
-            </span>
-          </h2>
-          <p className="text-white/70 text-xs font-bold tracking-wide uppercase mb-2">
             The Weru 100% Philosophy
-          </p>
-          <p className="text-white/45 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            “96.4 FM. 96 + 4 = 100. We don’t just broadcast – we give 100%. We don’t just reach
-            audiences – we complete the circle. Weru is 100% entertainment. 100% information. 100%
-            community. 100% movement. From the studio to the farm, from the mall to the campus, from
-            TV to radio to digital – we are 100% Weru.”
-          </p>
+          </h2>
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={quoteIndex}
+              className="text-white/45 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.4 }}
+            >
+              {philosophyQuotes[quoteIndex].text}
+            </motion.p>
+          </AnimatePresence>
+
+          <div className="flex gap-2 items-center justify-center mt-5">
+            {philosophyQuotes.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setQuoteIndex(i)}
+                aria-label={`Quote ${i + 1}`}
+                style={{
+                  width: i === quoteIndex ? 24 : 8,
+                  height: 8,
+                  borderRadius: 999,
+                  background: i === quoteIndex ? "#f97d00" : "rgba(255,255,255,0.22)",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  transition: "all 0.25s",
+                }}
+              />
+            ))}
+          </div>
         </motion.div>
 
         {/* Listen options grid */}

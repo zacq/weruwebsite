@@ -65,9 +65,6 @@ export default function HotMixesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
         >
-          <p className="text-[11px] font-bold tracking-wider mb-3" style={{ color: "#f97d00" }}>
-            Weru FM
-          </p>
           <h2 className="font-display text-white font-extrabold text-3xl sm:text-4xl md:text-5xl mb-4">
             Hot{" "}
             <span className="font-headline italic" style={{ color: "#f97d00" }}>
