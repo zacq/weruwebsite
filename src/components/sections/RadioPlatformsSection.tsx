@@ -57,8 +57,14 @@ export default function RadioPlatformsSection() {
               Everywhere
             </span>
           </h2>
-          <p className="text-white/45 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
-            From a kitchen radio in Nyeri to a phone in Harare — Weru FM reaches you wherever you are.
+          <p className="text-white/70 text-xs font-bold tracking-wide uppercase mb-2">
+            The Weru 100% Philosophy
+          </p>
+          <p className="text-white/45 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            “96.4 FM. 96 + 4 = 100. We don’t just broadcast – we give 100%. We don’t just reach
+            audiences – we complete the circle. Weru is 100% entertainment. 100% information. 100%
+            community. 100% movement. From the studio to the farm, from the mall to the campus, from
+            TV to radio to digital – we are 100% Weru.”
           </p>
         </motion.div>
 

@@ -255,6 +255,28 @@ export default function PlatformsSection() {
           </Link>
         </motion.div>
 
+        {/* Multi-Stream Advantage */}
+        <motion.div
+          className="text-center mb-10"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45 }}
+        >
+          <h3 className="text-white font-extrabold text-lg sm:text-xl mb-3">
+            The Weru{" "}
+            <span className="font-headline italic" style={{ color: "#f97d00" }}>
+              Multi-Stream Advantage
+            </span>
+          </h3>
+          <p className="text-white/45 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            “Why choose between TV and radio and digital when you can have all three? Weru is
+            the only media house that delivers your message simultaneously – on screen, on
+            air, online, on farm, and on ground. One investment. Five platforms. Maximum
+            reach. That’s the Weru Multi-Stream Advantage.”
+          </p>
+        </motion.div>
+
         {/* Social handles */}
         <motion.div
           className="text-center"
@@ -263,9 +285,6 @@ export default function PlatformsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.45 }}
         >
-          <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-5">
-            Also Follow Us Online
-          </p>
           <div className="flex flex-wrap justify-center gap-3">
             {socials.map((s) => (
               <a
