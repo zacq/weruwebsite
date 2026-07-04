@@ -241,26 +241,25 @@ function LivePill({ liveShow }: { liveShow: ReturnType<typeof getCurrentShow> })
   );
 }
 
-/* ─── 4-line headline ─────────────────────────────────────────────────────── */
+/* ─── Movement headline ───────────────────────────────────────────────────── */
 function Headline({ fontSize }: { fontSize: string }) {
   return (
     <motion.h1
-      className="font-display font-extrabold text-white"
+      className="font-display font-extrabold text-white leading-[.94]"
       style={{
         fontSize,
         letterSpacing: "clamp(-1px, -.3vw, -2px)",
-        lineHeight: 1.0,
-        display: "grid",
-        gridTemplateRows: "repeat(4, 1fr)",
       }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
-      <span>Not TV.</span>
-      <span>Not Radio.</span>
-      <em style={{ fontStyle: "italic", color: "#FF7A00" }}>Not Digital.</em>
-      <span>A Movement.</span>
+      <span className="block">Weru is not just a TV station.</span>
+      <span className="block">It&apos;s not just a radio station.</span>
+      <em className="block" style={{ fontStyle: "italic", color: "#FF7A00" }}>
+        It&apos;s not just digital.
+      </em>
+      <span className="block">It&apos;s a movement.</span>
     </motion.h1>
   );
 }
@@ -312,7 +311,7 @@ export default function HomeHero() {
 
         {/* Title */}
         <div className="shrink-0 mt-2">
-          <Headline fontSize="clamp(30px, 9.5vw, 46px)" />
+          <Headline fontSize="clamp(24px, 6.2vw, 36px)" />
         </div>
 
         {/* Spacer — pushes cards toward bottom */}
@@ -343,9 +342,9 @@ export default function HomeHero() {
           <div className="mb-5 sm:mb-6">
             <LivePill liveShow={liveShow} />
           </div>
-          <Headline fontSize="clamp(34px, 6.5vw, 76px)" />
+          <Headline fontSize="clamp(33px, 4.4vw, 50px)" />
           <p className="mt-5 sm:mt-6 text-white/45 text-sm sm:text-base max-w-lg leading-relaxed">
-            We don&apos;t just broadcast — we activate. We don&apos;t just reach audiences — we build communities.
+            We build communities, not just audiences.
           </p>
         </div>
       </div>

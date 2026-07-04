@@ -20,10 +20,28 @@ const SOCIAL_PATHS: Record<string, string> = {
 
 export default function MultiStreamAdvantageSection() {
   return (
-    <section className="py-16 sm:py-24 px-4 sm:px-8 relative overflow-hidden" style={{ background: "#0D1117" }}>
+    <section className="py-16 sm:py-24 px-4 sm:px-8 relative overflow-hidden" style={{ background: "#0A0A0A", zIndex: 0 }}>
+      {/* Background mural */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "url(/bckground.jpeg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          zIndex: -3,
+        }}
+      />
+      {/* Dark scrim — keeps the mural as ambient texture, not a competing focal image */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse 65% 85% at center, rgba(6,6,8,0.78) 0%, rgba(6,6,8,0.60) 55%, rgba(6,6,8,0.42) 100%)",
+          zIndex: -2,
+        }}
+      />
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at center, rgba(249,125,0,0.06) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse at center, rgba(249,125,0,0.10) 0%, transparent 70%)", zIndex: -1 }}
       />
       <motion.div
         className="max-w-4xl mx-auto relative z-10 text-center"
