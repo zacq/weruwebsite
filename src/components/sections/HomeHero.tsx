@@ -281,11 +281,11 @@ export default function HomeHero() {
       <div className="sm:hidden absolute inset-0 hero-bg-mobile" style={{ zIndex: -3 }} />
       <div className="hidden sm:block absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
 
-      {/* Scrim — mobile: near-uniform veil, lighter over the empty flex-1 spacer row */}
+      {/* Scrim — mobile: heavy behind headline, deep dip over the empty spacer row, light behind self-opaque cards */}
       <div
         className="sm:hidden absolute inset-0 pointer-events-none"
         style={{
-          background: "linear-gradient(180deg, rgba(8,8,10,.82) 0%, rgba(8,8,10,.72) 45%, rgba(8,8,10,.80) 100%)",
+          background: "linear-gradient(180deg, rgba(8,8,10,.88) 0%, rgba(8,8,10,.80) 20%, rgba(8,8,10,.50) 32%, rgba(8,8,10,.20) 45%, rgba(8,8,10,.26) 60%, rgba(8,8,10,.38) 78%, rgba(8,8,10,.48) 100%)",
           zIndex: -2,
         }}
       />
