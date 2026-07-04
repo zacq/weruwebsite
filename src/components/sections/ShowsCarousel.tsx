@@ -7,12 +7,12 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 const tvShows = [
   {
     id: 1,
-    presenter: "Nkatha Cietu",
-    showName: "URIA NDAGITARI",
-    subtitle: "Health Insights",
+    presenter: "Uria Ndagitari",
+    showName: "NKATHA CIETU",
+    subtitle: "Showcases the achievements of impactful women",
     description:
-      "Nkatha Cietu shines a spotlight on the incredible contributions of women in Kenya. Join Makena Wa Matiri every Tuesday to explore their stories, achievements, and the impact they have on our society.",
-    time: "Tuesdays 8:00 PM",
+      "We present a prime-time, weekly program focused on women's empowerment, airing Tuesdays from 8:15 PM to 9:00 PM. The show showcases the achievements of impactful women and those who have overcome significant obstacles. Hosted by experienced journalist Makena Wa Matiri, the program aims to inspire and elevate.",
+    time: "Tuesdays 8:15–9:00 PM",
     initials: "NC",
     image: "/Presenters/makena-wa-matiri.png",
     bg: "#6B0A0A",
@@ -20,12 +20,12 @@ const tvShows = [
   },
   {
     id: 2,
-    presenter: "Martin Gichunge",
-    showName: "GICHUNKI",
-    subtitle: "Entertainment & Community",
+    presenter: "Martin Gichunge Dullah",
+    showName: "GICHUNKI GIA CIACA",
+    subtitle: "Political Talk Show",
     description:
-      "Join Martin Gichunge for the latest entertainment, community news, and stories that matter most to Central Kenya viewers.",
-    time: "Weekdays 6:00 PM",
+      "This is our flagship political talk show, hosted by Martin Gichunge Dullah. The show airs every Sunday from 9:00 PM to 11:30 PM and features politicians, lawyers, political analysts, and specialists from local, regional, and national levels within Kenya's political landscape. The program is highly interactive, with strong audience engagement through our digital platforms, live phone calls, and SMS participation.",
+    time: "Sundays 9:00–11:30 PM",
     initials: "MG",
     image: "/Presenters/martin-gichunge.png",
     bg: "#7A1010",
