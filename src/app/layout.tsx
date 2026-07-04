@@ -118,7 +118,7 @@ export default function RootLayout({
     <html lang="en" className={`h-full ${display.variable} ${serif.variable} ${ui.variable}`}>
       <head>
         {/* Preload the first hero image so the browser fetches it before JS runs — critical for LCP on high-latency connections */}
-        <link rel="preload" as="image" href="/heroimages/HomePage.png" fetchPriority="high" />
+        <link rel="preload" as="image" href="/heroimages/Weru%20hero%20banner.png" fetchPriority="high" />
         {jsonLd.map((schema, i) => (
           <script
             key={i}

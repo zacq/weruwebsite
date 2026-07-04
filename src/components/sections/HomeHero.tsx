@@ -279,19 +279,22 @@ export default function HomeHero() {
 
       {/* Background */}
       <div className="absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
+
+      {/* Scrim — mobile: near-uniform veil, lighter over the empty flex-1 spacer row */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="sm:hidden absolute inset-0 pointer-events-none"
         style={{
-          background: "linear-gradient(95deg,rgba(8,8,10,.92) 0%,rgba(8,8,10,.72) 32%,rgba(8,8,10,.20) 60%,rgba(8,8,10,.48) 100%)",
+          background: "linear-gradient(180deg, rgba(8,8,10,.82) 0%, rgba(8,8,10,.72) 45%, rgba(8,8,10,.80) 100%)",
           zIndex: -2,
         }}
       />
+
+      {/* Scrim — desktop: left-heavy (headline) → clear (WERU wordmark) → moderate (cards) */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="hidden sm:block absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(60% 80% at 12% 70%,rgba(255,122,0,.28),transparent 60%)",
-          mixBlendMode: "screen",
-          zIndex: -1,
+          background: "linear-gradient(95deg, rgba(8,8,10,.90) 0%, rgba(8,8,10,.88) 22%, rgba(8,8,10,.45) 34%, rgba(8,8,10,.10) 48%, rgba(8,8,10,.08) 74%, rgba(8,8,10,.32) 82%, rgba(8,8,10,.42) 100%)",
+          zIndex: -2,
         }}
       />
       <div

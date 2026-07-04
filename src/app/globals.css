@@ -43,19 +43,17 @@ body::after {
 .font-headline { font-family: var(--font-serif), Georgia, "Times New Roman", serif; }
 .font-display  { font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif; }
 
-/* Hero background — wide composite image (studio left + heritage garden right).
-   On mobile portrait the image is scaled to fill height, showing only a center
-   slice. Shifting left (20%) reveals both studio and garden on narrow viewports.
-   On sm+ the image is wide enough that center shows both halves naturally. */
+/* Hero background — vivid "100% WERU" wordmark composite. Busy FM/guitarist
+   cluster on the far left, the huge "100% WERU" graffiti wordmark dead-center
+   as the visual anchor, community/family imagery on the right, and a busy
+   waveform + mixing-console strip along the bottom edge. `center top`
+   keeps the wordmark — the richest, least UI-obstructed part of the image —
+   in view on every viewport. The scrim gradients that protect the headline
+   text and TV/FM cards live in HomeHero.tsx, not here. */
 .hero-bg {
-  background-image: url('/heroimages/HomePage.png');
+  background-image: url('/heroimages/Weru%20hero%20banner.png');
   background-size: cover;
-  background-position: 20% top;
-}
-@media (min-width: 640px) {
-  .hero-bg {
-    background-position: center top;
-  }
+  background-position: center top;
 }
 
 /* Balanced headline wrapping — prevents awkward orphaned words on section headings */
