@@ -139,10 +139,10 @@ export default function CultureSection() {
           </motion.span>
           <div className="flex flex-col min-w-0">
             <span className="font-bold text-sm leading-tight" style={{ color: "#F97D00" }}>
-              10 for 10: Castle Escape
+              10 Over 10: Twine Cietu SN2
             </span>
             <span className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>
-              10 questions for 10 years – win a night at Tafaria
+              10 questions — win a complimentary ticket to Twine Cietu SN2
             </span>
           </div>
           <Link

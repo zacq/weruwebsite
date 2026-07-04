@@ -174,10 +174,10 @@ function QuizBar({ compact = false }: { compact?: boolean }) {
         🎯
       </div>
       <div className="min-w-0 flex-1">
-        <p className={`font-display font-bold text-white leading-snug ${compact ? "text-xs" : "text-sm"}`}>10 for 10: Castle Escape</p>
+        <p className={`font-display font-bold text-white leading-snug ${compact ? "text-xs" : "text-sm"}`}>10 Over 10: Twine Cietu SN2</p>
         {!compact && (
           <p className="text-xs" style={{ color: "rgba(244,241,236,.58)" }}>
-            10 questions for 10 years – win a night at Tafaria
+            10 questions — win a complimentary ticket to Twine Cietu SN2
           </p>
         )}
       </div>

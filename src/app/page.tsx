@@ -73,9 +73,9 @@ export default function HomePage() {
             🎯
           </div>
           <div className="min-w-0">
-            <p className="font-display font-bold text-white text-sm leading-snug">10 for 10: Castle Escape</p>
+            <p className="font-display font-bold text-white text-sm leading-snug">10 Over 10: Twine Cietu SN2</p>
             <p className="text-xs whitespace-nowrap" style={{ color: "rgba(244,241,236,.58)" }}>
-              10 questions for 10 years – win a night at Tafaria
+              10 questions — win a complimentary ticket to Twine Cietu SN2
             </p>
           </div>
           <span className="shrink-0 px-4 py-1.5 rounded-full font-bold text-sm whitespace-nowrap" style={{ background: "#FACC15", color: "#1a1003" }}>

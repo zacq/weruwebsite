@@ -3,60 +3,55 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// ── Dummy answers — replace correct index per question when real answers arrive
 const QUESTIONS = [
   {
+    q: "What is the theme for the upcoming Nairobi edition of Twine Cietu?",
+    options: ["Honouring our founding fathers", "Celebrating our MauMau heroes", "Celebrating 10 years of Weru"],
+    correct: 1,
+  },
+  {
+    q: "When was the first Twine Cietu Event held?",
+    options: ["June 2014 in Meru", "March 2015 in Nairobi", "March 2013 in Nairobi"],
+    correct: 2,
+  },
+  {
+    q: "Where and when will the Twine Cietu Festival 2.0 be held?",
+    options: ["Nyayo Stadium, Nairobi on 8th August", "Scilla Gardens, Kasarani on 8th August", "Uhuru Gardens, Nairobi on 15th August"],
+    correct: 1,
+  },
+  {
     q: "When did Weru TV start broadcasting?",
-    options: ["2012", "2016", "2014"],
+    options: ["2017", "2018", "2016", "2019"],
+    correct: 2,
+  },
+  {
+    q: "When does Chibu Nkobotia air on Weru TV?",
+    options: ["Friday 8:40 PM", "Saturday 8:20 PM", "Sunday 8:20 PM"],
+    correct: 2,
+  },
+  {
+    q: "Who hosts the Chanchamuka show on Weru FM 96.4?",
+    options: ["Edward Mutembei and Dorcas wa Kaaria", "Martin Gichunge & Stella Karimi Kaunty", "Empress Rita and Empress Natty"],
     correct: 1,
   },
   {
-    q: "What is American Extravaganza?",
-    options: ["A weekly music variety show", "A travel documentary series", "A morning talk show"],
-    correct: 0,
-  },
-  {
-    q: "Which stand-up comedy show once featured on Weru TV?",
-    options: ["Churchill Show", "Laugh Factory Live", "Comedy Masala"],
+    q: "Which programme airs every Tuesday on Weru TV @8:20 PM?",
+    options: ["Gikaro na Kaunty", "Nkatha Mashinani", "Nkatha Cietu"],
     correct: 1,
   },
   {
-    q: "Name three drama shows that aired on Weru TV.",
-    options: [
-      "Tahidi High, Imenti & Wendo",
-      "Selina, Zora & Makutano Junction",
-      "Mwisho wa Lami, Papa Shirandula & Inspekta Mwala",
-    ],
-    correct: 0,
+    q: "What time does Katiba Ka Gen Z air?",
+    options: ["Saturdays 1:30 PM to 4 PM", "Weekdays from 1:30 PM to 5 PM", "Every day from 5:00 PM to 6:30 PM"],
+    correct: 1,
   },
   {
-    q: "Who hosts the Gikaro show on Weru TV?",
-    options: ["Edward Mutembei", "Eston Gitonga", "Stella Karimi Kaunty"],
+    q: "Who presents Nteto Cia Weru every Wednesday @9:30 PM?",
+    options: ["Edward Mutembei", "Maureen Kinya", "Dorcas wa Kaaria", "Phineas Imaana"],
     correct: 2,
   },
   {
-    q: "Who paired with Phineas Imaana for news bulletins in 2017?",
-    options: ["Kelvin Kimathi", "Maureen Kinya", "Doreen Kathambi"],
-    correct: 2,
-  },
-  {
-    q: "When does Gaaru E Ciaca air?",
-    options: ["Weekdays at 6:00 PM", "Sundays at 8:00 PM", "Saturdays at 7:00 PM"],
-    correct: 0,
-  },
-  {
-    q: "Who hosts Gichunki Gia Ciaca?",
-    options: ["Martin Gichunge", "Edward Mutembei", "Christine Wanjeru"],
-    correct: 0,
-  },
-  {
-    q: "Where is Weru TV located?",
-    options: ["Maua", "Meru Town", "Kirogine, Meru"],
-    correct: 2,
-  },
-  {
-    q: "Name the first two hosts of ReggaeMania.",
-    options: ["DJ Roots & MC Fire", "Ras Kimani & Mama Africa", "Sipho & Reggae Dan"],
+    q: "When does Woi Tene air?",
+    options: ["Thursday 6:40–7:20 PM", "Saturday 6:40–7:20 PM", "Friday 6:40–7:20 PM"],
     correct: 1,
   },
 ];
@@ -136,7 +131,7 @@ export default function QuizModal() {
       {/* Floating card — bottom-left, always visible */}
       <motion.button
         onClick={handleOpen}
-        aria-label="Open quiz: 10 for 10 Castle Escape"
+        aria-label="Open quiz: 10 Over 10 Twine Cietu SN2"
         className="fixed bottom-6 md:bottom-8 left-4 md:left-8 z-50 w-[290px] sm:w-[310px] text-left rounded-2xl p-4 flex flex-col gap-3"
         style={{
           marginBottom: "env(safe-area-inset-bottom, 0px)",
@@ -159,10 +154,10 @@ export default function QuizModal() {
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-sm leading-tight" style={{ color: "#F97D00" }}>
-              10 for 10: Castle Escape
+              10 Over 10: Twine Cietu SN2
             </span>
             <span className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.62)" }}>
-              10 questions for 10 years – win a night at Tafaria
+              10 questions — win a complimentary ticket to Twine Cietu SN2
             </span>
           </div>
         </div>
@@ -191,7 +186,7 @@ export default function QuizModal() {
             <motion.div
               role="dialog"
               aria-modal="true"
-              aria-label="10 for 10: Castle Escape Quiz"
+              aria-label="10 Over 10: Twine Cietu SN2 Quiz"
               className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl"
               style={{
                 background: "rgba(10,10,10,0.97)",
@@ -218,10 +213,10 @@ export default function QuizModal() {
 
                 <div className="flex items-center gap-2.5 mb-0.5">
                   <span className="text-2xl" aria-hidden>🏆</span>
-                  <h2 className="text-white font-bold text-lg leading-tight">10 for 10: Castle Escape</h2>
+                  <h2 className="text-white font-bold text-lg leading-tight">10 Over 10: Twine Cietu SN2</h2>
                 </div>
                 <p className="text-white/45 text-xs mb-4 pl-9">
-                  10 questions · 10 years · Win a night at Tafaria Castle
+                  10 questions · Win a complimentary ticket to Twine Cietu SN2
                 </p>
 
                 {phase === "quiz" && (
@@ -394,7 +389,7 @@ export default function QuizModal() {
                           color: "rgba(255,255,255,0.55)",
                         }}
                       >
-                        Thank you for entering the Castle Escape draw. Winners will be announced on Weru TV and FM. Good luck!
+                        Thank you for entering the Twine Cietu SN2 ticket draw. Winners will be announced on Weru TV and FM. Good luck!
                       </div>
                       <button
                         onClick={handleClose}

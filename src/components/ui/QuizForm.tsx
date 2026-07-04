@@ -5,57 +5,53 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const QUESTIONS = [
   {
+    q: "What is the theme for the upcoming Nairobi edition of Twine Cietu?",
+    options: ["Honouring our founding fathers", "Celebrating our MauMau heroes", "Celebrating 10 years of Weru"],
+    correct: 1,
+  },
+  {
+    q: "When was the first Twine Cietu Event held?",
+    options: ["June 2014 in Meru", "March 2015 in Nairobi", "March 2013 in Nairobi"],
+    correct: 2,
+  },
+  {
+    q: "Where and when will the Twine Cietu Festival 2.0 be held?",
+    options: ["Nyayo Stadium, Nairobi on 8th August", "Scilla Gardens, Kasarani on 8th August", "Uhuru Gardens, Nairobi on 15th August"],
+    correct: 1,
+  },
+  {
     q: "When did Weru TV start broadcasting?",
-    options: ["2012", "2016", "2014"],
+    options: ["2017", "2018", "2016", "2019"],
+    correct: 2,
+  },
+  {
+    q: "When does Chibu Nkobotia air on Weru TV?",
+    options: ["Friday 8:40 PM", "Saturday 8:20 PM", "Sunday 8:20 PM"],
+    correct: 2,
+  },
+  {
+    q: "Who hosts the Chanchamuka show on Weru FM 96.4?",
+    options: ["Edward Mutembei and Dorcas wa Kaaria", "Martin Gichunge & Stella Karimi Kaunty", "Empress Rita and Empress Natty"],
     correct: 1,
   },
   {
-    q: "What is Amerucan Extravaganza?",
-    options: ["Weru TV 1st Anniversary", "A weekly music variety show", "A talent search competition"],
-    correct: 0,
-  },
-  {
-    q: "Which stand-up comedy show once featured on Weru TV?",
-    options: ["Churchill Show", "Laugh Factory Live", "Tuune Mbaru"],
-    correct: 2,
-  },
-  {
-    q: "Name three drama shows that aired on Weru TV.",
-    options: [
-      "Witho, Kaiguetie, Chibu Nkobotia",
-      "Selina, Zora & Makutano Junction",
-      "Tahidi High, Imenti & Wendo",
-    ],
-    correct: 0,
-  },
-  {
-    q: "Who hosts the Gikaro show on Weru TV?",
-    options: ["Edward Mutembei", "Eston Gitonga", "Stella Karimi Kaunty"],
-    correct: 2,
-  },
-  {
-    q: "Who paired with Phineas Imaana for news bulletins in 2017?",
-    options: ["Kelvin Kimathi", "Maureen Kinya", "Doreen Kathambi"],
+    q: "Which programme airs every Tuesday on Weru TV @8:20 PM?",
+    options: ["Gikaro na Kaunty", "Nkatha Mashinani", "Nkatha Cietu"],
     correct: 1,
   },
   {
-    q: "When does Gaaru E Ciaca air?",
-    options: ["Thursday 8.20 PM", "Sundays at 8:00 PM", "Saturdays at 7:00 PM"],
-    correct: 0,
+    q: "What time does Katiba Ka Gen Z air?",
+    options: ["Saturdays 1:30 PM to 4 PM", "Weekdays from 1:30 PM to 5 PM", "Every day from 5:00 PM to 6:30 PM"],
+    correct: 1,
   },
   {
-    q: "Who hosts Gichunki Gia Ciaca?",
-    options: ["Martin Gichunge", "Edward Mutembei", "Christine Wanjeru"],
-    correct: 0,
-  },
-  {
-    q: "Where is Weru TV located?",
-    options: ["Maua", "Meru Town", "Kirogine, Meru"],
+    q: "Who presents Nteto Cia Weru every Wednesday @9:30 PM?",
+    options: ["Edward Mutembei", "Maureen Kinya", "Dorcas wa Kaaria", "Phineas Imaana"],
     correct: 2,
   },
   {
-    q: "Name the first two hosts of ReggaeMania.",
-    options: ["DJ Roots & MC Fire", "Empress Rita & Selector Prince", "Sipho & Reggae Dan"],
+    q: "When does Woi Tene air?",
+    options: ["Thursday 6:40–7:20 PM", "Saturday 6:40–7:20 PM", "Friday 6:40–7:20 PM"],
     correct: 1,
   },
 ];
@@ -327,7 +323,7 @@ export default function QuizForm() {
           </p>
 
           <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Thank you for entering the Castle Escape draw. Winners will be contacted directly and announced on Weru TV &amp; FM. Good luck!
+            Thank you for entering the Twine Cietu SN2 ticket draw. Winners will be contacted directly and announced on Weru TV &amp; FM. Good luck!
           </p>
         </motion.div>
       )}

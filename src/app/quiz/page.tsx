@@ -5,13 +5,13 @@ export const dynamic    = "force-static";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "10 for 10: Castle Escape — Weru TV",
+  title: "10 Over 10: Twine Cietu SN2 — Weru TV",
   description:
-    "Think you know Weru TV? Answer 10 questions and stand a chance to win a one-night stay at Tafaria Castle.",
+    "Think you know Weru TV and Twine Cietu? Answer 10 questions and stand a chance to win a complimentary ticket to Twine Cietu SN2.",
   openGraph: {
-    title: "10 for 10: Castle Escape — Weru TV",
+    title: "10 Over 10: Twine Cietu SN2 — Weru TV",
     description:
-      "Think you know Weru TV? Answer 10 questions and stand a chance to win a one-night stay at Tafaria Castle.",
+      "Think you know Weru TV and Twine Cietu? Answer 10 questions and stand a chance to win a complimentary ticket to Twine Cietu SN2.",
   },
 };
 
@@ -46,17 +46,17 @@ export default function QuizPage() {
             className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2 sm:mb-3"
             style={{ color: "rgba(255,255,255,0.25)" }}
           >
-            Celebrating 10 years
+            Twine Cietu SN2
           </p>
           <h1
             className="text-white font-bold leading-none mb-3 sm:mb-4"
             style={{ fontSize: "clamp(2rem, 7vw, 4rem)", letterSpacing: "-0.02em" }}
           >
-            10 for 10:<br />Castle Escape
+            10 Over 10:<br />Twine Cietu SN2
           </h1>
           <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Answer all 10 questions and stand a chance to win a one-night stay at{" "}
-            <span className="font-semibold" style={{ color: "#FACC15" }}>Tafaria Castle</span>.
+            Answer all 10 questions and stand a chance to win a{" "}
+            <span className="font-semibold" style={{ color: "#FACC15" }}>complimentary ticket to Twine Cietu SN2</span>.
           </p>
         </div>
 

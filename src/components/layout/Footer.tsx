@@ -88,7 +88,7 @@ export default function Footer() {
                 className="text-xs font-bold hover:opacity-80 transition-opacity mt-0.5"
                 style={{ color: "#FACC15" }}
               >
-                🏆 10 for 10
+                🎟️ 10 Over 10
               </Link>
             </div>
 
