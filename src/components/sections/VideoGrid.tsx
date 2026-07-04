@@ -17,7 +17,7 @@ const placeholderVideos: Video[] = [
   { id: "3", title: "Sports Digest — Weekend", duration: "20:05", views: "6.1K" },
   { id: "4", title: "Cultural Showcase Special", duration: "44:52", views: "18K" },
   { id: "5", title: "Gichunki — Latest Episode", duration: "35:20", views: "22K" },
-  { id: "6", title: "Reggaemani — Live Show", duration: "56:10", views: "15K" },
+  { id: "6", title: "ReggaeMania — Live Show", duration: "56:10", views: "15K" },
   { id: "7", title: "Uria Ndagitari — Health Tips", duration: "24:40", views: "9.7K" },
   { id: "8", title: "Tuburuke Na Tash — Mix", duration: "42:00", views: "31K" },
 ];

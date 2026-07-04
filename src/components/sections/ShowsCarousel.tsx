@@ -11,7 +11,7 @@ const tvShows = [
     showName: "NKATHA CIETU",
     subtitle: "Showcases the achievements of impactful women",
     description:
-      "We present a prime-time, weekly program focused on women's empowerment, airing Tuesdays from 8:15 PM to 9:00 PM. The show showcases the achievements of impactful women and those who have overcome significant obstacles. Hosted by experienced journalist Makena Wa Matiri, the program aims to inspire and elevate.",
+      "We present a prime-time, weekly program focused on women's empowerment, airing Tuesdays from 8:15 PM to 9:00 PM. The show showcases the achievements of impactful women and those who have overcome significant obstacles. Hosted by experienced journalist Makena wa Matiri, the program aims to inspire and elevate.",
     time: "Tuesdays 8:15–9:00 PM",
     initials: "NC",
     image: "/Presenters/makena-wa-matiri.png",
@@ -34,7 +34,7 @@ const tvShows = [
   {
     id: 3,
     presenter: "Empress Ritta & Empress Natty",
-    showName: "REGGAEMANI",
+    showName: "REGGAEMANIA",
     subtitle: "Reggae & African Culture",
     description:
       "Your weekly dose of roots reggae, African vibes, and cultural celebration hosted by the incomparable Empress Rita.",

@@ -57,7 +57,7 @@ const weekdayPrograms = (prefix: string): RadioProgram[] => [
   },
   {
     id: `${prefix}-7`,
-    name: "Reggaemania",
+    name: "ReggaeMania",
     host: "Empress Rita & Empress Natty",
     time: "7:00 PM – 10:00 PM",
     description: "Vibrant programme catering to reggae and dancehall enthusiasts — rich blend of sounds and styles. Engaging discussions on current political and social issues, empowering listeners with knowledge, inspiration and positive vibes.",
@@ -96,7 +96,7 @@ export const radioSchedule: RadioDaySchedule[] = [
       },
       {
         id: "rsat-3",
-        name: "Reggaemania Saturday",
+        name: "ReggaeMania Saturday",
         host: "Empress Rita & Empress Natty",
         time: "10:00 AM – 1:00 PM",
         description: "Saturday reggae marathon — roots, culture, and live listener requests from Empress Rita and Empress Natty.",
@@ -117,7 +117,7 @@ export const radioSchedule: RadioDaySchedule[] = [
       },
       {
         id: "rsat-6",
-        name: "Reggaemania Evening",
+        name: "ReggaeMania Evening",
         host: "Empress Rita & Empress Natty",
         time: "7:00 PM – 10:00 PM",
         description: "Saturday evening reggae and dancehall session with engaging social discussions and positive vibes.",
@@ -178,7 +178,7 @@ export const radioSchedule: RadioDaySchedule[] = [
       },
       {
         id: "rsun-7",
-        name: "Reggaemania",
+        name: "ReggaeMania",
         host: "Empress Rita & Empress Natty",
         time: "7:00 PM – 10:00 PM",
         description: "Sunday reggae and dancehall session with Empress Rita and Empress Natty.",

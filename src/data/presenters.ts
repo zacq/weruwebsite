@@ -51,7 +51,7 @@ export const presenters: Presenter[] = [
   {
     slug: "martin-gichunge",
     name: "Martin Gichunge",
-    show: "Gichunki gia Ciaca",
+    show: "Gichunki Gia Ciaca",
     role: "Host",
     category: "Program Presenters",
     imageSrc: "/Presenters/martin-gichunge.png",
@@ -61,10 +61,10 @@ export const presenters: Presenter[] = [
       instagram: "https://instagram.com",
     },
     bio: [
-      "Martin Gichunge is the anchor of Gichunki gia Ciaca, Weru TV's prime-time entertainment and current-affairs magazine. Known for his sharp wit, deep community roots, and an encyclopaedic knowledge of Central Kenya culture, Martin has turned what began as a local variety slot into one of the channel's flagship evening programmes.",
+      "Martin Gichunge is the anchor of Gichunki Gia Ciaca, Weru TV's prime-time entertainment and current-affairs magazine. Known for his sharp wit, deep community roots, and an encyclopaedic knowledge of Central Kenya culture, Martin has turned what began as a local variety slot into one of the channel's flagship evening programmes.",
     ],
     programHistory: [
-      "Gichunki gia Ciaca was conceived as a programme that would sit at the intersection of entertainment and public discourse — giving communities a platform to celebrate their achievements while holding institutions to account. Martin Gichunge was the natural choice to anchor it, bringing years of live-event hosting and radio experience to the television format.",
+      "Gichunki Gia Ciaca was conceived as a programme that would sit at the intersection of entertainment and public discourse — giving communities a platform to celebrate their achievements while holding institutions to account. Martin Gichunge was the natural choice to anchor it, bringing years of live-event hosting and radio experience to the television format.",
       "Under Martin's stewardship the show has evolved significantly, moving from a studio-only format to one that regularly features outside broadcasts from county fairs, agricultural shows, cultural festivals, and community development projects. This willingness to take the cameras to where the people are has been a decisive factor in growing the programme's reach beyond Meru town into the wider county.",
       "The show's Facebook livestream routinely attracts tens of thousands of concurrent viewers for major episodes, and guest bookings — once filled weeks in advance — are now scheduled months ahead, reflecting the prestige the programme has earned among politicians, businesspeople, and cultural figures across the region.",
     ],
@@ -130,7 +130,7 @@ export const presenters: Presenter[] = [
   {
     slug: "edward-mutembei",
     name: "Edward Mutembei",
-    show: "Gaaru ya Ciaca",
+    show: "Gaaru E Ciaca",
     role: "Host",
     category: "Program Presenters",
     imageSrc: "/Presenters/edward-mutembei.png",
@@ -139,12 +139,12 @@ export const presenters: Presenter[] = [
       facebook: "https://facebook.com",
     },
     bio: [
-      "Edward Mutembei is the host of Gaaru ya Ciaca, Weru TV's family and relationships programme that tackles the topics Kenyan families grapple with but rarely discuss openly. With a measured, empathetic presenting style, Edward has created a safe on-screen space that has attracted some of the most candid conversations ever broadcast on the channel.",
+      "Edward Mutembei is the host of Gaaru E Ciaca, Weru TV's family and relationships programme that tackles the topics Kenyan families grapple with but rarely discuss openly. With a measured, empathetic presenting style, Edward has created a safe on-screen space that has attracted some of the most candid conversations ever broadcast on the channel.",
     ],
     programHistory: [
-      "Gaaru ya Ciaca began as a weekly slot addressing marriage, parenting, and inter-generational relationships within the Kimeru cultural context. Edward Mutembei brought lived experience and a willingness to be vulnerable on camera — qualities that immediately distinguished the show from more formal magazine formats and built rapid audience trust.",
+      "Gaaru E Ciaca began as a weekly slot addressing marriage, parenting, and inter-generational relationships within the Kimeru cultural context. Edward Mutembei brought lived experience and a willingness to be vulnerable on camera — qualities that immediately distinguished the show from more formal magazine formats and built rapid audience trust.",
       "Over time the programme evolved to address emerging social issues including mental health, youth unemployment, and gender-based violence — subjects that regional broadcasters had largely avoided. Expert guests from counselling, medicine, and law began appearing regularly, lending authority to episodes that were simultaneously emotionally resonant and practically informative.",
-      "Gaaru ya Ciaca now draws consistent prime-time viewership and has been cited by social welfare organisations as a meaningful contributor to community dialogue in Meru County. Several listener interventions — viewers contacting the show after episodes on domestic support services — have led to real family outcomes that the production team documents as part of its impact reporting.",
+      "Gaaru E Ciaca now draws consistent prime-time viewership and has been cited by social welfare organisations as a meaningful contributor to community dialogue in Meru County. Several listener interventions — viewers contacting the show after episodes on domestic support services — have led to real family outcomes that the production team documents as part of its impact reporting.",
     ],
     stats: [
       { value: "5+ yrs", label: "On air" },
@@ -155,7 +155,7 @@ export const presenters: Presenter[] = [
   {
     slug: "munene-wa-kagwi",
     name: "Munene wa Kagwi",
-    show: "Tiira Muuru & Tunthunkume",
+    show: "Tiira Muuru & Tuthunkume",
     role: "Host & Agricultural Expert",
     category: "Program Presenters",
     imageSrc: "/Presenters/munene-wa-kagwi.png",
@@ -165,12 +165,12 @@ export const presenters: Presenter[] = [
       youtube: "https://youtube.com",
     },
     bio: [
-      "Munene wa Kagwi is the driving force behind two of Weru TV's most practically important programmes: Tiira Muuru, a flagship agricultural advisory show, and Tunthunkume, which focuses on livestock and veterinary guidance. With deep roots in Meru's farming communities, Munene translates technical knowledge into actionable advice that thousands of smallholder farmers apply season after season.",
+      "Munene wa Kagwi is the driving force behind two of Weru TV's most practically important programmes: Tiira Muuru, a flagship agricultural advisory show, and Tuthunkume, which focuses on livestock and veterinary guidance. With deep roots in Meru's farming communities, Munene translates technical knowledge into actionable advice that thousands of smallholder farmers apply season after season.",
     ],
     programHistory: [
       "Tiira Muuru launched at a time when Meru County's agricultural sector was grappling with unpredictable rainfall, rising input costs, and limited access to extension services. Munene wa Kagwi positioned the show as a practical alternative — bringing agricultural officers, agrovets, and successful farmers directly into the studio to share what was actually working on the ground.",
       "The response was immediate and sustained. Viewer letters and phone calls poured in from farmers who had adjusted planting schedules, switched crop varieties, or adopted conservation techniques based on advice heard on the programme. County agricultural departments began partnering with the show to disseminate advisories, recognising its reach into remote areas where extension officers rarely travel.",
-      "Tunthunkume extended the model to livestock — covering dairy cattle management, poultry rearing, and disease prevention with the same practical, evidence-based approach. Both shows now form the backbone of Weru TV's agricultural content and are frequently cited by farming cooperatives and county government officials as key channels for reaching rural smallholders with timely, trusted information.",
+      "Tuthunkume extended the model to livestock — covering dairy cattle management, poultry rearing, and disease prevention with the same practical, evidence-based approach. Both shows now form the backbone of Weru TV's agricultural content and are frequently cited by farming cooperatives and county government officials as key channels for reaching rural smallholders with timely, trusted information.",
     ],
     stats: [
       { value: "6+ yrs", label: "On air" },
@@ -387,14 +387,14 @@ export const presenters: Presenter[] = [
   {
     slug: "dorcas-wa-kaaria",
     name: "Dorcas wa Kaaria",
-    show: "Nteto cia Weru",
+    show: "Nteto Cia Weru",
     role: "News Anchor",
     category: "News Anchors",
     imageSrc: "/Presenters/News%20Anchors/Dorcas%20wa%20Kaaria%20-%20Nteto%20cia%20Weru%20Wednesday.jpeg",
     tagline: "Midweek news — clear, accurate, and on time.",
     socialLinks: {},
     bio: [
-      "Dorcas wa Kaaria anchors the Wednesday edition of Nteto cia Weru, Weru TV's weekday evening bulletin. Her sharp delivery and thorough understanding of the Central Kenya news landscape make her one of the newsroom's most dependable anchors, trusted by viewers to bring them the day's events with accuracy and calm authority.",
+      "Dorcas wa Kaaria anchors the Wednesday edition of Nteto Cia Weru, Weru TV's weekday evening bulletin. Her sharp delivery and thorough understanding of the Central Kenya news landscape make her one of the newsroom's most dependable anchors, trusted by viewers to bring them the day's events with accuracy and calm authority.",
     ],
     programHistory: [
       "Dorcas established herself as a reliable presence on the Wednesday bulletin, a day that often carries significant policy, governance, and county council news. Her ability to navigate complex stories — from budget announcements to community disputes — and present them clearly in both Kimeru and Swahili has earned her strong audience trust.",
@@ -453,18 +453,18 @@ export const presenters: Presenter[] = [
   {
     slug: "phineas-imaana",
     name: "Phineas Imaana",
-    show: "Nteto cia Weru",
+    show: "Nteto Cia Weru",
     role: "News Anchor & Presenter",
     category: "News Anchors",
     imageSrc: "/Presenters/News%20Anchors/Phineas%20Imaana%20-%20Nteto%20cia%20Weru%20Monday.jpeg",
     tagline: "Setting the week's news tone — every Monday.",
     socialLinks: {},
     bio: [
-      "Phineas Imaana anchors the Monday edition of Nteto cia Weru and also co-hosts Woi Wene on Saturday evenings, making him one of the most versatile members of Weru TV's on-screen team. His confident delivery and broad editorial knowledge make Monday's bulletin — which must capture the week's opening energy — one of the most watched of the weekday editions.",
+      "Phineas Imaana anchors the Monday edition of Nteto Cia Weru and also co-hosts Woi Tene on Saturday evenings, making him one of the most versatile members of Weru TV's on-screen team. His confident delivery and broad editorial knowledge make Monday's bulletin — which must capture the week's opening energy — one of the most watched of the weekday editions.",
     ],
     programHistory: [
       "The Monday bulletin sets the tone for the week's news coverage, and Phineas brings the discipline and editorial judgement that the slot demands. His preparation is thorough, and his ability to handle late-breaking stories without losing composure has made him a trusted anchor for viewers starting their week with Weru TV.",
-      "His dual role as a news anchor and evening entertainment show host reflects the breadth of his broadcasting skills. On Woi Wene, he demonstrates a warmer, more conversational presenting style — a versatility that has made him one of the channel's most recognisable and respected on-screen personalities.",
+      "His dual role as a news anchor and evening entertainment show host reflects the breadth of his broadcasting skills. On Woi Tene, he demonstrates a warmer, more conversational presenting style — a versatility that has made him one of the channel's most recognisable and respected on-screen personalities.",
     ],
     stats: [
       { value: "Monday", label: "Bulletin" },

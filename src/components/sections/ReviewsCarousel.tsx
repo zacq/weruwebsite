@@ -17,7 +17,7 @@ const FALLBACK_REVIEWS: Review[] = [
   { id: 1, name: "James M'Murithi",  location: "Embu Tharaka Nithi County", rating: 5, text: "Weru TV is the best Kikuyu channel! Always informative and entertaining. I never miss the evening news.", photo: "" },
   { id: 2, name: "Grace Kanini",     location: "Meru County",               rating: 5, text: "The radio programs are amazing. Tutharimwe Morning Show sets the perfect tone for my day. God bless Weru FM!", photo: "" },
   { id: 3, name: "Peter M'Rimberia", location: "Isiolo County",             rating: 5, text: "I advertised my business on Weru TV and saw incredible results within the first week. Highly recommended!", photo: "" },
-  { id: 4, name: "Mary Kathambi",    location: "Embu Tharaka Nithi County", rating: 5, text: "Gichunki is my favourite show! Martin Gichunge brings so much energy and cultural pride to every episode.", photo: "" },
+  { id: 4, name: "Mary Kathambi",    location: "Embu Tharaka Nithi County", rating: 5, text: "Gichunki Gia Ciaca is my favourite show! Martin Gichunge brings so much energy and cultural pride to every episode.", photo: "" },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

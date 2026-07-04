@@ -54,7 +54,7 @@ const QUESTIONS = [
     correct: 2,
   },
   {
-    q: "Name the first two hosts of Reggamania.",
+    q: "Name the first two hosts of ReggaeMania.",
     options: ["DJ Roots & MC Fire", "Empress Rita & Selector Prince", "Sipho & Reggae Dan"],
     correct: 1,
   },
