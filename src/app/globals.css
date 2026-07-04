@@ -56,6 +56,16 @@ body::after {
   background-position: center top;
 }
 
+/* Mobile hero background — dedicated portrait crop (768x1376) of the same
+   artwork, composed so the "100% WERU" wordmark reads clearly on narrow
+   phone screens instead of being cropped to an unrecognizable sliver by
+   `cover` on the wide desktop banner. */
+.hero-bg-mobile {
+  background-image: url('/heroimages/phonehero.jpg');
+  background-size: cover;
+  background-position: center top;
+}
+
 /* Balanced headline wrapping — prevents awkward orphaned words on section headings */
 h1, h2, h3 { text-wrap: balance; }
 

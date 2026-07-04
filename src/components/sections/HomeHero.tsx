@@ -278,7 +278,8 @@ export default function HomeHero() {
     <section className="relative w-full overflow-hidden" style={{ height: "100dvh" }}>
 
       {/* Background */}
-      <div className="absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
+      <div className="sm:hidden absolute inset-0 hero-bg-mobile" style={{ zIndex: -3 }} />
+      <div className="hidden sm:block absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
 
       {/* Scrim — mobile: near-uniform veil, lighter over the empty flex-1 spacer row */}
       <div
