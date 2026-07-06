@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const presenterImages = [
-  { src: "/Presenters/ajelyne-george.png",   caption: "Ajelyne George",               slug: "ajelyne-george" },
+  { src: "/Presenters/mc-kithumba.png",      caption: "MC Kithumba",                  slug: "mc-kithumba" },
   { src: "/Presenters/makena-wa-matiri.png",  caption: "Makena Wa Matiri",             slug: "makena-wa-matiri" },
   { src: "/Presenters/martin-gichunge.png",   caption: "Martin Gichunge",              slug: "martin-gichunge" },
   { src: "/Presenters/mc-tash.png",           caption: "MC Tash",                      slug: "mc-tash" },

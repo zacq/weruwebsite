@@ -205,29 +205,26 @@ export const presenters: Presenter[] = [
     ],
   },
   {
-    slug: "ajelyne-george",
-    name: "Ajelyne George",
+    slug: "mc-kithumba",
+    name: "MC Kithumba",
     show: "Mantu Kimenchu",
-    role: "Host & Lifestyle Presenter",
+    role: "Host",
     category: "Program Presenters",
-    imageSrc: "/Presenters/ajelyne-george.png",
-    tagline: "Style, health, and the good life — Meru's way.",
+    imageSrc: "/Presenters/mc-kithumba.png",
+    tagline: "Adult conversations, honestly told.",
     socialLinks: {
       facebook: "https://facebook.com",
       instagram: "https://instagram.com",
     },
     bio: [
-      "Ajelyne George is the host of Mantu Kimenchu, Weru TV's lifestyle and wellness programme that covers fashion, nutrition, fitness, beauty, and modern home management through a distinctly Central Kenyan lens. Elegant, knowledgeable, and deeply relatable, Ajelyne has made the show a staple for viewers who want practical lifestyle guidance that reflects their own cultural context.",
+      "MC Kithumba hosts Mantu Kimenchu, a platform for mature discussions focusing on adult-oriented topics, including intimate relationships. Broadcast between 10:00 PM and 1:00 AM, the programme strategically targets an adult audience, ensuring content delivery during hours when children are typically asleep. The show benefits from her adept facilitation of these sensitive conversations.",
     ],
     programHistory: [
-      "Mantu Kimenchu launched with a clear editorial stance: lifestyle television for Kenyan women should not simply replicate formats designed for Western or Nairobi audiences. Ajelyne George was instrumental in shaping a programme that celebrates local fabrics and fashion designers, features nutritionists who understand what Meru families actually eat, and profiles fitness approaches that work within real household budgets.",
-      "The show built a loyal following quickly, particularly among women aged 25–45 who found it the only television programme that consistently spoke to their daily realities. Viewer surveys commissioned by the channel placed Mantu Kimenchu among the top programmes for audience loyalty — the metric that measures how reliably viewers return episode after episode.",
-      "Over successive seasons, Mantu Kimenchu has expanded to cover entrepreneurship, financial literacy for women, and mental wellness — subjects Ajelyne handles with a warmth and directness that makes difficult topics accessible. The show has become a trusted brand in its own right, with local businesses and national brands regularly requesting product integrations and sponsorship opportunities.",
+      "Mantu Kimenchu occupies the late-night slot specifically so that frank, adult conversations — about relationships, intimacy, and topics rarely discussed openly — can be explored without the constraints of a family-viewing timeslot. MC Kithumba's steady, non-judgemental facilitation style has made the show a trusted space for listeners to hear these subjects addressed directly.",
     ],
     stats: [
-      { value: "5+ yrs", label: "On air" },
-      { value: "Top loyalty", label: "Viewer score" },
-      { value: "25–45", label: "Core audience" },
+      { value: "10PM–1AM", label: "Nightly slot" },
+      { value: "Adult", label: "Audience" },
     ],
   },
   {

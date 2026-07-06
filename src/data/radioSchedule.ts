@@ -65,7 +65,7 @@ const weekdayPrograms = (prefix: string): RadioProgram[] => [
   {
     id: `${prefix}-8`,
     name: "Mantu Kimenchu",
-    host: "Ajelyne George",
+    host: "MC Kithumba",
     time: "10:00 PM – 1:00 AM",
     description: "Platform for mature discussions focusing on adult-oriented topics including intimate relationships. Targets an adult audience during hours when children are typically asleep.",
   },
@@ -186,9 +186,9 @@ export const radioSchedule: RadioDaySchedule[] = [
       {
         id: "rsun-8",
         name: "Mantu Kimenchu",
-        host: "Ajelyne George",
+        host: "MC Kithumba",
         time: "10:00 PM – 1:00 AM",
-        description: "Late-night mature discussions hosted by Ajelyne George.",
+        description: "Late-night mature discussions hosted by MC Kithumba.",
       },
     ],
   },
