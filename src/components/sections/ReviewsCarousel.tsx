@@ -14,10 +14,13 @@ interface Review {
 }
 
 const FALLBACK_REVIEWS: Review[] = [
-  { id: 1, name: "James M'Murithi",  location: "Embu Tharaka Nithi County", rating: 5, text: "Weru TV is the best Kikuyu channel! Always informative and entertaining. I never miss the evening news.", photo: "" },
-  { id: 2, name: "Grace Kanini",     location: "Meru County",               rating: 5, text: "The radio programs are amazing. Tutharimwe Morning Show sets the perfect tone for my day. God bless Weru FM!", photo: "" },
-  { id: 3, name: "Peter M'Rimberia", location: "Isiolo County",             rating: 5, text: "I advertised my business on Weru TV and saw incredible results within the first week. Highly recommended!", photo: "" },
-  { id: 4, name: "Mary Kathambi",    location: "Embu Tharaka Nithi County", rating: 5, text: "Gichunki Gia Ciaca is my favourite show! Martin Gichunge brings so much energy and cultural pride to every episode.", photo: "" },
+  { id: 1, name: "Shad Bin Shad",         location: "",                    rating: 5, text: "Stesheni inayoelimisha na kuburudisha, pia kuleta utangamano Kenya nzima.", photo: "" },
+  { id: 2, name: "Dayana Gachungwa",      location: "Chuka",               rating: 5, text: "Weru FM is the best of the best in terms of reliable information and maturity — and the best tunes! Always updating us on time. Uma Muundune ija Werune.", photo: "" },
+  { id: 3, name: "Evans Mwenda Mchelsea", location: "",                    rating: 5, text: "Number one radio station. Uma Muundune ija Werune.", photo: "" },
+  { id: 4, name: "Munene Dennis",         location: "Kimongoro, Meru County", rating: 5, text: "We appreciate your effort so much — here in Meru, Kimongoro, you serve us so well. Keep the fire blazing, tunawapenda sana.", photo: "" },
+  { id: 5, name: "Isaac Bundi",           location: "",                    rating: 5, text: "I love Weru TV programs — their content is informative and educative. Truly Rumuri Rwa Ameru.", photo: "" },
+  { id: 6, name: "Ann Mwenda",            location: "Nairobi",             rating: 5, text: "The place to be. Big up guys, good work. Keep at it, keep on, keep going up.", photo: "" },
+  { id: 7, name: "Morris Kimathi",        location: "Nkubu",               rating: 5, text: "Weru TV News is balanced — the best TV station in the Mount Kenya region.", photo: "" },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -148,16 +151,19 @@ function NavBtn({ dir, onClick }: { dir: "prev" | "next"; onClick: () => void })
 
 export default function ReviewsCarousel() {
   const { reviews, rating, reviewCount, isLive } = useGoogleReviews();
-  const displayed = reviews.slice(0, 4);
+  const displayed = reviews.slice(0, 8);
 
-  // Shared index 0-3. Desktop uses Math.floor(current/2) as page index.
+  // Shared index. Desktop uses Math.floor(current/2) as page index.
   const [current, setCurrent] = useState(0);
+
+  const desktopPages = Math.ceil(displayed.length / 2);
 
   function mobilePrev() { setCurrent((c) => (c - 1 + displayed.length) % displayed.length); }
   function mobileNext() { setCurrent((c) => (c + 1) % displayed.length); }
-  function desktopToggle() { setCurrent((c) => (c >= 2 ? 0 : 2)); }
+  function desktopPrev() { setCurrent((c) => ((Math.floor(c / 2) - 1 + desktopPages) % desktopPages) * 2); }
+  function desktopNext() { setCurrent((c) => ((Math.floor(c / 2) + 1) % desktopPages) * 2); }
 
-  const desktopPage = Math.floor(current / 2); // 0 or 1
+  const desktopPage = Math.floor(current / 2);
 
   return (
     <section
@@ -265,8 +271,8 @@ export default function ReviewsCarousel() {
               animate={{ x: `-${desktopPage * 100}%` }}
               transition={{ type: "spring", stiffness: 280, damping: 28 }}
             >
-              {/* Two panels, each holds 2 cards side by side */}
-              {[0, 2].map((pairStart) => (
+              {/* One panel per page, each holds up to 2 cards side by side */}
+              {Array.from({ length: desktopPages }, (_, page) => page * 2).map((pairStart) => (
                 <div key={pairStart} className="w-full shrink-0 grid grid-cols-2 gap-4">
                   {displayed.slice(pairStart, pairStart + 2).map((review, j) => (
                     <ReviewCard key={review.id} review={review} index={pairStart + j} />
@@ -276,11 +282,11 @@ export default function ReviewsCarousel() {
             </motion.div>
           </div>
 
-          {/* Desktop nav — arrows + 2 page dots */}
+          {/* Desktop nav — arrows + page dots */}
           <div className="flex items-center justify-center gap-4 mt-6">
-            <NavBtn dir="prev" onClick={desktopToggle} />
+            <NavBtn dir="prev" onClick={desktopPrev} />
             <div className="flex gap-2 items-center">
-              {[0, 1].map((page) => (
+              {Array.from({ length: desktopPages }, (_, page) => page).map((page) => (
                 <button
                   key={page}
                   onClick={() => setCurrent(page * 2)}
@@ -298,7 +304,7 @@ export default function ReviewsCarousel() {
                 />
               ))}
             </div>
-            <NavBtn dir="next" onClick={desktopToggle} />
+            <NavBtn dir="next" onClick={desktopNext} />
           </div>
         </div>
 

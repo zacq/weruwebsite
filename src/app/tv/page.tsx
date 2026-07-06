@@ -18,19 +18,19 @@ export const dynamic    = "force-static";
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Weru Digital - Watch Weru TV and listen to Weru FM 96.4 On The GO !",
-  description: "WERU isn't just a broadcaster. It's a movement. Join us.",
+  title: "Weru TV – Mount Kenya's trusted voice",
+  description: "Broadcasting Across East Africa & Beyond. Trusted News, Culture, and Entertainment.",
   openGraph: {
-    title: "Weru Digital - Watch Weru TV and listen to Weru FM 96.4 On The GO !",
-    description: "WERU isn't just a broadcaster. It's a movement. Join us.",
+    title: "Weru TV – Mount Kenya's trusted voice",
+    description: "Broadcasting Across East Africa & Beyond. Trusted News, Culture, and Entertainment.",
     url: "https://werudigital.co.ke/tv",
     siteName: "Weru Digital",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Weru Digital - Watch Weru TV and listen to Weru FM 96.4 On The GO !",
-    description: "WERU isn't just a broadcaster. It's a movement. Join us.",
+    title: "Weru TV – Mount Kenya's trusted voice",
+    description: "Broadcasting Across East Africa & Beyond. Trusted News, Culture, and Entertainment.",
   },
 };
 

@@ -29,20 +29,19 @@ const ui = Hanken_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://werudigital.co.ke"),
-  title: "Weru TV & Radio — Watch. Listen. Connect.",
-  description:
-    "Kenya's premier Kikuyu-language TV and radio broadcaster. Watch Weru TV live on DStv 368, Azam 342 & Startimes 440. Listen to Weru FM 96.4 across Central Kenya.",
+  title: "Weru Digital - Watch Weru TV and listen to Weru FM 96.4 On The GO !",
+  description: "WERU isn't just a broadcaster. It's a movement. Join us.",
   openGraph: {
-    title: "Weru TV & Radio — Watch. Listen. Connect.",
-    description: "Kenya's premier Kikuyu broadcaster. Live TV on DStv 368, Azam 342, Startimes 440. Weru FM 96.4 across East Africa.",
+    title: "Weru Digital - Watch Weru TV and listen to Weru FM 96.4 On The GO !",
+    description: "WERU isn't just a broadcaster. It's a movement. Join us.",
     siteName: "Weru Digital",
     type: "website",
     images: [{ url: "/logo.png", width: 400, height: 133, alt: "Weru TV & Radio logo" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Weru TV & Radio",
-    description: "Kenya's premier Kikuyu-language TV & radio broadcaster. Watch live on DStv 368, Azam 342, Startimes 440.",
+    title: "Weru Digital - Watch Weru TV and listen to Weru FM 96.4 On The GO !",
+    description: "WERU isn't just a broadcaster. It's a movement. Join us.",
   },
 };
 

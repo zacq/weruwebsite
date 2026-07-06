@@ -7,20 +7,20 @@ export const dynamic    = "force-static";
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Weru FM 96.4 — Listen Live to Kenya's Top Kikuyu Radio Station",
+  title: "WERU FM 96.4 . '96 + 4 = 100'",
   description:
-    "Stream Weru FM 96.4 live online — Kenya's leading Kikuyu-language radio station. Morning shows, news, music, farming tips and community programming from Nyeri, Central Kenya.",
+    "We don't just broadcast – we give 100%. We don't just reach audiences – we complete the circle. Weru is 100% entertainment. 100% information. 100% community. 100% movement. WE ARE 100% WERU!",
   openGraph: {
-    title: "Weru FM 96.4 — Listen Live Online",
-    description: "Stream Kenya's top Kikuyu radio station live. Morning shows, news, music and farming from Nyeri, Central Kenya.",
+    title: "WERU FM 96.4 . '96 + 4 = 100'",
+    description: "We don't just broadcast – we give 100%. We don't just reach audiences – we complete the circle. Weru is 100% entertainment. 100% information. 100% community. 100% movement. WE ARE 100% WERU!",
     url: "https://werudigital.co.ke/radio",
     siteName: "Weru Digital",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Weru FM 96.4 — Live Kikuyu Radio from Nyeri",
-    description: "Stream Weru FM 96.4 live online — Kenya's leading Kikuyu-language radio station.",
+    title: "WERU FM 96.4 . '96 + 4 = 100'",
+    description: "We don't just broadcast – we give 100%. We don't just reach audiences – we complete the circle. Weru is 100% entertainment. 100% information. 100% community. 100% movement. WE ARE 100% WERU!",
   },
 };
 
