@@ -41,6 +41,11 @@ const HotMixesSection = lazyImport(
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
 );
 
+const OurBrandsSection = lazyImport(
+  () => import("@/components/sections/OurBrandsSection"),
+  { loading: () => <div className="h-48 mx-4 my-10 rounded-2xl bg-black/20" /> }
+);
+
 const ReviewsCarousel = lazyImport(
   () => import("@/components/sections/ReviewsCarousel"),
   { loading: () => <div className="h-64 mx-4 my-10 rounded-2xl bg-black/20" /> }
@@ -89,6 +94,7 @@ export default function HomePage() {
       <MultiStreamAdvantageSection />
       <RadioPlatformsSection />
       <HotMixesSection />
+      <OurBrandsSection />
       <ReviewsCarousel />
       <PartnersCarousel />
       <Footer />

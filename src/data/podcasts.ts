@@ -1,57 +1,13 @@
-export type PodcastCategory = {
+export type Podcast = {
   slug: string;
-  label: string;
-  description: string;
-  icon: string;
+  title: string;
+  hosts: string;
 };
 
-export const PODCAST_CATEGORIES: PodcastCategory[] = [
-  {
-    slug: "news-analysis",
-    label: "News Analysis",
-    icon: "📰",
-    description: "In-depth breakdowns of Kenya's top stories with Weru journalists.",
-  },
-  {
-    slug: "empress-corner",
-    label: "Empress's Corner",
-    icon: "👑",
-    description: "Culture, fashion, and conversation hosted by Empress Ritta & Natty.",
-  },
-  {
-    slug: "smart-farming",
-    label: "Smart Farming",
-    icon: "🌿",
-    description: "Agricultural insights for Kenyan farmers — crops, markets, weather.",
-  },
-  {
-    slug: "dance-challenge",
-    label: "Dance Challenge",
-    icon: "🎵",
-    description: "Music, dance trends, and challenges from across East Africa.",
-  },
-  {
-    slug: "genz-conversations",
-    label: "GenZ Conversations",
-    icon: "💬",
-    description: "Youth voices on life, tech, and Kenya's future.",
-  },
-  {
-    slug: "lifestyle",
-    label: "Lifestyle",
-    icon: "🥗",
-    description: "Diets, nutrition, wellness, and everyday living.",
-  },
-  {
-    slug: "health",
-    label: "Health",
-    icon: "❤️",
-    description: "Medical experts on the health issues that matter to Kenyans.",
-  },
-  {
-    slug: "sports",
-    label: "Sports",
-    icon: "⚽",
-    description: "Football, athletics, and all Kenyan sports — highlights and opinion.",
-  },
+export const PODCASTS: Podcast[] = [
+  { slug: "politics-360",      title: "Politics 360",       hosts: "Morgan Mwiti" },
+  { slug: "the-var",           title: "The VAR",            hosts: "Ken Bisaka, Ken Mutuma & Prince Ken" },
+  { slug: "gen-z-unfiltered",  title: "Gen Z Unfiltered",   hosts: "The Katiba Gang" },
+  { slug: "empress-korner",    title: "Empress Korner",     hosts: "Empress Rita & Empress Natty" },
+  { slug: "bounce-and-groove", title: "Bounce and Groove",  hosts: "Afrik Annah" },
 ];

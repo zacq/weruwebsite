@@ -53,7 +53,7 @@ export default function CultureSection() {
           >
             Weru Studios is more than a broadcast facility — it is a cultural centre. From roots
             reggae to investigative journalism, from morning talk shows to agricultural programming,
-            every production is rooted in the heritage of Central Kenya and crafted for audiences
+            every production is rooted in the heritage of Mt Kenya and crafted for audiences
             from Nairobi to Harare.
           </p>
           <a

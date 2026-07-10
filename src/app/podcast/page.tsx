@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
-import { PODCAST_CATEGORIES } from "@/data/podcasts";
+import { PODCASTS } from "@/data/podcasts";
 import type { Metadata } from "next";
 
 export const dynamic    = "force-static";
@@ -67,9 +67,9 @@ export default function PodcastPage() {
       >
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {PODCAST_CATEGORIES.map((cat) => (
+            {PODCASTS.map((show) => (
               <Link
-                key={cat.slug}
+                key={show.slug}
                 href="/radio"
                 className="group flex flex-col gap-3 rounded-2xl p-5 transition-all duration-150 hover:scale-[1.02]"
                 style={{
@@ -80,10 +80,10 @@ export default function PodcastPage() {
                   boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.3)",
                 }}
               >
-                <span className="text-3xl" aria-hidden>{cat.icon}</span>
+                <span className="text-3xl" aria-hidden>🎙</span>
                 <div className="flex flex-col gap-1 flex-1">
-                  <p className="text-white font-bold text-sm leading-snug">{cat.label}</p>
-                  <p className="text-white/45 text-xs leading-relaxed">{cat.description}</p>
+                  <p className="text-white font-bold text-sm leading-snug">{show.title}</p>
+                  <p className="text-white/45 text-xs leading-relaxed">{show.hosts}</p>
                 </div>
                 <p
                   className="text-xs font-bold transition-colors group-hover:text-[#f97d00]"

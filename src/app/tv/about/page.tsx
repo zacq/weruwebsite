@@ -26,11 +26,6 @@ const STATS = [
 
 const TIMELINE = [
   {
-    year: "2014",
-    title: "First signal on air",
-    body: "Weru TV launched as a small free-to-air digital channel out of Nyeri, broadcasting a handful of hours a day — largely repeats of Weru FM's radio content read to camera, plus a nightly news bulletin sourced from wire agencies.",
-  },
-  {
     year: "2016",
     title: "Original newsroom established",
     body: "The station built its first dedicated television newsroom, hiring anchors and field reporters rather than relying on agency-fed content. This marked the beginning of Weru TV's identity as a genuine broadcaster rather than a radio simulcast.",

@@ -170,6 +170,20 @@ export default function Footer() {
             <span>werudigital.co.ke</span>
           </div>
         </div>
+
+        {/* Credit badge */}
+        <div className="flex justify-center mt-4">
+          <a
+            href="https://neuraflow.cloud/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] transition-colors"
+            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.45)" }}
+          >
+            Built &amp; maintained by{" "}
+            <span className="font-bold" style={{ color: "#FACC15" }}>Neuraflow</span>
+          </a>
+        </div>
       </div>
     </footer>
   );

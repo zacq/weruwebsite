@@ -14,13 +14,13 @@ interface Review {
 }
 
 const FALLBACK_REVIEWS: Review[] = [
-  { id: 1, name: "Shad Bin Shad",         location: "",                    rating: 5, text: "Stesheni inayoelimisha na kuburudisha, pia kuleta utangamano Kenya nzima.", photo: "" },
+  { id: 1, name: "Isaac Bundi",           location: "",                    rating: 5, text: "I love Weru TV programs — their content is informative and educative. Truly Rumuri Rwa Ameru.", photo: "" },
   { id: 2, name: "Dayana Gachungwa",      location: "Chuka",               rating: 5, text: "Weru FM is the best of the best in terms of reliable information and maturity — and the best tunes! Always updating us on time. Uma Muundune ija Werune.", photo: "" },
-  { id: 3, name: "Evans Mwenda Mchelsea", location: "",                    rating: 5, text: "Number one radio station. Uma Muundune ija Werune.", photo: "" },
+  { id: 3, name: "Ann Mwenda",            location: "Nairobi",             rating: 5, text: "The place to be. Big up guys, good work. Keep at it, keep on, keep going up.", photo: "" },
   { id: 4, name: "Munene Dennis",         location: "Kimongoro, Meru County", rating: 5, text: "We appreciate your effort so much — here in Meru, Kimongoro, you serve us so well. Keep the fire blazing, tunawapenda sana.", photo: "" },
-  { id: 5, name: "Isaac Bundi",           location: "",                    rating: 5, text: "I love Weru TV programs — their content is informative and educative. Truly Rumuri Rwa Ameru.", photo: "" },
-  { id: 6, name: "Ann Mwenda",            location: "Nairobi",             rating: 5, text: "The place to be. Big up guys, good work. Keep at it, keep on, keep going up.", photo: "" },
-  { id: 7, name: "Morris Kimathi",        location: "Nkubu",               rating: 5, text: "Weru TV News is balanced — the best TV station in the Mount Kenya region.", photo: "" },
+  { id: 5, name: "Morris Kimathi",        location: "Nkubu",               rating: 5, text: "Weru TV News is balanced — the best TV station in the Mount Kenya region.", photo: "" },
+  { id: 6, name: "Shad Bin Shad",         location: "",                    rating: 5, text: "Stesheni inayoelimisha na kuburudisha, pia kuleta utangamano Kenya nzima.", photo: "" },
+  { id: 7, name: "Evans Mwenda Mchelsea", location: "",                    rating: 5, text: "Number one radio station. Uma Muundune ija Werune.", photo: "" },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
