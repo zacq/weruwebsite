@@ -15,21 +15,19 @@ export default function ViewerCaptureModal() {
     const alreadySeen = localStorage.getItem("weru_viewer_seen");
     if (alreadySeen) return;
 
-    // Fire once when the headlines ticker scrolls into view
-    const target = document.getElementById("headlines");
-    if (!target) return;
+    // Fire once the visitor has scrolled 40% down whichever page they're on —
+    // works site-wide instead of depending on a page-specific element.
+    const handleScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max <= 0) return;
+      if (window.scrollY / max >= 0.4) {
+        setOpen(true);
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setOpen(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const dismiss = () => {

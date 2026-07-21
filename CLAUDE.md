@@ -66,7 +66,7 @@ src/components/
   ui/           # FloatingCTA, ViewerCaptureModal — global overlays in root layout
 ```
 
-`FloatingCTA` and `ViewerCaptureModal` are mounted once in `src/app/layout.tsx` and render on every page. `ViewerCaptureModal` fires once per session (keyed by `localStorage.weru_viewer_seen`) when the `#headlines` element scrolls into view.
+`FloatingCTA` and `ViewerCaptureModal` are mounted once in `src/app/layout.tsx` and render on every page. `ViewerCaptureModal` fires once per session (keyed by `localStorage.weru_viewer_seen`) after the visitor scrolls 40% down the page — this is a site-wide scroll-depth trigger, not tied to any specific element, so it works the same on every route.
 
 ### API routes
 
