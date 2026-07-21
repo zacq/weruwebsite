@@ -10,8 +10,8 @@ export type HotMix = {
 };
 
 export const hotMixes: HotMix[] = [
-  { title: "Friday Night Bangers", dj: "MC Tash",                       mixcloudFeed: null },
-  { title: "ReggaeMania Selections",  dj: "Empress Ritta & Empress Natty", mixcloudFeed: null },
+  { title: "Friday Night Bangers", dj: "Dj Alekkings",                  mixcloudFeed: null },
+  { title: "ReggaeMania Selections",  dj: "DjTushUntamed",                 mixcloudFeed: null },
   { title: "Sunday Chill Sessions",   dj: "Weru FM Resident DJs",          mixcloudFeed: null },
   { title: "Throwback Kikuyu Classics", dj: "Weru FM Resident DJs",        mixcloudFeed: null },
 ];
