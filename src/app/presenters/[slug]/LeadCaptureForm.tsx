@@ -13,7 +13,7 @@ export function LeadCaptureForm({ show }: { show: string }) {
     setSubmitting(true);
     setError("");
     try {
-      const res = await fetch("/api/viewer", {
+      const res = await fetch("/api/presenter-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: formData.name, phone: formData.phone, interests: [show] }),

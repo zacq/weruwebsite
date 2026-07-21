@@ -65,6 +65,7 @@ export default function QuizForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [duplicate, setDuplicate] = useState(false);
 
   const selectAnswer = (i: number) =>
     setAnswers((prev) => { const n = [...prev]; n[step] = i; return n; });
@@ -78,7 +79,7 @@ export default function QuizForm() {
     if (!name.trim() || !phone.trim()) return;
     setSubmitting(true);
     try {
-      await fetch("/api/quiz", {
+      const res = await fetch("/api/quiz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -92,6 +93,8 @@ export default function QuizForm() {
           score,
         }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (data?.duplicate) setDuplicate(true);
     } finally {
       setSubmitting(false);
       setPhase("done");
@@ -307,23 +310,27 @@ export default function QuizForm() {
           <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "#FACC15" }} />
 
           <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-5 sm:mb-6" style={{ color: "#FACC15" }}>
-            Entry received
+            {duplicate ? "Already entered" : "Entry received"}
           </p>
 
           <h2
             className="text-white font-bold leading-tight mb-4"
             style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
           >
-            You&apos;re in the draw!
+            {duplicate ? "You've already entered." : "You're in the draw!"}
           </h2>
 
-          <p className="text-sm sm:text-base mb-3" style={{ color: "rgba(255,255,255,0.50)" }}>
-            You scored{" "}
-            <span className="font-bold" style={{ color: "#FACC15" }}>{score} out of 10</span>.
-          </p>
+          {!duplicate && (
+            <p className="text-sm sm:text-base mb-3" style={{ color: "rgba(255,255,255,0.50)" }}>
+              You scored{" "}
+              <span className="font-bold" style={{ color: "#FACC15" }}>{score} out of 10</span>.
+            </p>
+          )}
 
           <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Thank you for entering the Twine Cietu SN2 ticket draw. Winners will be contacted directly and announced on Weru TV &amp; FM. Good luck!
+            {duplicate
+              ? "This phone number has already submitted an entry for the Twine Cietu SN2 ticket draw. Only one entry per person is allowed."
+              : "Thank you for entering the Twine Cietu SN2 ticket draw. Winners will be contacted directly and announced on Weru TV & FM. Good luck!"}
           </p>
         </motion.div>
       )}

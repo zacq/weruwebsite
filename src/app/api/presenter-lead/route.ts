@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const BASE_ID  = "appXyMV3O6ycSVRAi";
-const TABLE_ID = "tblWuPMHzBHoc8wjF"; // Viewer Leads
+const TABLE_ID = "tblYEsFb2gKyPariy"; // Presenter Leads
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const pat = process.env.AIRTABLE_PAT;
     if (!pat) {
-      console.error("[VIEWER CAPTURE] AIRTABLE_PAT env var not set");
+      console.error("[PRESENTER LEAD] AIRTABLE_PAT env var not set");
       return NextResponse.json({ success: true });
     }
 
@@ -28,10 +28,13 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        // The Interests field is a single-select keyed on the presenter's show name —
+        // typecast auto-creates a new option the first time a given show is requested.
+        typecast: true,
         fields: {
           Name: name,
           Phone: phone,
-          Interests: Array.isArray(interests) ? interests : interests ? [interests] : [],
+          Interests: Array.isArray(interests) ? interests[0] : interests,
           "Submitted At": new Date().toISOString().split("T")[0],
           Status: "New",
         },
@@ -39,12 +42,12 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok) {
-      console.error("[VIEWER CAPTURE] Airtable error:", await res.text());
+      console.error("[PRESENTER LEAD] Airtable error:", await res.text());
     }
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("[VIEWER CAPTURE ERROR]", err);
+    console.error("[PRESENTER LEAD ERROR]", err);
     return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }
