@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import { radioSchedule, type RadioDaySchedule } from "@/data/radioSchedule";
 
 const RADIO_STREAM_URL = "https://media.streambrothers.com/stream/8252";
@@ -34,9 +33,9 @@ function parseStartHour(time: string): number {
 }
 
 function getCurrentIndex(programs: { time: string }[], isToday: boolean): number {
-  if (!isToday) return 0;
+  if (!isToday) return -1;
   const now = new Date().getHours() + new Date().getMinutes() / 60;
-  let idx = 0;
+  let idx = -1;
   for (let i = 0; i < programs.length; i++) {
     if (parseStartHour(programs[i].time) <= now) idx = i;
   }
@@ -60,6 +59,7 @@ export default function RadioSection() {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [selectedDay, setSelectedDay] = useState<Day>(todayName());
+  const [expanded, setExpanded] = useState(false);
   const [notified, setNotified] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -149,7 +149,14 @@ export default function RadioSection() {
   const schedule = radioSchedule.find((d) => d.day === selectedDay);
   const allPrograms = schedule?.programs ?? [];
   const currentIdx = getCurrentIndex(allPrograms, selectedDay === todayName());
-  const visible = allPrograms.slice(currentIdx, currentIdx + 2);
+  const previewStart = currentIdx >= 0 ? currentIdx : 0;
+  const indexedPrograms = allPrograms.map((program, i) => ({ program, i }));
+  const visible = expanded ? indexedPrograms : indexedPrograms.slice(previewStart, previewStart + 2);
+
+  const handleDayChange = (day: Day) => {
+    setSelectedDay(day);
+    setExpanded(false);
+  };
 
   return (
     <section id="radio" className="w-full" style={{ background: "#f97d00" }}>
@@ -284,27 +291,14 @@ export default function RadioSection() {
 
           {/* Header row */}
           <motion.div
-            className="flex items-center justify-between gap-3 mb-6"
+            className="mb-6"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45 }}
           >
-            <div>
-              <h2 className="text-white font-extrabold text-xl sm:text-2xl leading-tight">Radio Program Schedule</h2>
-              <p className="text-white/70 text-xs mt-1">On air now &amp; up next</p>
-            </div>
-            <Link
-              href="/radio"
-              className="shrink-0 text-xs font-bold px-4 py-2 rounded-xl transition-all duration-200"
-              style={{
-                background: "rgba(0,0,0,0.25)",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.25)",
-              }}
-            >
-              Full Schedule →
-            </Link>
+            <h2 className="text-white font-extrabold text-xl sm:text-2xl leading-tight">Radio Program Schedule</h2>
+            <p className="text-white/70 text-xs mt-1">On air now &amp; up next</p>
           </motion.div>
 
           {/* Pill day tabs */}
@@ -315,7 +309,7 @@ export default function RadioSection() {
               return (
                 <button
                   key={day}
-                  onClick={() => setSelectedDay(day)}
+                  onClick={() => handleDayChange(day)}
                   className="shrink-0 relative flex flex-col items-center px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200"
                   style={{
                     background: isActive ? "#111111" : "rgba(0,0,0,0.20)",
@@ -335,40 +329,44 @@ export default function RadioSection() {
             })}
           </div>
 
-          {/* 2-program preview */}
+          {/* Program preview / full list */}
           <AnimatePresence mode="wait">
             <motion.div
-              key={selectedDay}
+              key={`${selectedDay}-${expanded}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.28 }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              className={expanded ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "grid grid-cols-1 sm:grid-cols-2 gap-4"}
             >
-              {visible.map((program, i) => {
+              {visible.map(({ program, i }) => {
                 const isNotified = notified.has(program.id);
-                const isOnAir = i === 0 && selectedDay === todayName();
+                const isOnAir = i === currentIdx;
+                const isNext = i === currentIdx + 1;
+                const isPast = currentIdx >= 0 && i < currentIdx;
                 return (
                   <motion.div
                     key={program.id}
                     initial={{ opacity: 0, scale: 0.97 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    animate={{ opacity: isPast ? 0.45 : 1, scale: 1 }}
                     transition={{ delay: i * 0.06, duration: 0.3 }}
-                    className="glass-sm relative rounded-2xl p-5 flex flex-col gap-2"
+                    className={`relative rounded-2xl p-5 flex flex-col gap-2 ${isOnAir ? "glass-orange" : "glass-sm"}`}
                   >
                     {/* On-air / Up next badge */}
-                    <div className="flex items-center gap-2 mb-1">
-                      {isOnAir ? (
-                        <div className="flex items-center gap-1.5">
-                          <span className="live-dot" style={{ "--dot-color": "#fff" } as React.CSSProperties} />
-                          <span className="text-[10px] font-extrabold tracking-widest uppercase text-white">On Air</span>
-                        </div>
-                      ) : (
-                        <span className="text-[10px] font-extrabold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.50)" }}>
-                          Up Next
-                        </span>
-                      )}
-                    </div>
+                    {(isOnAir || isNext) && (
+                      <div className="flex items-center gap-2 mb-1">
+                        {isOnAir ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="live-dot" style={{ "--dot-color": "#fff" } as React.CSSProperties} />
+                            <span className="text-[10px] font-extrabold tracking-widest uppercase text-white">On Air</span>
+                          </div>
+                        ) : (
+                          <span className="text-[10px] font-extrabold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.50)" }}>
+                            Up Next
+                          </span>
+                        )}
+                      </div>
+                    )}
 
                     <span
                       className="self-start text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"
@@ -399,26 +397,28 @@ export default function RadioSection() {
             </motion.div>
           </AnimatePresence>
 
-          {/* CTA */}
-          <motion.div
-            className="mt-8 flex justify-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
-            <Link
-              href="/radio"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-200 hover:opacity-90"
-              style={{
-                background: "#111111",
-                color: "#f97d00",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.35)",
-              }}
+          {/* View all / show less toggle */}
+          {allPrograms.length > 2 && (
+            <motion.div
+              className="mt-8 flex justify-center"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
             >
-              See Full Radio Schedule →
-            </Link>
-          </motion.div>
+              <button
+                onClick={() => setExpanded((v) => !v)}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-200 hover:opacity-90"
+                style={{
+                  background: "#111111",
+                  color: "#f97d00",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.35)",
+                }}
+              >
+                {expanded ? "Show Less ↑" : `View All ${allPrograms.length} Programs ↓`}
+              </button>
+            </motion.div>
+          )}
         </div>
       </div>
 

@@ -70,15 +70,28 @@ function Initials({ name }: { name: string }) {
 export default function TVScheduleSection() {
   const [selectedDay, setSelectedDay] = useState<Day>(todayName());
   const [animKey, setAnimKey] = useState(0);
+  const [expanded, setExpanded] = useState(false);
 
   const schedule = tvSchedule.find((d) => d.day === selectedDay);
   const programs = schedule?.programs ?? [];
 
   const now = new Date().getHours() + new Date().getMinutes() / 60;
 
+  const currentIndex = programs.findIndex((program, i) => {
+    const programHour = parseHour(program.time);
+    return selectedDay === todayName() && i < programs.length - 1
+      ? programHour <= now && parseHour(programs[i + 1].time) > now
+      : selectedDay === todayName() && i === programs.length - 1 && programHour <= now;
+  });
+
+  const previewStart = currentIndex >= 0 ? currentIndex : 0;
+  const indexedPrograms = programs.map((program, i) => ({ program, i }));
+  const visiblePrograms = expanded ? indexedPrograms : indexedPrograms.slice(previewStart, previewStart + 3);
+
   const handleDayChange = (day: Day) => {
     setSelectedDay(day);
     setAnimKey((k) => k + 1);
+    setExpanded(false);
   };
 
   useEffect(() => {
@@ -156,7 +169,7 @@ export default function TVScheduleSection() {
             transition={{ duration: 0.2 }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
-            {programs.map((program, i) => {
+            {visiblePrograms.map(({ program, i }) => {
               const colors = TAG_COLORS[program.tag];
               const programHour = parseHour(program.time);
               const isCurrentlyAiring =
@@ -225,6 +238,23 @@ export default function TVScheduleSection() {
             })}
           </motion.div>
         </AnimatePresence>
+
+        {/* View all / show less toggle */}
+        {programs.length > 3 && (
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="px-6 py-3 rounded-2xl text-xs font-bold tracking-wide transition-all duration-200 hover:scale-[1.03]"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.10)",
+                color: "#f97d00",
+              }}
+            >
+              {expanded ? "Show Less ↑" : `View All ${programs.length} Programs ↓`}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

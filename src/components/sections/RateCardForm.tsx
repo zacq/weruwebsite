@@ -60,8 +60,8 @@ function PackageCard({
       whileTap={{ scale: 0.98 }}
       style={{
         textAlign: "left",
-        padding: "16px",
-        borderRadius: "16px",
+        padding: "12px",
+        borderRadius: "14px",
         background: selected ? "rgba(249,125,0,0.08)" : "rgba(255,255,255,0.04)",
         border: selected
           ? "1.5px solid #f97d00"
@@ -104,29 +104,29 @@ function PackageCard({
         )}
       </AnimatePresence>
 
-      <div style={{ fontSize: 22, marginBottom: 8 }}>{pkg.icon}</div>
+      <div style={{ fontSize: 18, marginBottom: 5 }}>{pkg.icon}</div>
       <p
         className="font-display"
         style={{
           fontWeight: 700,
-          fontSize: "14px",
+          fontSize: "13px",
           color: selected ? "#f97d00" : "#fff",
-          marginBottom: 4,
-          paddingRight: selected ? 28 : 0,
+          marginBottom: 3,
+          paddingRight: selected ? 26 : 0,
           transition: "color 0.18s",
         }}
       >
         {pkg.name}
       </p>
-      <p style={{ fontSize: "12px", color: "rgba(244,241,236,0.55)", lineHeight: 1.5, marginBottom: 10 }}>
+      <p style={{ fontSize: "11px", color: "rgba(244,241,236,0.55)", lineHeight: 1.4, marginBottom: 7 }}>
         {pkg.desc}
       </p>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6, flexWrap: "wrap" }}>
         <span
           style={{
-            fontSize: "10px",
+            fontSize: "9px",
             fontWeight: 700,
-            letterSpacing: "0.8px",
+            letterSpacing: "0.7px",
             textTransform: "uppercase",
             color: "rgba(244,241,236,0.38)",
           }}
@@ -135,7 +135,7 @@ function PackageCard({
         </span>
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "10px",
             color: "rgba(249,125,0,0.55)",
             fontStyle: "italic",
             display: "flex",
@@ -229,7 +229,7 @@ export default function RateCardForm() {
   return (
     <section
       id="rate-card"
-      className="px-4 py-16 sm:py-20"
+      className="px-4 pt-4 pb-10 sm:pt-6 sm:pb-12"
       style={{ background: "#0D1117" }}
     >
       <div className="max-w-6xl mx-auto">
@@ -241,7 +241,7 @@ export default function RateCardForm() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex flex-col md:flex-row gap-8 items-start"
+              className="flex flex-col md:flex-row gap-6 items-start"
             >
               {/* ── LEFT: Package browser ── */}
               <div className="w-full md:flex-1">
@@ -253,7 +253,7 @@ export default function RateCardForm() {
                     background: "rgba(255,255,255,0.06)",
                     padding: 4,
                     borderRadius: 14,
-                    marginBottom: 20,
+                    marginBottom: 14,
                     width: "100%",
                   }}
                 >
@@ -264,7 +264,7 @@ export default function RateCardForm() {
                       onClick={() => switchTab(t)}
                       style={{
                         flex: 1,
-                        padding: "10px 0",
+                        padding: "8px 0",
                         borderRadius: 10,
                         border: "none",
                         fontWeight: 800,
@@ -291,8 +291,8 @@ export default function RateCardForm() {
                     transition={{ duration: 0.22 }}
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                      gap: 10,
+                      gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+                      gap: 8,
                     }}
                   >
                     {packages.map((pkg) => (
@@ -323,11 +323,11 @@ export default function RateCardForm() {
               </div>
 
               {/* ── RIGHT: Enquiry form ── */}
-              <div className="w-full md:w-[360px] md:flex-shrink-0 md:sticky md:top-24">
+              <div className="w-full md:w-[320px] md:flex-shrink-0 md:sticky md:top-24">
                 <div
                   style={{
-                    borderRadius: 24,
-                    padding: "28px 24px",
+                    borderRadius: 20,
+                    padding: "20px 20px",
                     background: "rgba(255,255,255,0.05)",
                     backdropFilter: "blur(24px)",
                     WebkitBackdropFilter: "blur(24px)",
@@ -337,21 +337,22 @@ export default function RateCardForm() {
                   }}
                 >
                   <p
-                    className="font-display font-extrabold text-xl text-white mb-1"
+                    className="font-display font-extrabold text-lg text-white mb-1"
                   >
                     Get Pricing
                   </p>
-                  <p style={{ fontSize: "12px", color: "rgba(244,241,236,0.45)", marginBottom: 20 }}>
+                  <p style={{ fontSize: "11px", color: "rgba(244,241,236,0.45)", marginBottom: 14 }}>
                     Our team will reply on WhatsApp
                   </p>
 
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                     {/* Contact name */}
                     <div>
                       <input
                         type="text"
                         placeholder="Your Name *"
                         className={`form-input ${errors.name ? "error" : ""}`}
+                        style={{ padding: "9px 12px", fontSize: "13px" }}
                         value={form.name}
                         onChange={(e) => set("name", e.target.value)}
                       />
@@ -366,6 +367,7 @@ export default function RateCardForm() {
                         type="tel"
                         placeholder="WhatsApp Number *"
                         className={`form-input ${errors.phone ? "error" : ""}`}
+                        style={{ padding: "9px 12px", fontSize: "13px" }}
                         value={form.phone}
                         onChange={(e) => set("phone", e.target.value)}
                       />
@@ -384,6 +386,7 @@ export default function RateCardForm() {
                             : "Business Name (optional)"
                         }
                         className={`form-input ${errors.businessName ? "error" : ""}`}
+                        style={{ padding: "9px 12px", fontSize: "13px" }}
                         value={form.businessName}
                         onChange={(e) => set("businessName", e.target.value)}
                       />
@@ -400,6 +403,7 @@ export default function RateCardForm() {
                         type="email"
                         placeholder="Email Address (optional)"
                         className={`form-input ${errors.email ? "error" : ""}`}
+                        style={{ padding: "9px 12px", fontSize: "13px" }}
                         value={form.email}
                         onChange={(e) => set("email", e.target.value)}
                       />
@@ -413,7 +417,8 @@ export default function RateCardForm() {
                       <textarea
                         placeholder="Campaign details or questions... (optional)"
                         className="form-input resize-none"
-                        rows={3}
+                        style={{ padding: "9px 12px", fontSize: "13px" }}
+                        rows={2}
                         value={form.message}
                         onChange={(e) => set("message", e.target.value)}
                       />
@@ -425,16 +430,16 @@ export default function RateCardForm() {
                       disabled={loading}
                       style={{
                         width: "100%",
-                        padding: "14px",
+                        padding: "11px",
                         borderRadius: 14,
                         border: "none",
                         fontWeight: 800,
-                        fontSize: "15px",
+                        fontSize: "14px",
                         color: "#fff",
                         cursor: loading ? "not-allowed" : "pointer",
                         background: loading ? "rgba(249,125,0,0.55)" : "#f97d00",
                         boxShadow: "0 0 24px rgba(249,125,0,0.35)",
-                        marginTop: 4,
+                        marginTop: 2,
                       }}
                       whileHover={!loading ? { scale: 1.02, boxShadow: "0 0 36px rgba(249,125,0,0.55)" } : {}}
                       whileTap={!loading ? { scale: 0.97 } : {}}

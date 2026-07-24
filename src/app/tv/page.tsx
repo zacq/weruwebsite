@@ -76,6 +76,14 @@ export default async function TVPage() {
       {/* Latest Headlines */}
       <NewsGrid articles={toNewsArticles(feed)} />
 
+      {/* Advertise on TV CTA */}
+      <div className="px-4 pt-12 pb-2 text-center" style={{ background: "#111111" }}>
+        <p className="text-white font-extrabold text-2xl mb-2">Advertise on Weru TV</p>
+        <p className="text-white/55 text-sm max-w-md mx-auto">
+          Reach millions of viewers across the Mount Kenya region and East Africa.
+        </p>
+      </div>
+
       <RateCardForm />
       <Footer />
     </>
