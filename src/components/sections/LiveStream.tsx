@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import type { StreamResponse } from "@/lib/getStreamSource";
 
@@ -8,6 +9,7 @@ const CHANNEL_ID = "UCKf9xsi0uL1mwdrq7PmZsQA";
 
 export default function LiveStream({ initialStream }: { initialStream?: StreamResponse }) {
   const [stream, setStream] = useState<StreamResponse | null>(initialStream ?? null);
+  const [showPoster, setShowPoster] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -17,6 +19,11 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
       .then(setStream)
       .catch(() => setStream({ type: "none" }));
   }, [initialStream]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowPoster(false), 6000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (stream?.type !== "hls" || !videoRef.current) return;
@@ -111,6 +118,24 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
                 className="absolute inset-0 w-full h-full"
                 style={{ border: "none", background: "#000" }}
               />
+            )}
+
+            {/* Branded poster — masks OK.ru's raw preview thumbnail while its player initializes */}
+            {embedSrc && (
+              <motion.div
+                className="absolute inset-0 z-10"
+                animate={{ opacity: showPoster ? 1 : 0 }}
+                transition={{ duration: 0.6 }}
+                style={{ pointerEvents: showPoster ? "auto" : "none" }}
+              >
+                <Image
+                  src="/TV page/TV page image.jpeg"
+                  alt="Weru Digital — 100% Weru"
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              </motion.div>
             )}
 
             {/* Fallback — no source available */}
