@@ -133,7 +133,7 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
                   alt="Weru Digital — 100% Weru"
                   fill
                   priority
-                  className="object-cover"
+                  className="object-contain sm:object-cover"
                 />
               </motion.div>
             )}
