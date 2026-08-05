@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { hotMixes } from "@/data/hotMixes";
+import type { HotMix } from "@/data/hotMixes";
 
 function MixCard({ title, dj, mixcloudFeed, i }: { title: string; dj: string; mixcloudFeed: string | null; i: number }) {
   return (
@@ -48,7 +48,7 @@ function MixCard({ title, dj, mixcloudFeed, i }: { title: string; dj: string; mi
   );
 }
 
-export default function HotMixesSection() {
+export default function HotMixesSection({ mixes }: { mixes: HotMix[] }) {
   return (
     <section className="py-16 sm:py-24 px-4 sm:px-8 relative overflow-hidden" style={{ background: "#0D1117" }}>
       <div
@@ -78,7 +78,7 @@ export default function HotMixesSection() {
 
         {/* Mix grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          {hotMixes.map((mix, i) => (
+          {mixes.map((mix, i) => (
             <MixCard key={mix.title} title={mix.title} dj={mix.dj} mixcloudFeed={mix.mixcloudFeed} i={i} />
           ))}
         </div>

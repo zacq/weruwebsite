@@ -97,7 +97,7 @@ function CommunityDropdown() {
   const { open, setOpen, ref, show, hide } = useDropdown();
   const socials = [
     { icon: "📘", label: "Facebook", handle: "/werutv",       href: "https://facebook.com/werutv" },
-    { icon: "▶️", label: "YouTube",  handle: "@werutvfm3411", href: "https://youtube.com/@werutvfm3411" },
+    { icon: "▶️", label: "YouTube",  handle: "@WeruTVOfficial", href: "https://youtube.com/@WeruTVOfficial" },
     { icon: "𝕏",  label: "X",        handle: "@werutv",       href: "https://x.com/werutv" },
     { icon: "♪",  label: "TikTok",   handle: "@werutv.fm96.4", href: "https://tiktok.com/@werutv.fm96.4" },
   ];
@@ -380,7 +380,7 @@ function MobileMenu({ pathname, open, setOpen }: { pathname: string; open: boole
                       initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}>
                       {[
                         { icon: "📘", label: "Facebook", href: "https://facebook.com/werutv" },
-                        { icon: "▶️", label: "YouTube",  href: "https://youtube.com/@werutvfm3411" },
+                        { icon: "▶️", label: "YouTube",  href: "https://youtube.com/@WeruTVOfficial" },
                         { icon: "𝕏",  label: "X (Twitter)", href: "https://x.com/werutv" },
                         { icon: "♪",  label: "TikTok",   href: "https://tiktok.com/@werutv.fm96.4" },
                       ].map((s) => (

@@ -1,5 +1,6 @@
 import lazyImport from "next/dynamic";
 import HomeHero from "@/components/sections/HomeHero";
+import { getHotMixes } from "@/lib/getHotMixes";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
@@ -58,10 +59,11 @@ const PartnersCarousel = lazyImport(
 
 const Footer = lazyImport(() => import("@/components/layout/Footer"));
 
-export default function HomePage() {
+export default async function HomePage() {
+  const hotMixes = await getHotMixes();
   return (
     <>
-      <HomeHero />
+      <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} />
 
       {/* Quiz bar — desktop only; mobile version lives inside HomeHero */}
       <div className="hidden sm:flex justify-center px-4 py-4" style={{ background: "#060608" }}>
@@ -93,7 +95,7 @@ export default function HomePage() {
       <PlatformsSection />
       <MultiStreamAdvantageSection />
       <RadioPlatformsSection />
-      <HotMixesSection />
+      <HotMixesSection mixes={hotMixes} />
       <OurBrandsSection />
       <ReviewsCarousel />
       <PartnersCarousel />

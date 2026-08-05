@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { studioGallery } from "@/data/studios";
+import { getStudios } from "@/lib/getStudios";
 import StudioGallery from "./StudioGallery";
 
 export const dynamic    = "force-static";
@@ -25,7 +25,8 @@ const STATS = [
   { n: "6",    sup: "",  label: "Countries reached on air" },
 ];
 
-export default function StudiosPage() {
+export default async function StudiosPage() {
+  const studioGallery = await getStudios();
   return (
     <div style={{ background: "#08080A", minHeight: "100dvh", color: "#F4F1EC" }}>
 

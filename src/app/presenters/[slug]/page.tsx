@@ -3,13 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
-import { presenters } from "@/data/presenters";
+import { getPresenters } from "@/lib/getPresenters";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 
-export const dynamic    = "force-static";
-export const revalidate = 3600;
+export const dynamic       = "force-static";
+export const dynamicParams = true;
+export const revalidate    = 3600;
 
 export async function generateStaticParams() {
+  const presenters = await getPresenters();
   return presenters.map((p) => ({ slug: p.slug }));
 }
 
@@ -19,6 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const presenters = await getPresenters();
   const p = presenters.find((x) => x.slug === slug);
   if (!p) return {};
   return {
@@ -45,6 +48,7 @@ export default async function PresenterPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const presenters = await getPresenters();
   const presenter = presenters.find((p) => p.slug === slug);
   if (!presenter) notFound();
 

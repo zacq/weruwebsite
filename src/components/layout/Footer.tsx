@@ -21,7 +21,7 @@ const SOCIAL_PATHS: Record<string, string> = {
 const socials = [
   { label: "Facebook",  href: "https://facebook.com/werutv" },
   { label: "Instagram", href: "https://instagram.com/werutv" },
-  { label: "YouTube",   href: "https://youtube.com/@werutvfm3411" },
+  { label: "YouTube",   href: "https://youtube.com/@WeruTVOfficial" },
   { label: "X",         href: "https://x.com/werutv" },
   { label: "TikTok",    href: "https://tiktok.com/@werutv.fm96.4" },
 ];

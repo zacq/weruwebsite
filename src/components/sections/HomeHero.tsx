@@ -265,7 +265,7 @@ function Headline({ fontSize }: { fontSize: string }) {
 }
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
-export default function HomeHero() {
+export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
   const [liveShow, setLiveShow] = useState<ReturnType<typeof getCurrentShow>>(null);
 
   useEffect(() => {
@@ -278,8 +278,23 @@ export default function HomeHero() {
     <section className="relative w-full overflow-hidden" style={{ height: "100dvh" }}>
 
       {/* Background */}
-      <div className="sm:hidden absolute inset-0 hero-bg-mobile" style={{ zIndex: -3 }} />
-      <div className="hidden sm:block absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
+      {videoUrl ? (
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ zIndex: -3 }}
+          src={videoUrl}
+          poster="/heroimages/Weru%20hero%20banner.png"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      ) : (
+        <>
+          <div className="sm:hidden absolute inset-0 hero-bg-mobile" style={{ zIndex: -3 }} />
+          <div className="hidden sm:block absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
+        </>
+      )}
 
       {/* Scrim — mobile: heavy behind headline, deep dip over the empty spacer row, light behind self-opaque cards */}
       <div

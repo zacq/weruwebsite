@@ -68,7 +68,7 @@ const jsonLd = [
     inLanguage: ["sw", "ki", "en"],
     areaServed: ["KE", "UG", "TZ", "RW", "ZW", "ZM"],
     sameAs: [
-      "https://www.youtube.com/@werutvfm3411",
+      "https://www.youtube.com/@WeruTVOfficial",
       "https://www.facebook.com/WeruTV",
       "https://x.com/werutv",
       "https://tiktok.com/@werutv.fm96.4",
@@ -104,7 +104,7 @@ const jsonLd = [
       closes: "23:59",
     },
     sameAs: [
-      "https://www.youtube.com/@werutvfm3411",
+      "https://www.youtube.com/@WeruTVOfficial",
       "https://www.facebook.com/WeruTV",
     ],
   },

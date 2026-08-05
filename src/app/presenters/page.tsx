@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import PresenterTabs from "@/components/sections/PresenterTabs";
+import { getPresenters } from "@/lib/getPresenters";
 import type { Metadata } from "next";
 
 export const dynamic    = "force-static";
@@ -20,7 +21,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PresentersPage() {
+export default async function PresentersPage() {
+  const presenters = await getPresenters();
   return (
     <>
       {/* Hero */}
@@ -67,7 +69,7 @@ export default function PresentersPage() {
       {/* Tabbed grid */}
       <section className="px-4 py-16" style={{ background: "#0D0D0D" }}>
         <div className="max-w-6xl mx-auto">
-          <PresenterTabs />
+          <PresenterTabs presenters={presenters} />
         </div>
       </section>
 

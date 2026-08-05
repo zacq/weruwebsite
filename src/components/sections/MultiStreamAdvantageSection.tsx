@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const socials = [
   { label: "TikTok",    handle: "@werutv.fm96.4",  href: "https://tiktok.com/@werutv.fm96.4" },
   { label: "Facebook",  handle: "@Weru FM 96.4",    href: "https://facebook.com/werutv" },
-  { label: "YouTube",   handle: "@WERU TV & FM",    href: "https://www.youtube.com/@werutvfm3411" },
+  { label: "YouTube",   handle: "@WeruTVOfficial",  href: "https://www.youtube.com/@WeruTVOfficial" },
   { label: "Instagram", handle: "@werutv",           href: "https://instagram.com/werutv" },
   { label: "X",         handle: "@WeruTV",           href: "https://x.com/werutv" },
 ];

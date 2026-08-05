@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const YOUTUBE_LIVE_URL = "https://www.youtube.com/@werutvfm3411/live";
+const YOUTUBE_LIVE_URL = "https://www.youtube.com/@WeruTVOfficial/live";
 
 type StreamData = { videoId: string | null; isLive: boolean };
 

@@ -41,6 +41,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "https", hostname: "i.ytimg.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
   // Reduce the number of chunks that block the main thread

@@ -4,11 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { presenters, type PresenterCategory } from "@/data/presenters";
+import type { Presenter, PresenterCategory } from "@/data/presenters";
 
 const CATEGORIES: PresenterCategory[] = ["News Anchors", "Program Presenters", "Reporters"];
 
-export default function PresenterTabs() {
+export default function PresenterTabs({ presenters }: { presenters: Presenter[] }) {
   const [active, setActive] = useState<PresenterCategory>("News Anchors");
 
   const filtered = presenters.filter((p) => p.category === active);

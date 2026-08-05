@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import GalleryClient from "@/components/sections/GalleryClient";
-import { albums } from "@/data/gallery";
+import { getGalleryAlbums } from "@/lib/getGalleryAlbums";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
@@ -53,7 +53,8 @@ const jsonLd = {
   },
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const albums = await getGalleryAlbums();
   return (
     <>
       <script
