@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { StreamResponse } from "@/lib/getStreamSource";
+import { TV_LIVE_POSTER_URL } from "@/lib/brandAssets";
 
 const CHANNEL_ID = "UCKf9xsi0uL1mwdrq7PmZsQA";
 
@@ -129,7 +130,7 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
                 style={{ pointerEvents: showPoster ? "auto" : "none" }}
               >
                 <Image
-                  src="/TV page/TV page image.jpeg"
+                  src={TV_LIVE_POSTER_URL}
                   alt="Weru Digital — 100% Weru"
                   fill
                   priority

@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import FloatingCTA from "@/components/ui/FloatingCTA";
 import ViewerCaptureModal from "@/components/ui/ViewerCaptureModal";
+import { SITE_LOGO_URL, HERO_BG_DESKTOP_URL } from "@/lib/brandAssets";
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     description: "WERU isn't just a broadcaster. It's a movement. Join us.",
     siteName: "Weru Digital",
     type: "website",
-    images: [{ url: "/logo.png", width: 400, height: 133, alt: "Weru TV & Radio logo" }],
+    images: [{ url: SITE_LOGO_URL, width: 400, height: 133, alt: "Weru TV & Radio logo" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -117,7 +118,7 @@ export default function RootLayout({
     <html lang="en" className={`h-full ${display.variable} ${serif.variable} ${ui.variable}`}>
       <head>
         {/* Preload the first hero image so the browser fetches it before JS runs — critical for LCP on high-latency connections */}
-        <link rel="preload" as="image" href="/heroimages/Weru%20hero%20banner.png" fetchPriority="high" />
+        <link rel="preload" as="image" href={HERO_BG_DESKTOP_URL} fetchPriority="high" />
         {jsonLd.map((schema, i) => (
           <script
             key={i}

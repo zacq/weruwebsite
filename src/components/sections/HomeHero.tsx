@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { tvSchedule } from "@/data/tvSchedule";
+import { HERO_BG_DESKTOP_URL } from "@/lib/brandAssets";
 
 /* ─── Platform chips ─────────────────────────────────────────────────────── */
 const PLATFORMS = [
@@ -283,7 +284,7 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ zIndex: -3 }}
           src={videoUrl}
-          poster="/heroimages/Weru%20hero%20banner.png"
+          poster={HERO_BG_DESKTOP_URL}
           autoPlay
           loop
           muted

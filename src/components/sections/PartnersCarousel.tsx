@@ -1,22 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const partners = [
-  { name: "Joy Millers",                       logo: "/PatnerLogo/JoyMillers.png"       },
-  { name: "Rhino Mabati",                      logo: "/PatnerLogo/RhinoMabati.png"      },
-  { name: "Nice Rice Millers",                 logo: "/PatnerLogo/NiceRice.png"         },
-  { name: "Duralong Mabati",                   logo: "/PatnerLogo/Duralong.png"         },
-  { name: "Yetu Sacco",                        logo: "/PatnerLogo/Yetu%20Sacco.png"     },
-  { name: "Betika",                            logo: "/PatnerLogo/Betika.png"           },
-  { name: "Safaricom PLC",                     logo: "/PatnerLogo/Safaricom.png"        },
-  { name: "Greenlife Crop Protection Africa",  logo: "/PatnerLogo/Greenlife.png"        },
-  { name: "Osho Chemical Industries",          logo: "/PatnerLogo/Osho.png"             },
-  { name: "Paleah Millers",                    logo: null                               },
-  { name: "Imperial College",                  logo: null                               },
-  { name: "The Kambakia Christian Centre",     logo: null                               },
-  { name: "Coca Cola",                         logo: null                               },
-];
+import type { Partner } from "@/lib/getPartners";
 
 function LogoTile({ name, logo }: { name: string; logo: string | null }) {
   if (logo) {
@@ -61,7 +46,7 @@ function LogoTile({ name, logo }: { name: string; logo: string | null }) {
   );
 }
 
-export default function PartnersCarousel() {
+export default function PartnersCarousel({ partners }: { partners: Partner[] }) {
   const doubled = [...partners, ...partners];
 
   return (

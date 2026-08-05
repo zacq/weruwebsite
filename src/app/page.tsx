@@ -1,6 +1,9 @@
 import lazyImport from "next/dynamic";
 import HomeHero from "@/components/sections/HomeHero";
 import { getHotMixes } from "@/lib/getHotMixes";
+import { getPresenters } from "@/lib/getPresenters";
+import { getPartners } from "@/lib/getPartners";
+import { OG_LOGO_URL } from "@/lib/brandAssets";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
@@ -13,7 +16,7 @@ export const metadata = {
     title: "Weru TV — Kenya's Premier Regional TV Channel",
     description:
       "Broadcasting live across East Africa — Azam TV CH 342, DStv CH 368, Startimes CH 440, Zuku CH 39.",
-    images: ["/Werulogo.jpeg"],
+    images: [OG_LOGO_URL],
   },
 };
 
@@ -61,6 +64,8 @@ const Footer = lazyImport(() => import("@/components/layout/Footer"));
 
 export default async function HomePage() {
   const hotMixes = await getHotMixes();
+  const presenters = await getPresenters();
+  const partners = await getPartners();
   return (
     <>
       <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} />
@@ -91,14 +96,14 @@ export default async function HomePage() {
         </a>
       </div>
 
-      <CultureSection />
+      <CultureSection presenters={presenters} />
       <PlatformsSection />
       <MultiStreamAdvantageSection />
       <RadioPlatformsSection />
       <HotMixesSection mixes={hotMixes} />
       <OurBrandsSection />
       <ReviewsCarousel />
-      <PartnersCarousel />
+      <PartnersCarousel partners={partners} />
       <Footer />
     </>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { SITE_LOGO_URL } from "@/lib/brandAssets";
 
 const footerLinks = [
   { label: "Home",       href: "/" },
@@ -39,7 +40,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="flex flex-col items-center md:items-start">
             <Link href="/" className="inline-flex items-center">
-              <Image src="/logo.png" alt="Weru TV" width={90} height={30} className="object-contain" />
+              <Image src={SITE_LOGO_URL} alt="Weru TV" width={90} height={30} className="object-contain" />
             </Link>
             <p className="text-xs mt-1.5 text-center md:text-left" style={{ color: "rgba(255,255,255,0.55)" }}>
               Kenya&apos;s premier broadcast experience.

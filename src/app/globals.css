@@ -51,7 +51,7 @@ body::after {
    in view on every viewport. The scrim gradients that protect the headline
    text and TV/FM cards live in HomeHero.tsx, not here. */
 .hero-bg {
-  background-image: url('/heroimages/Weru%20hero%20banner.png');
+  background-image: url('https://res.cloudinary.com/d3m1hdbk/image/upload/v1785930040/Weru_hero_banner_tymdbi.png');
   background-size: cover;
   background-position: center top;
 }
@@ -61,7 +61,7 @@ body::after {
    phone screens instead of being cropped to an unrecognizable sliver by
    `cover` on the wide desktop banner. */
 .hero-bg-mobile {
-  background-image: url('/heroimages/phonehero.jpg');
+  background-image: url('https://res.cloudinary.com/d3m1hdbk/image/upload/v1785930035/phonehero_cr9qq5.jpg');
   background-size: cover;
   background-position: center top;
 }

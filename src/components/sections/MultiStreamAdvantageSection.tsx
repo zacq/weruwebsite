@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { MULTISTREAM_BG_URL } from "@/lib/brandAssets";
 
 const socials = [
   { label: "TikTok",    handle: "@werutv.fm96.4",  href: "https://tiktok.com/@werutv.fm96.4" },
@@ -25,7 +26,7 @@ export default function MultiStreamAdvantageSection() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "url(/bckground.jpeg)",
+          backgroundImage: `url(${MULTISTREAM_BG_URL})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           zIndex: -3,

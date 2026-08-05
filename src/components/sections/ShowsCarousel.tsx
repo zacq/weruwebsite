@@ -3,8 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import type { Presenter } from "@/data/presenters";
 
-const tvShows = [
+const SHOWS = [
   {
     id: 1,
     presenter: "Uria Ndagitari",
@@ -14,7 +15,7 @@ const tvShows = [
       "We present a prime-time, weekly program focused on women's empowerment, airing Tuesdays from 8:15 PM to 9:00 PM. The show showcases the achievements of impactful women and those who have overcome significant obstacles. Hosted by experienced journalist Makena wa Matiri, the program aims to inspire and elevate.",
     time: "Tuesdays 8:15–9:00 PM",
     initials: "NC",
-    image: "/Presenters/makena-wa-matiri.png",
+    presenterSlug: "makena-wa-matiri",
     bg: "#6B0A0A",
     accent: "#FACC15",
   },
@@ -27,7 +28,7 @@ const tvShows = [
       "This is our flagship political talk show, hosted by Martin Gichunge Dullah. The show airs every Sunday from 9:00 PM to 11:30 PM and features politicians, lawyers, political analysts, and specialists from local, regional, and national levels within Kenya's political landscape. The program is highly interactive, with strong audience engagement through our digital platforms, live phone calls, and SMS participation.",
     time: "Sundays 9:00–11:30 PM",
     initials: "MG",
-    image: "/Presenters/martin-gichunge.png",
+    presenterSlug: "martin-gichunge",
     bg: "#7A1010",
     accent: "#f97d00",
   },
@@ -40,7 +41,7 @@ const tvShows = [
       "Your weekly dose of roots reggae, African vibes, and cultural celebration hosted by the incomparable Empress Rita.",
     time: "Weekends 5:00 PM",
     initials: "ER",
-    image: "/Presenters/empress-rita-natty.png",
+    presenterSlug: "empress-rita-natty",
     bg: "#6B0A0A",
     accent: "#FACC15",
   },
@@ -53,14 +54,18 @@ const tvShows = [
       "An energetic afternoon packed with the latest music and trends. MC Tash brings the vibes while DJ Dennie keeps the beats flowing non-stop.",
     time: "Weekdays 3:00 PM",
     initials: "TT",
-    image: "/Presenters/mc-tash.png",
+    presenterSlug: "mc-tash",
     bg: "#7A1010",
     accent: "#f97d00",
   },
 ];
 
-export default function ShowsCarousel() {
+export default function ShowsCarousel({ presenters }: { presenters: Presenter[] }) {
   const [current, setCurrent] = useState(0);
+  const tvShows = SHOWS.map((s) => ({
+    ...s,
+    image: presenters.find((p) => p.slug === s.presenterSlug)?.imageSrc ?? "/placeholder-presenter.svg",
+  }));
   const count = tvShows.length;
   const isMobile = useMediaQuery("(max-width: 640px)");
   const touchStartX = useRef(0);

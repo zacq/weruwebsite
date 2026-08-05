@@ -2,26 +2,34 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import type { Presenter } from "@/data/presenters";
 
-const presenterImages = [
-  { src: "/Presenters/mc-kithumba.png",      caption: "MC Kithumba",                  slug: "mc-kithumba" },
-  { src: "/Presenters/makena-wa-matiri.png",  caption: "Makena Wa Matiri",             slug: "makena-wa-matiri" },
-  { src: "/Presenters/martin-gichunge.png",   caption: "Martin Gichunge",              slug: "martin-gichunge" },
-  { src: "/Presenters/mc-tash.png",           caption: "MC Tash",                      slug: "mc-tash" },
-  { src: "/Presenters/munene-wa-kagwi.png",   caption: "Munene Wa Kagwi",              slug: "munene-wa-kagwi" },
-  { src: "/Presenters/mwenda-h-pilot.png",    caption: "Mwenda H Pilot",               slug: "mwenda-h-pilot" },
-  { src: "/Presenters/nelly-githinji.png",    caption: "Nelly Githinji",               slug: "nelly-githinji" },
-  { src: "/Presenters/stella-karimi.png",     caption: "Stella Karimi",                slug: "stella-karimi" },
-  { src: "/Presenters/empress-rita-natty.png", caption: "Empress Ritta & Empress Natty", slug: "empress-rita-natty" },
-  { src: "/Presenters/edward-mutembei.png",   caption: "Edward Mutembei",              slug: "edward-mutembei" },
-  { src: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png", caption: "Betty",            slug: "betty" },
-  { src: "/Presenters/Njumaa%20sacco.png",              caption: "Njumaa Sacco Squad", slug: "njumaa-sacco-squad" },
+// Curated order of presenters to feature in this strip — images come from
+// the Presenters Airtable data (see src/lib/getPresenters.ts), not local files.
+const FEATURED_SLUGS = [
+  "mc-kithumba",
+  "makena-wa-matiri",
+  "martin-gichunge",
+  "mc-tash",
+  "munene-wa-kagwi",
+  "mwenda-h-pilot",
+  "nelly-githinji",
+  "stella-karimi",
+  "empress-rita-natty",
+  "edward-mutembei",
+  "betty",
+  "njumaa-sacco-squad",
 ];
 
-// Duplicate for seamless infinite loop
-const doubled = [...presenterImages, ...presenterImages];
+export default function CultureSection({ presenters }: { presenters: Presenter[] }) {
+  const presenterImages = FEATURED_SLUGS
+    .map((slug) => presenters.find((p) => p.slug === slug))
+    .filter((p): p is Presenter => Boolean(p))
+    .map((p) => ({ src: p.imageSrc, caption: p.name, slug: p.slug }));
 
-export default function CultureSection() {
+  // Duplicate for seamless infinite loop
+  const doubled = [...presenterImages, ...presenterImages];
+
   return (
     <section className="py-16 sm:py-24 overflow-hidden relative" style={{ background: "#0A0A0A" }}>
       {/* Ambient glow — gold tint matches cultural/gold accent */}

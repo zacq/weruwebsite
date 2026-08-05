@@ -8,6 +8,7 @@ import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
 import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
 import { getStreamSource } from "@/lib/getStreamSource";
+import { getPresenters } from "@/lib/getPresenters";
 
 const NewsGrid = lazyImport(
   () => import("@/components/sections/NewsGrid"),
@@ -54,7 +55,7 @@ function toNewsArticles(feed: Headline[]) {
 }
 
 export default async function TVPage() {
-  const [feed, initialStream] = await Promise.all([getNewsFeed(), getStreamSource()]);
+  const [feed, initialStream, presenters] = await Promise.all([getNewsFeed(), getStreamSource(), getPresenters()]);
 
   return (
     <>
@@ -69,7 +70,7 @@ export default async function TVPage() {
       <TVScheduleSection />
 
       {/* TV Shows */}
-      <ShowsCarousel />
+      <ShowsCarousel presenters={presenters} />
 
       {/* Latest Videos */}
 

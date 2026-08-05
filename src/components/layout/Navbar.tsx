@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import { SITE_LOGO_URL } from "@/lib/brandAssets";
 
 const navLinks = [
   { label: "Home",               href: "/" },
@@ -207,7 +208,7 @@ export default function Navbar() {
         <Link href="/" className="shrink-0 flex items-center">
           <motion.div style={{ rotateY: logoRotate, transformPerspective: 800, willChange: "transform" }}>
             <Image
-              src="/logo.png"
+              src={SITE_LOGO_URL}
               alt="Weru TV"
               width={110}
               height={38}

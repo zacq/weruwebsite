@@ -27,6 +27,8 @@ const STATS = [
 
 export default async function StudiosPage() {
   const studioGallery = await getStudios();
+  const heroImage =
+    studioGallery.find((p) => p.caption === "Main Broadcast Studio")?.src ?? studioGallery[0]?.src;
   return (
     <div style={{ background: "#08080A", minHeight: "100dvh", color: "#F4F1EC" }}>
 
@@ -39,7 +41,7 @@ export default async function StudiosPage() {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: "url(/Studio%20images/studio%20area17.png)",
+            backgroundImage: `url(${heroImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             animation: "kenburns 30s ease-in-out infinite alternate",

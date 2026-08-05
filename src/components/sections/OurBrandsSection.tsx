@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { BRAND_LOGOS } from "@/lib/brandAssets";
 
 const BRANDS = [
-  { name: "Weru TV",      src: "/brands/weru-tv-logo.png" },
-  { name: "Weru FM 96.4", src: "/brands/weru-fm-logo.png" },
-  { name: "Weru Digital", src: "/brands/weru-digital-logo.png" },
+  { name: "Weru TV",      src: BRAND_LOGOS.weruTv },
+  { name: "Weru FM 96.4", src: BRAND_LOGOS.weruFm },
+  { name: "Weru Digital", src: BRAND_LOGOS.weruDigital },
 ];
 
 export default function OurBrandsSection() {
