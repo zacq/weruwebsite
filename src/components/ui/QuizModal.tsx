@@ -5,53 +5,53 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const QUESTIONS = [
   {
-    q: "What is the theme for the upcoming Nairobi edition of Twine Cietu?",
-    options: ["Honouring our founding fathers", "Celebrating our MauMau heroes", "Celebrating 10 years of Weru"],
+    q: "When did Weru FM begin broadcasting?",
+    options: ["26th Dec 2016", "3rd July 2017", "26th Dec 2017"],
     correct: 1,
   },
   {
-    q: "When was the first Twine Cietu Event held?",
-    options: ["June 2014 in Meru", "March 2015 in Nairobi", "March 2013 in Nairobi"],
+    q: "Who is the current host of Weru Beats?",
+    options: ["Empress Natty", "Ajelyne George", "Mwenda H the Pilot"],
+    correct: 0,
+  },
+  {
+    q: "Who among these is not a news anchor on Weru FM?",
+    options: ["Mercy Ndumba", "Dorcas Kaaria", "Raymond Mwenda"],
+    correct: 1,
+  },
+  {
+    q: "Who was the first host of Reggae Kuruka?",
+    options: ["Dj Tush untamed", "Selector Prince", "Empress Rita"],
+    correct: 1,
+  },
+  {
+    q: "Which is the Weru FM frequency?",
+    options: ["96.4", "94.6", "96.6"],
+    correct: 0,
+  },
+  {
+    q: "Who is the current host of Mantu Kimencu?",
+    options: ["Mc Kithumba", "Empress Rita", "Prince Ken"],
+    correct: 0,
+  },
+  {
+    q: "Who is the current host of Chanchamuka?",
+    options: ["Martin Gichunge & Karimi Kaunty", "Martin Gichunge & Makena Matiri", "Makena Matiri"],
     correct: 2,
   },
   {
-    q: "Where and when will the Twine Cietu Festival 2.0 be held?",
-    options: ["Nyayo Stadium, Nairobi on 8th August", "Scilla Gardens, Kasarani on 8th August", "Uhuru Gardens, Nairobi on 15th August"],
+    q: "Who are the current hosts of Reggaemania on Weru FM?",
+    options: ["Empress Rita & Dj Tush untamed", "Empress Rita & Empress Natty", "Empress Natty & Dj Tush untamed"],
     correct: 1,
   },
   {
-    q: "When did Weru TV start broadcasting?",
-    options: ["2017", "2018", "2016", "2019"],
-    correct: 2,
+    q: "Munene wa Kagwi hosts which shows on Weru FM?",
+    options: ["Tuthunkume & Choir Kanisene", "Tuthunkume & Tuborerie", "Tuthunkume & Tutharimwe"],
+    correct: 0,
   },
   {
-    q: "When does Chibu Nkobotia air on Weru TV?",
-    options: ["Friday 8:40 PM", "Saturday 8:20 PM", "Sunday 8:20 PM"],
-    correct: 2,
-  },
-  {
-    q: "Who hosts the Chanchamuka show on Weru FM 96.4?",
-    options: ["Edward Mutembei and Dorcas wa Kaaria", "Martin Gichunge & Stella Karimi Kaunty", "Empress Rita and Empress Natty"],
-    correct: 1,
-  },
-  {
-    q: "Which programme airs every Tuesday on Weru TV @8:20 PM?",
-    options: ["Gikaro na Kaunty", "Nkatha Mashinani", "Nkatha Cietu"],
-    correct: 1,
-  },
-  {
-    q: "What time does Katiba Ka Gen Z air?",
-    options: ["Saturdays 1:30 PM to 4 PM", "Weekdays from 1:30 PM to 5 PM", "Every day from 5:00 PM to 6:30 PM"],
-    correct: 1,
-  },
-  {
-    q: "Who presents Nteto Cia Weru every Wednesday @9:30 PM?",
-    options: ["Edward Mutembei", "Maureen Kinya", "Dorcas wa Kaaria", "Phineas Imaana"],
-    correct: 2,
-  },
-  {
-    q: "When does Woi Tene air?",
-    options: ["Thursday 6:40–7:20 PM", "Saturday 6:40–7:20 PM", "Friday 6:40–7:20 PM"],
+    q: "Who among these have never hosted Chanchamuka on Weru FM?",
+    options: ["Mc Kithumba", "Betty Ntinyari", "Morgan Mwiti"],
     correct: 1,
   },
 ];
@@ -131,7 +131,7 @@ export default function QuizModal() {
       {/* Floating card — bottom-left, always visible */}
       <motion.button
         onClick={handleOpen}
-        aria-label="Open quiz: 10 Over 10 Twine Cietu SN2"
+        aria-label="Open quiz: 96+4 Quiz"
         className="fixed bottom-6 md:bottom-8 left-4 md:left-8 z-50 w-[290px] sm:w-[310px] text-left rounded-2xl p-4 flex flex-col gap-3"
         style={{
           marginBottom: "env(safe-area-inset-bottom, 0px)",
@@ -154,10 +154,10 @@ export default function QuizModal() {
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-sm leading-tight" style={{ color: "#F97D00" }}>
-              10 Over 10: Twine Cietu SN2
+              96+4 Quiz
             </span>
             <span className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.62)" }}>
-              10 questions — win a complimentary ticket to Twine Cietu SN2
+              10 questions — win a KSh 5,000 shopping voucher + studio visit
             </span>
           </div>
         </div>
@@ -186,7 +186,7 @@ export default function QuizModal() {
             <motion.div
               role="dialog"
               aria-modal="true"
-              aria-label="10 Over 10: Twine Cietu SN2 Quiz"
+              aria-label="96+4 Quiz"
               className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl"
               style={{
                 background: "rgba(10,10,10,0.97)",
@@ -213,10 +213,10 @@ export default function QuizModal() {
 
                 <div className="flex items-center gap-2.5 mb-0.5">
                   <span className="text-2xl" aria-hidden>🏆</span>
-                  <h2 className="text-white font-bold text-lg leading-tight">10 Over 10: Twine Cietu SN2</h2>
+                  <h2 className="text-white font-bold text-lg leading-tight">96+4 Quiz</h2>
                 </div>
                 <p className="text-white/45 text-xs mb-4 pl-9">
-                  10 questions · Win a complimentary ticket to Twine Cietu SN2
+                  10 questions · Win a KSh 5,000 shopping voucher + studio visit
                 </p>
 
                 {phase === "quiz" && (
@@ -359,7 +359,7 @@ export default function QuizModal() {
                       </button>
 
                       <p className="text-white/25 text-xs text-center mt-4 leading-relaxed">
-                        All entries go into the draw. Winners announced on Weru TV.
+                        Score 10/10 to win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.
                       </p>
                     </motion.div>
                   )}
@@ -389,7 +389,7 @@ export default function QuizModal() {
                           color: "rgba(255,255,255,0.55)",
                         }}
                       >
-                        Thank you for entering the Twine Cietu SN2 ticket draw. Winners will be announced on Weru TV and FM. Good luck!
+                        Thanks for playing the 96+4 Quiz! If you scored 10/10 you're in line for a KSh 5,000 shopping voucher and a visit to the Weru Studios. Winners will be announced on Weru TV and FM. Good luck!
                       </div>
                       <button
                         onClick={handleClose}

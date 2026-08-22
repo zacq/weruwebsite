@@ -5,53 +5,53 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const QUESTIONS = [
   {
-    q: "What is the theme for the upcoming Nairobi edition of Twine Cietu?",
-    options: ["Honouring our founding fathers", "Celebrating our MauMau heroes", "Celebrating 10 years of Weru"],
+    q: "When did Weru FM begin broadcasting?",
+    options: ["26th Dec 2016", "3rd July 2017", "26th Dec 2017"],
     correct: 1,
   },
   {
-    q: "When was the first Twine Cietu Event held?",
-    options: ["June 2014 in Meru", "March 2015 in Nairobi", "March 2013 in Nairobi"],
+    q: "Who is the current host of Weru Beats?",
+    options: ["Empress Natty", "Ajelyne George", "Mwenda H the Pilot"],
+    correct: 0,
+  },
+  {
+    q: "Who among these is not a news anchor on Weru FM?",
+    options: ["Mercy Ndumba", "Dorcas Kaaria", "Raymond Mwenda"],
+    correct: 1,
+  },
+  {
+    q: "Who was the first host of Reggae Kuruka?",
+    options: ["Dj Tush untamed", "Selector Prince", "Empress Rita"],
+    correct: 1,
+  },
+  {
+    q: "Which is the Weru FM frequency?",
+    options: ["96.4", "94.6", "96.6"],
+    correct: 0,
+  },
+  {
+    q: "Who is the current host of Mantu Kimencu?",
+    options: ["Mc Kithumba", "Empress Rita", "Prince Ken"],
+    correct: 0,
+  },
+  {
+    q: "Who is the current host of Chanchamuka?",
+    options: ["Martin Gichunge & Karimi Kaunty", "Martin Gichunge & Makena Matiri", "Makena Matiri"],
     correct: 2,
   },
   {
-    q: "Where and when will the Twine Cietu Festival 2.0 be held?",
-    options: ["Nyayo Stadium, Nairobi on 8th August", "Scilla Gardens, Kasarani on 8th August", "Uhuru Gardens, Nairobi on 15th August"],
+    q: "Who are the current hosts of Reggaemania on Weru FM?",
+    options: ["Empress Rita & Dj Tush untamed", "Empress Rita & Empress Natty", "Empress Natty & Dj Tush untamed"],
     correct: 1,
   },
   {
-    q: "When did Weru TV start broadcasting?",
-    options: ["2017", "2018", "2016", "2019"],
-    correct: 2,
+    q: "Munene wa Kagwi hosts which shows on Weru FM?",
+    options: ["Tuthunkume & Choir Kanisene", "Tuthunkume & Tuborerie", "Tuthunkume & Tutharimwe"],
+    correct: 0,
   },
   {
-    q: "When does Chibu Nkobotia air on Weru TV?",
-    options: ["Friday 8:40 PM", "Saturday 8:20 PM", "Sunday 8:20 PM"],
-    correct: 2,
-  },
-  {
-    q: "Who hosts the Chanchamuka show on Weru FM 96.4?",
-    options: ["Edward Mutembei and Dorcas wa Kaaria", "Martin Gichunge & Stella Karimi Kaunty", "Empress Rita and Empress Natty"],
-    correct: 1,
-  },
-  {
-    q: "Which programme airs every Tuesday on Weru TV @8:20 PM?",
-    options: ["Gikaro na Kaunty", "Nkatha Mashinani", "Nkatha Cietu"],
-    correct: 1,
-  },
-  {
-    q: "What time does Katiba Ka Gen Z air?",
-    options: ["Saturdays 1:30 PM to 4 PM", "Weekdays from 1:30 PM to 5 PM", "Every day from 5:00 PM to 6:30 PM"],
-    correct: 1,
-  },
-  {
-    q: "Who presents Nteto Cia Weru every Wednesday @9:30 PM?",
-    options: ["Edward Mutembei", "Maureen Kinya", "Dorcas wa Kaaria", "Phineas Imaana"],
-    correct: 2,
-  },
-  {
-    q: "When does Woi Tene air?",
-    options: ["Thursday 6:40–7:20 PM", "Saturday 6:40–7:20 PM", "Friday 6:40–7:20 PM"],
+    q: "Who among these have never hosted Chanchamuka on Weru FM?",
+    options: ["Mc Kithumba", "Betty Ntinyari", "Morgan Mwiti"],
     correct: 1,
   },
 ];
@@ -118,7 +118,7 @@ export default function QuizForm() {
           {/* Top bar */}
           <div className="flex items-center justify-between mb-4 sm:mb-5">
             <span className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase" style={{ color: "#FACC15" }}>
-              Weru TV History
+              96+4 Quiz
             </span>
             <span className="text-xs sm:text-sm font-semibold tabular-nums" style={{ color: "rgba(255,255,255,0.35)" }}>
               {step + 1}&thinsp;/&thinsp;10
@@ -252,7 +252,7 @@ export default function QuizForm() {
             Enter your details to complete your entry.
           </h2>
           <p className="text-sm mb-8 sm:mb-10" style={{ color: "rgba(255,255,255,0.40)" }}>
-            All entries go into the draw — winners announced on Weru TV &amp; FM.
+            Score 10/10 to win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.
           </p>
 
           <div className="flex flex-col gap-4 sm:gap-5 mb-7 sm:mb-8">
@@ -294,7 +294,7 @@ export default function QuizForm() {
           </button>
 
           <p className="text-xs text-center mt-4" style={{ color: "rgba(255,255,255,0.22)" }}>
-            All entries go into the draw. Winners announced on Weru TV &amp; FM.
+            Score 10/10 to win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.
           </p>
         </motion.div>
       )}
@@ -329,8 +329,8 @@ export default function QuizForm() {
 
           <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
             {duplicate
-              ? "This phone number has already submitted an entry for the Twine Cietu SN2 ticket draw. Only one entry per person is allowed."
-              : "Thank you for entering the Twine Cietu SN2 ticket draw. Winners will be contacted directly and announced on Weru TV & FM. Good luck!"}
+              ? "This phone number has already entered the 96+4 Quiz. Only one entry per person is allowed."
+              : "Thanks for playing the 96+4 Quiz! If you scored 10/10 you're in line for a KSh 5,000 shopping voucher and a visit to the Weru Studios. Winners will be contacted directly and announced on Weru TV & FM. Good luck!"}
           </p>
         </motion.div>
       )}
