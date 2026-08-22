@@ -52,7 +52,7 @@ const QUESTIONS = [
   {
     q: "Who among these have never hosted Chanchamuka on Weru FM?",
     options: ["Mc Kithumba", "Betty Ntinyari", "Morgan Mwiti"],
-    correct: 1,
+    correct: 2,
   },
 ];
 
