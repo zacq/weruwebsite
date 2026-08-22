@@ -175,10 +175,10 @@ function QuizBar({ compact = false }: { compact?: boolean }) {
         🎯
       </div>
       <div className="min-w-0 flex-1">
-        <p className={`font-display font-bold text-white leading-snug ${compact ? "text-xs" : "text-sm"}`}>10 Over 10: Twine Cietu SN2</p>
+        <p className={`font-display font-bold text-white leading-snug ${compact ? "text-xs" : "text-sm"}`}>96+4 Quiz</p>
         {!compact && (
           <p className="text-xs" style={{ color: "rgba(244,241,236,.58)" }}>
-            10 questions — win a complimentary ticket to Twine Cietu SN2
+            10 questions — win a KSh 5,000 shopping voucher + studio visit
           </p>
         )}
       </div>

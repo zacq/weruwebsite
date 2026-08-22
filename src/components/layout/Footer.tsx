@@ -89,7 +89,7 @@ export default function Footer() {
                 className="text-xs font-bold hover:opacity-80 transition-opacity mt-0.5"
                 style={{ color: "#FACC15" }}
               >
-                🎟️ 10 Over 10
+                🎟️ 96+4 Quiz
               </Link>
             </div>
 
