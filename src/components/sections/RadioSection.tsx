@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { radioSchedule, type RadioDaySchedule } from "@/data/radioSchedule";
 
-const RADIO_STREAM_URL = "https://media.streambrothers.com/stream/8252";
+const RADIO_STREAM_URL = "https://stream.zeno.fm/d4gvmydrosbuv";
 
 type Day = RadioDaySchedule["day"];
 
