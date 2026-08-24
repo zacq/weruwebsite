@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isValidFullName, isValidKenyanPhone } from "@/lib/validateLead";
 
 const BASE_ID  = "appXyMV3O6ycSVRAi";
 const TABLE_ID = "tblYEsFb2gKyPariy"; // Presenter Leads
@@ -8,9 +9,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { name, phone, interests } = body;
 
-    if (!name || !phone) {
+    if (!isValidFullName(name) || !isValidKenyanPhone(phone)) {
       return NextResponse.json(
-        { success: false, error: "Name and phone are required" },
+        { success: false, error: "Please enter your full name and a valid Kenyan phone number." },
         { status: 400 }
       );
     }

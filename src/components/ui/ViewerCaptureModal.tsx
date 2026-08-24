@@ -10,6 +10,7 @@ export default function ViewerCaptureModal() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", interests: [] as string[] });
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const alreadySeen = localStorage.getItem("weru_viewer_seen");
@@ -48,19 +49,26 @@ export default function ViewerCaptureModal() {
     e.preventDefault();
     if (!form.name || !form.phone) return;
     setLoading(true);
+    setError("");
     try {
-      await fetch("/api/viewer", {
+      const res = await fetch("/api/viewer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.error || "Something went wrong. Please check your details and try again.");
+        setLoading(false);
+        return;
+      }
+      setSubmitted(true);
+      localStorage.setItem("weru_viewer_seen", "1");
+      setTimeout(dismiss, 2500);
     } catch {
-      // fail silently
+      setError("Connection failed. Please try again.");
     }
     setLoading(false);
-    setSubmitted(true);
-    localStorage.setItem("weru_viewer_seen", "1");
-    setTimeout(dismiss, 2500);
   };
 
   return (
@@ -150,6 +158,10 @@ export default function ViewerCaptureModal() {
                         })}
                       </div>
                     </div>
+
+                    {error && (
+                      <p className="text-xs text-center" style={{ color: "#f97d00" }}>{error}</p>
+                    )}
 
                     <motion.button
                       type="submit"

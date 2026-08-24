@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { isValidFullName, isValidKenyanPhone } from "@/lib/validateLead";
 
 type AdType = "TV" | "Radio" | "Both" | "";
 
@@ -45,6 +46,7 @@ export default function AdvertisingModal({ isOpen, title, onClose }: Props) {
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const set = (key: keyof FormState, value: string) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -53,8 +55,8 @@ export default function AdvertisingModal({ isOpen, title, onClose }: Props) {
 
   const validate = () => {
     const e: Partial<FormState> = {};
-    if (!form.name.trim())  e.name  = "Name is required";
-    if (!form.phone.trim()) e.phone = "Phone is required";
+    if (!isValidFullName(form.name))    e.name  = "Enter your full name (first and last)";
+    if (!isValidKenyanPhone(form.phone)) e.phone = "Enter a valid Kenyan phone number";
     if (!form.email.trim()) e.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Invalid email";
     if (!form.adType)       e.adType = "Please select ad type" as AdType;
@@ -66,21 +68,30 @@ export default function AdvertisingModal({ isOpen, title, onClose }: Props) {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
+    setSubmitError("");
     try {
-      await fetch("/api/rate-card", {
+      const res = await fetch("/api/rate-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-    } catch { /* fail silently */ }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSubmitError(data?.error || "Something went wrong. Please check your details and try again.");
+        setLoading(false);
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setSubmitError("Connection failed. Please try again.");
+    }
     setLoading(false);
-    setSubmitted(true);
   };
 
   const handleClose = () => {
     onClose();
     // Reset after animation
-    setTimeout(() => { setForm(empty); setErrors({}); setSubmitted(false); }, 300);
+    setTimeout(() => { setForm(empty); setErrors({}); setSubmitted(false); setSubmitError(""); }, 300);
   };
 
   return (
@@ -236,6 +247,10 @@ export default function AdvertisingModal({ isOpen, title, onClose }: Props) {
                         value={form.message}
                         onChange={(e) => set("message", e.target.value)}
                       />
+
+                      {submitError && (
+                        <p className="text-[#f97d00] text-xs text-center">{submitError}</p>
+                      )}
 
                       {/* Submit */}
                       <motion.button

@@ -18,7 +18,11 @@ export function LeadCaptureForm({ show }: { show: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: formData.name, phone: formData.phone, interests: [show] }),
       });
-      if (!res.ok) throw new Error();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.error || "Something went wrong. Please check your details and try again.");
+        return;
+      }
       setSubmitted(true);
     } catch {
       setError("Connection failed. Please try again.");

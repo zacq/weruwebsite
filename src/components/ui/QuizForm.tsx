@@ -66,6 +66,7 @@ export default function QuizForm() {
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [duplicate, setDuplicate] = useState(false);
+  const [error, setError] = useState("");
 
   const selectAnswer = (i: number) =>
     setAnswers((prev) => { const n = [...prev]; n[step] = i; return n; });
@@ -78,6 +79,7 @@ export default function QuizForm() {
   const handleSubmit = async () => {
     if (!name.trim() || !phone.trim()) return;
     setSubmitting(true);
+    setError("");
     try {
       const res = await fetch("/api/quiz", {
         method: "POST",
@@ -94,10 +96,20 @@ export default function QuizForm() {
         }),
       });
       const data = await res.json().catch(() => ({}));
-      if (data?.duplicate) setDuplicate(true);
+      if (!res.ok) {
+        if (data?.duplicate) {
+          setDuplicate(true);
+          setPhase("done");
+        } else {
+          setError(data?.error || "Something went wrong. Please check your details and try again.");
+        }
+      } else {
+        setPhase("done");
+      }
+    } catch {
+      setError("Connection failed. Please try again.");
     } finally {
       setSubmitting(false);
-      setPhase("done");
     }
   };
 
@@ -283,6 +295,10 @@ export default function QuizForm() {
               />
             </div>
           </div>
+
+          {error && (
+            <p className="text-xs text-center mb-3" style={{ color: "#f97d00" }}>{error}</p>
+          )}
 
           <button
             onClick={handleSubmit}

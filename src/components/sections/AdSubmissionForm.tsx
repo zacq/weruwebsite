@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { isValidFullName, isValidKenyanPhone } from "@/lib/validateLead";
 
 /* ── Constants ─────────────────────────────────────────────────────── */
 
@@ -111,8 +112,8 @@ const today = new Date().toISOString().split("T")[0];
 
 function validate(form: FormState): FieldErrors {
   const e: FieldErrors = {};
-  if (!form.contactName.trim())   e.contactName   = "Name is required";
-  if (!form.phone.trim())         e.phone         = "Phone number is required";
+  if (!isValidFullName(form.contactName)) e.contactName = "Enter your full name (first and last)";
+  if (!isValidKenyanPhone(form.phone))    e.phone       = "Enter a valid Kenyan phone number";
   if (!form.email.trim())         e.email         = "Email is required";
   else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Invalid email address";
   if (!form.adType)               e.adType        = "Please select TV, Radio, or Both";
@@ -151,6 +152,7 @@ export default function AdSubmissionForm() {
   const [errors, setErrors]   = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [reqTab, setReqTab]   = useState<"TV" | "Radio">("TV");
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -184,8 +186,9 @@ export default function AdSubmissionForm() {
       return;
     }
     setLoading(true);
+    setSubmitError("");
     try {
-      await fetch("/api/ad-submission", {
+      const res = await fetch("/api/ad-submission", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -193,9 +196,17 @@ export default function AdSubmissionForm() {
           daysOfWeek: form.daysOfWeek.filter(d => d !== "All Week"),
         }),
       });
-    } catch { /* fail silently */ }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSubmitError(data?.error || "Something went wrong. Please check your details and try again.");
+        setLoading(false);
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setSubmitError("Connection failed. Please try again.");
+    }
     setLoading(false);
-    setSubmitted(true);
   }
 
   const cardStyle = {
@@ -646,6 +657,12 @@ export default function AdSubmissionForm() {
                   </label>
                   <FieldError msg={errors.termsAccepted} />
                 </div>
+
+                {submitError && (
+                  <p style={{ color: "#f97d00", fontSize: 12, textAlign: "center", marginBottom: 12 }}>
+                    {submitError}
+                  </p>
+                )}
 
                 {/* ── Submit ── */}
                 <motion.button

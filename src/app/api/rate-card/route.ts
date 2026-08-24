@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isValidFullName, isValidKenyanPhone } from "@/lib/validateLead";
 
 const BASE_ID  = "appXyMV3O6ycSVRAi";
 const TABLE_ID = process.env.AIRTABLE_RATE_CARD_TABLE_ID ?? "tbliYbLcpLfLal9An";
@@ -8,9 +9,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { name, company, phone, email, adType, packages, message } = body;
 
-    if (!name || !phone || !adType) {
+    if (!isValidFullName(name) || !isValidKenyanPhone(phone) || !adType) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields" },
+        { success: false, error: "Please enter your full name and a valid Kenyan phone number." },
         { status: 400 }
       );
     }

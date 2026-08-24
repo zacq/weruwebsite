@@ -66,6 +66,7 @@ export default function QuizModal() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleOpen = () => {
     setStep(0);
@@ -73,6 +74,7 @@ export default function QuizModal() {
     setPhase("quiz");
     setName("");
     setPhone("");
+    setError("");
     setOpen(true);
   };
 
@@ -103,8 +105,9 @@ export default function QuizModal() {
   const handleSubmit = async () => {
     if (!name.trim() || !phone.trim()) return;
     setSubmitting(true);
+    setError("");
     try {
-      await fetch("/api/quiz", {
+      const res = await fetch("/api/quiz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -118,9 +121,16 @@ export default function QuizModal() {
           score,
         }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.error || "Something went wrong. Please check your details and try again.");
+      } else {
+        setPhase("done");
+      }
+    } catch {
+      setError("Connection failed. Please try again.");
     } finally {
       setSubmitting(false);
-      setPhase("done");
     }
   };
 
@@ -348,6 +358,10 @@ export default function QuizModal() {
                           />
                         </div>
                       </div>
+
+                      {error && (
+                        <p className="text-xs text-center mb-3" style={{ color: "#f97d00" }}>{error}</p>
+                      )}
 
                       <button
                         onClick={handleSubmit}

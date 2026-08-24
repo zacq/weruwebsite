@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { isValidFullName, isValidKenyanPhone } from "@/lib/validateLead";
 
 type Tab = "TV" | "Radio";
 
@@ -157,6 +158,7 @@ export default function RateCardForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const packages = tab === "TV" ? TV_PACKAGES : RADIO_PACKAGES;
 
@@ -186,8 +188,8 @@ export default function RateCardForm() {
 
   const validate = () => {
     const e: Partial<Record<keyof FormState, string>> = {};
-    if (!form.name.trim())  e.name  = "Name is required";
-    if (!form.phone.trim()) e.phone = "WhatsApp number is required";
+    if (!isValidFullName(form.name))    e.name  = "Enter your full name (first and last)";
+    if (!isValidKenyanPhone(form.phone)) e.phone = "Enter a valid Kenyan phone number";
     if (needsBusiness && !form.businessName.trim())
       e.businessName = "Business name is required";
     if (form.email && !/\S+@\S+\.\S+/.test(form.email))
@@ -200,6 +202,7 @@ export default function RateCardForm() {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
+    setSubmitError("");
 
     const packageNames = [...selected]
       .map((id) => packages.find((p) => p.id === id)?.name)
@@ -207,7 +210,7 @@ export default function RateCardForm() {
       .join(", ");
 
     try {
-      await fetch("/api/rate-card", {
+      const res = await fetch("/api/rate-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -220,10 +223,18 @@ export default function RateCardForm() {
           message: form.message,
         }),
       });
-    } catch { /* fail silently */ }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSubmitError(data?.error || "Something went wrong. Please check your details and try again.");
+        setLoading(false);
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setSubmitError("Connection failed. Please try again.");
+    }
 
     setLoading(false);
-    setSubmitted(true);
   };
 
   return (
@@ -423,6 +434,10 @@ export default function RateCardForm() {
                         onChange={(e) => set("message", e.target.value)}
                       />
                     </div>
+
+                    {submitError && (
+                      <p style={{ color: "#f97d00", fontSize: 12, textAlign: "center" }}>{submitError}</p>
+                    )}
 
                     {/* Submit */}
                     <motion.button

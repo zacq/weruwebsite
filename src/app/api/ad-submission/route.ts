@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isValidFullName, isValidKenyanPhone } from "@/lib/validateLead";
 
 const BASE_ID  = "appXyMV3O6ycSVRAi";
 const TABLE_ID = process.env.AIRTABLE_AD_TABLE_ID ?? "tblifCk8Mp05lyyVo";
@@ -14,9 +15,16 @@ export async function POST(req: NextRequest) {
       daysOfWeek, instructions,
     } = body;
 
-    if (!contactName || !phone || !email || !adType || !flightStartDate || !flightEndDate) {
+    if (
+      !isValidFullName(contactName) ||
+      !isValidKenyanPhone(phone) ||
+      !email ||
+      !adType ||
+      !flightStartDate ||
+      !flightEndDate
+    ) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields" },
+        { success: false, error: "Please enter your full name and a valid Kenyan phone number." },
         { status: 400 }
       );
     }
