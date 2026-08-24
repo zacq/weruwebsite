@@ -53,17 +53,22 @@ export default function DataTable({ config, records, onPatch, onDelete }: DataTa
   );
 
   return (
-    <div className="rounded-2xl bg-white overflow-hidden" style={{ border: "1px solid rgba(0,0,0,0.06)" }}>
-      <div className="p-4 flex items-center justify-between gap-3" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+    <div
+      className="rounded-2xl bg-white overflow-hidden"
+      style={{ border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 1px 3px rgba(249,125,0,0.05), 0 1px 2px rgba(0,0,0,0.03)" }}
+    >
+      <div className="p-3.5 sm:p-4 flex items-center justify-between gap-3" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by name or phone…"
-          className="text-sm px-3 py-2 rounded-lg w-full max-w-xs"
+          placeholder="Search name or phone…"
+          className="text-sm px-3 py-2.5 sm:py-2 rounded-lg w-full max-w-[220px] sm:max-w-xs transition-shadow focus:outline-none"
           style={{ border: "1px solid rgba(0,0,0,0.12)" }}
+          onFocus={(e) => { e.currentTarget.style.borderColor = "#f97d00"; }}
+          onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)"; }}
         />
-        <span className="text-xs text-black/40 whitespace-nowrap">{sorted.length} of {records.length}</span>
+        <span className="text-xs text-black/40 whitespace-nowrap shrink-0">{sorted.length} of {records.length}</span>
       </div>
 
       <div className="overflow-x-auto">
@@ -90,8 +95,10 @@ export default function DataTable({ config, records, onPatch, onDelete }: DataTa
                         <select
                           value={String(value ?? col.options?.[0] ?? "")}
                           onChange={(e) => onPatch(record.id, { [col.key]: e.target.value })}
-                          className="text-xs px-2 py-1.5 rounded-lg"
+                          className="text-xs px-2 py-2 rounded-lg transition-colors focus:outline-none"
                           style={{ border: "1px solid rgba(0,0,0,0.15)" }}
+                          onFocus={(e) => { e.currentTarget.style.borderColor = "#f97d00"; }}
+                          onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.15)"; }}
                         >
                           {col.options?.map((opt) => (
                             <option key={opt} value={opt}>{opt}</option>
@@ -110,8 +117,9 @@ export default function DataTable({ config, records, onPatch, onDelete }: DataTa
                             const n = Number(e.target.value);
                             if (!Number.isNaN(n) && n !== value) onPatch(record.id, { [col.key]: n });
                           }}
-                          className="text-xs w-16 px-2 py-1.5 rounded-lg tabular-nums"
+                          className="text-xs w-16 px-2 py-2 rounded-lg tabular-nums transition-colors focus:outline-none"
                           style={{ border: "1px solid rgba(0,0,0,0.15)" }}
+                          onFocus={(e) => { e.currentTarget.style.borderColor = "#f97d00"; }}
                         />
                       </td>
                     );
@@ -126,7 +134,7 @@ export default function DataTable({ config, records, onPatch, onDelete }: DataTa
                   <td className="px-4 py-2 text-right">
                     <button
                       onClick={() => setDetailRecord(record)}
-                      className="text-xs font-semibold whitespace-nowrap"
+                      className="text-xs font-semibold whitespace-nowrap py-1.5 px-1 transition-opacity hover:opacity-70 active:scale-95"
                       style={{ color: "#f97d00" }}
                     >
                       View →
@@ -141,7 +149,7 @@ export default function DataTable({ config, records, onPatch, onDelete }: DataTa
                           onDelete(record.id);
                         }
                       }}
-                      className="text-xs font-semibold text-red-600 hover:text-red-700 whitespace-nowrap"
+                      className="text-xs font-semibold text-red-600 whitespace-nowrap py-1.5 px-1 transition-opacity hover:opacity-70 active:scale-95"
                     >
                       Delete
                     </button>

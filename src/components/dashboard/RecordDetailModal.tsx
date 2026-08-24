@@ -26,19 +26,19 @@ export default function RecordDetailModal({ record, detailField, onClose }: Reco
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
-        className="w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-2xl bg-white p-6"
+        className="w-full max-w-lg max-h-[85vh] sm:max-h-[80vh] overflow-y-auto rounded-2xl bg-white p-4 sm:p-6"
         style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.35)" }}
       >
         <div className="flex items-start justify-between mb-4">
-          <div>
-            <h3 className="font-bold text-lg" style={{ color: "#0A0A0A" }}>
+          <div className="min-w-0">
+            <h3 className="font-bold text-lg truncate" style={{ color: "#0A0A0A" }}>
               {String(record.fields.Name ?? "Entry")}
             </h3>
             <p className="text-xs text-black/40">{String(record.fields.Phone ?? "")}</p>
           </div>
           <button
             onClick={onClose}
-            className="text-black/30 hover:text-black/70 transition-colors text-lg leading-none"
+            className="shrink-0 w-9 h-9 -mr-1.5 -mt-1 flex items-center justify-center rounded-full text-black/30 hover:text-black/70 hover:bg-black/5 active:scale-90 transition-all text-lg leading-none"
             aria-label="Close"
           >
             ✕

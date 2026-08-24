@@ -34,7 +34,7 @@ export default function ExportCsvButton({ config, records }: ExportCsvButtonProp
   return (
     <button
       onClick={handleExport}
-      className="text-xs font-semibold px-3 py-2 rounded-lg whitespace-nowrap"
+      className="text-xs font-semibold px-3.5 py-2.5 sm:py-2 rounded-lg whitespace-nowrap bg-white transition-all duration-150 hover:border-black/25 active:scale-95"
       style={{ border: "1px solid rgba(0,0,0,0.12)", color: "#0A0A0A" }}
     >
       Export CSV

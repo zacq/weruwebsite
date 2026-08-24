@@ -101,16 +101,18 @@ export default function DashboardPage() {
 
   const activeConfig = active !== "overview" ? DASHBOARD_TABLES[active] : null;
 
+  const isInitialLoad = loading && Object.keys(records).length === 0;
+
   return (
-    <div className="min-h-screen flex" style={{ background: "#F5F5F4" }}>
+    <div className="min-h-screen flex flex-col sm:flex-row" style={{ background: "#F5F5F4" }}>
       <Sidebar active={active} onSelect={setActive} />
 
-      <main className="flex-1 p-6 sm:p-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold" style={{ color: "#0A0A0A" }}>
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold" style={{ color: "#0A0A0A" }}>
             {active === "overview" ? "Overview" : activeConfig?.label}
           </h1>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between sm:justify-end gap-3">
             {lastUpdated && (
               <span className="text-xs text-black/40">
                 Updated {lastUpdated.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
@@ -119,8 +121,8 @@ export default function DashboardPage() {
             <button
               onClick={fetchAll}
               disabled={loading}
-              className="text-xs font-semibold px-3 py-2 rounded-lg text-white disabled:opacity-50"
-              style={{ background: "#f97d00" }}
+              className="text-xs font-semibold px-3.5 py-2 rounded-lg text-white transition-all duration-150 active:scale-95 disabled:opacity-50"
+              style={{ background: "#f97d00", boxShadow: "0 2px 10px rgba(249,125,0,0.25)" }}
             >
               {loading ? "Refreshing…" : "Refresh"}
             </button>
@@ -133,9 +135,22 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {active === "overview" ? (
+        {isInitialLoad ? (
           <div className="flex flex-col gap-6">
-            <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+              {DASHBOARD_TABLE_KEYS.map((key) => (
+                <div
+                  key={key}
+                  className="h-24 rounded-2xl bg-white animate-pulse"
+                  style={{ border: "1px solid rgba(0,0,0,0.06)" }}
+                />
+              ))}
+            </div>
+            <div className="h-56 rounded-2xl bg-white animate-pulse" style={{ border: "1px solid rgba(0,0,0,0.06)" }} />
+          </div>
+        ) : active === "overview" ? (
+          <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {DASHBOARD_TABLE_KEYS.map((key) => {
                 const config = DASHBOARD_TABLES[key];
                 const rows = records[key] ?? [];
@@ -153,12 +168,12 @@ export default function DashboardPage() {
               })}
             </div>
 
-            <div className="rounded-2xl bg-white p-5" style={{ border: "1px solid rgba(0,0,0,0.06)" }}>
+            <div className="rounded-2xl bg-white p-4 sm:p-5" style={{ border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 1px 3px rgba(249,125,0,0.05), 0 1px 2px rgba(0,0,0,0.03)" }}>
               <h2 className="text-sm font-bold mb-3" style={{ color: "#0A0A0A" }}>Quiz entries — last 14 days</h2>
               <TrendChart records={records.quiz ?? []} dateField="Submitted At" />
             </div>
 
-            <div className="rounded-2xl bg-white p-5" style={{ border: "1px solid rgba(0,0,0,0.06)" }}>
+            <div className="rounded-2xl bg-white p-4 sm:p-5" style={{ border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 1px 3px rgba(249,125,0,0.05), 0 1px 2px rgba(0,0,0,0.03)" }}>
               <h2 className="text-sm font-bold mb-3" style={{ color: "#0A0A0A" }}>Recent activity</h2>
               <div className="flex flex-col divide-y" style={{ borderColor: "rgba(0,0,0,0.05)" }}>
                 {recentActivity.map(({ tableKey, record }) => {
@@ -190,7 +205,7 @@ export default function DashboardPage() {
           </div>
         ) : activeConfig ? (
           <div className="flex flex-col gap-6">
-            <div className="rounded-2xl bg-white p-5" style={{ border: "1px solid rgba(0,0,0,0.06)" }}>
+            <div className="rounded-2xl bg-white p-4 sm:p-5" style={{ border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 1px 3px rgba(249,125,0,0.05), 0 1px 2px rgba(0,0,0,0.03)" }}>
               <h2 className="text-sm font-bold mb-3" style={{ color: "#0A0A0A" }}>Entries per day (last 14 days)</h2>
               <TrendChart records={records[active] ?? []} dateField={activeConfig.dateField} />
             </div>

@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Fraunces, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import FloatingCTA from "@/components/ui/FloatingCTA";
-import ViewerCaptureModal from "@/components/ui/ViewerCaptureModal";
+import SiteChrome from "@/components/layout/SiteChrome";
 import { SITE_LOGO_URL, HERO_BG_DESKTOP_URL } from "@/lib/brandAssets";
 
 const display = Bricolage_Grotesque({
@@ -128,10 +126,7 @@ export default function RootLayout({
         ))}
       </head>
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <FloatingCTA />
-        <ViewerCaptureModal />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
