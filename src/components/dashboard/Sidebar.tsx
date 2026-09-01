@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { DASHBOARD_TABLES } from "@/lib/dashboardTables";
 
 type SidebarProps = {
@@ -9,10 +10,19 @@ type SidebarProps = {
 
 const NAV_ITEMS = [
   { key: "overview", label: "Overview" },
+  { key: "quiz-management", label: "Quiz Management" },
   ...Object.values(DASHBOARD_TABLES).map((t) => ({ key: t.key, label: t.label })),
 ];
 
 export default function Sidebar({ active, onSelect }: SidebarProps) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch("/api/dashboard/logout", { method: "POST" });
+    router.replace("/dashboard/login");
+    router.refresh();
+  };
+
   return (
     <>
       {/* Desktop — fixed vertical sidebar */}
@@ -42,6 +52,15 @@ export default function Sidebar({ active, onSelect }: SidebarProps) {
             </button>
           );
         })}
+        <button
+          onClick={handleLogout}
+          className="mt-auto text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 active:scale-[0.98]"
+          style={{ color: "rgba(255,255,255,0.35)" }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.35)"; }}
+        >
+          Log out
+        </button>
       </aside>
 
       {/* Mobile — sticky top bar with horizontally scrollable pill nav */}
@@ -70,6 +89,13 @@ export default function Sidebar({ active, onSelect }: SidebarProps) {
               </button>
             );
           })}
+          <button
+            onClick={handleLogout}
+            className="shrink-0 px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 active:scale-95"
+            style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.40)" }}
+          >
+            Log out
+          </button>
         </div>
       </div>
     </>

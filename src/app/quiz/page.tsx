@@ -1,21 +1,42 @@
 import type { Metadata } from "next";
 import QuizForm from "@/components/ui/QuizForm";
+import { getActiveQuiz } from "@/lib/getActiveQuiz";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "96+4 Quiz — Weru TV",
-  description:
-    "Think you know Weru FM? Answer all 10 questions correctly and stand a chance to win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.",
-  openGraph: {
-    title: "96+4 Quiz — Weru TV",
-    description:
-      "Think you know Weru FM? Answer all 10 questions correctly and stand a chance to win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const quiz = await getActiveQuiz();
+  const title = quiz ? `${quiz.title} — Weru TV` : "Quiz — Weru TV";
+  const description = quiz
+    ? `Think you know Weru FM? Answer all 10 questions correctly and stand a chance to win a ${quiz.prize}.`
+    : "Check back soon for the next Weru TV quiz.";
+  return {
+    title,
+    description,
+    openGraph: { title, description },
+  };
+}
 
-export default function QuizPage() {
+export default async function QuizPage() {
+  const quiz = await getActiveQuiz();
+
+  if (!quiz) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#0A0A0A" }}>
+        <div className="text-center max-w-md">
+          <p className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "rgba(255,255,255,0.25)" }}>
+            No quiz running
+          </p>
+          <h1 className="text-white font-bold text-3xl sm:text-4xl mb-4">Check back soon.</h1>
+          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+            There&apos;s no active quiz right now — follow Weru TV &amp; FM to know when the next one drops.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="min-h-screen relative overflow-hidden"
@@ -46,22 +67,22 @@ export default function QuizPage() {
             className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2 sm:mb-3"
             style={{ color: "rgba(255,255,255,0.25)" }}
           >
-            96+4 Quiz
+            {quiz.title}
           </p>
           <h1
             className="text-white font-bold leading-none mb-3 sm:mb-4"
             style={{ fontSize: "clamp(2rem, 7vw, 4rem)", letterSpacing: "-0.02em" }}
           >
-            96+4<br />Quiz
+            {quiz.title}
           </h1>
           <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
             Answer all the questions correctly and stand a chance to win a{" "}
-            <span className="font-semibold" style={{ color: "#FACC15" }}>KSh 5,000 shopping voucher PLUS a visit to the Weru Studios</span>!
+            <span className="font-semibold" style={{ color: "#FACC15" }}>{quiz.prize}</span>!
           </p>
         </div>
 
         {/* Quiz */}
-        <QuizForm />
+        <QuizForm questions={quiz.questions} prize={quiz.prize} />
 
       </div>
     </div>

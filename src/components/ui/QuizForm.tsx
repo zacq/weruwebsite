@@ -2,63 +2,11 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const QUESTIONS = [
-  {
-    q: "When did Weru FM begin broadcasting?",
-    options: ["26th Dec 2016", "3rd July 2017", "26th Dec 2017"],
-    correct: 1,
-  },
-  {
-    q: "Who is the current host of Weru Beats?",
-    options: ["Empress Natty", "Ajelyne George", "Mwenda H the Pilot"],
-    correct: 0,
-  },
-  {
-    q: "Who among these is not a news anchor on Weru FM?",
-    options: ["Mercy Ndumba", "Dorcas Kaaria", "Raymond Mwenda"],
-    correct: 1,
-  },
-  {
-    q: "Who was the first host of Reggae Kuruka?",
-    options: ["Dj Tush untamed", "Selector Prince", "Empress Rita"],
-    correct: 1,
-  },
-  {
-    q: "Which is the Weru FM frequency?",
-    options: ["96.4", "94.6", "96.6"],
-    correct: 0,
-  },
-  {
-    q: "Who is the current host of Mantu Kimencu?",
-    options: ["Mc Kithumba", "Empress Rita", "Prince Ken"],
-    correct: 0,
-  },
-  {
-    q: "Who is the current host of Chanchamuka?",
-    options: ["Martin Gichunge & Karimi Kaunty", "Martin Gichunge & Makena Matiri", "Makena Matiri"],
-    correct: 2,
-  },
-  {
-    q: "Who are the current hosts of Reggaemania on Weru FM?",
-    options: ["Empress Rita & Dj Tush untamed", "Empress Rita & Empress Natty", "Empress Natty & Dj Tush untamed"],
-    correct: 1,
-  },
-  {
-    q: "Munene wa Kagwi hosts which shows on Weru FM?",
-    options: ["Tuthunkume & Choir Kanisene", "Tuthunkume & Tuborerie", "Tuthunkume & Tutharimwe"],
-    correct: 0,
-  },
-  {
-    q: "Who among these have never hosted Chanchamuka on Weru FM?",
-    options: ["Mc Kithumba", "Betty Ntinyari", "Morgan Mwiti"],
-    correct: 2,
-  },
-];
+import type { QuizQuestion } from "@/lib/getActiveQuiz";
 
 type Phase = "quiz" | "contact" | "done";
 
-export default function QuizForm() {
+export default function QuizForm({ questions: QUESTIONS, prize }: { questions: QuizQuestion[]; prize: string }) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(10).fill(null));
   const [phase, setPhase] = useState<Phase>("quiz");
@@ -264,7 +212,7 @@ export default function QuizForm() {
             Enter your details to complete your entry.
           </h2>
           <p className="text-sm mb-8 sm:mb-10" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Score 10/10 to win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.
+            Score 10/10 to win a {prize}.
           </p>
 
           <div className="flex flex-col gap-4 sm:gap-5 mb-7 sm:mb-8">
@@ -310,7 +258,7 @@ export default function QuizForm() {
           </button>
 
           <p className="text-xs text-center mt-4" style={{ color: "rgba(255,255,255,0.22)" }}>
-            Score 10/10 to win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.
+            Score 10/10 to win a {prize}.
           </p>
         </motion.div>
       )}
@@ -346,7 +294,7 @@ export default function QuizForm() {
           <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
             {duplicate
               ? "This phone number has already entered the 96+4 Quiz. Only one entry per person is allowed."
-              : "Thanks for playing the 96+4 Quiz! If you scored 10/10 you're in line for a KSh 5,000 shopping voucher and a visit to the Weru Studios. Winners will be contacted directly and announced on Weru TV & FM. Good luck!"}
+              : `Thanks for playing! If you scored 10/10 you're in line for a ${prize}. Winners will be contacted directly and announced on Weru TV & FM. Good luck!`}
           </p>
         </motion.div>
       )}

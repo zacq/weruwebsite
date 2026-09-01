@@ -7,6 +7,7 @@ import StatCard from "@/components/dashboard/StatCard";
 import TrendChart from "@/components/dashboard/TrendChart";
 import DataTable from "@/components/dashboard/DataTable";
 import ExportCsvButton from "@/components/dashboard/ExportCsvButton";
+import QuizManagementPanel from "@/components/dashboard/QuizManagementPanel";
 import type { AirtableRecord } from "@/components/dashboard/types";
 
 type RecordsState = Record<string, AirtableRecord[]>;
@@ -110,7 +111,7 @@ export default function DashboardPage() {
       <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6">
           <h1 className="text-xl sm:text-2xl font-bold" style={{ color: "#0A0A0A" }}>
-            {active === "overview" ? "Overview" : activeConfig?.label}
+            {active === "overview" ? "Overview" : active === "quiz-management" ? "Quiz Management" : activeConfig?.label}
           </h1>
           <div className="flex items-center justify-between sm:justify-end gap-3">
             {lastUpdated && (
@@ -203,6 +204,8 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+        ) : active === "quiz-management" ? (
+          <QuizManagementPanel />
         ) : activeConfig ? (
           <div className="flex flex-col gap-6">
             <div className="rounded-2xl bg-white p-4 sm:p-5" style={{ border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 1px 3px rgba(249,125,0,0.05), 0 1px 2px rgba(0,0,0,0.03)" }}>
