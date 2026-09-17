@@ -137,6 +137,26 @@ export const DASHBOARD_TABLES: Record<string, DashboardTableConfig> = {
       },
     ],
   },
+  "radio-requests": {
+    key: "radio-requests",
+    label: "Radio Requests",
+    tableId: "tbl97g7j9lQ8WJXJU",
+    nameField: "Name",
+    dateField: "Submitted At",
+    deletable: true,
+    columns: [
+      { key: "Name", label: "Name", type: "text" },
+      { key: "Request", label: "Request", type: "text" },
+      { key: "Submitted At", label: "Submitted", type: "datetime" },
+      {
+        key: "Status",
+        label: "Status",
+        type: "select",
+        editable: true,
+        options: ["New", "Played", "Dismissed"],
+      },
+    ],
+  },
 };
 
 export const DASHBOARD_TABLE_KEYS = Object.keys(DASHBOARD_TABLES);

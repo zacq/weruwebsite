@@ -5,6 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { radioSchedule, type RadioDaySchedule } from "@/data/radioSchedule";
 
 const RADIO_STREAM_URL = "https://stream.zeno.fm/d4gvmydrosbuv";
+const RADIO_MOUNT_ID = RADIO_STREAM_URL.split("/").pop()!;
+const METADATA_URL = `https://api.zeno.fm/mounts/metadata/subscribe/${RADIO_MOUNT_ID}`;
+
+type PlayedTrack = { title: string; at: Date };
 
 type Day = RadioDaySchedule["day"];
 
@@ -62,6 +66,9 @@ export default function RadioSection() {
   const [expanded, setExpanded] = useState(false);
   const [notified, setNotified] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
+  const [recentTracks, setRecentTracks] = useState<PlayedTrack[]>([]);
+  const [requestText, setRequestText] = useState("");
+  const [requestStatus, setRequestStatus] = useState<"idle" | "sending" | "sent">("idle");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playingRef = useRef(false);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -71,6 +78,27 @@ export default function RadioSection() {
       const stored = localStorage.getItem("radio_notifications");
       if (stored) setNotified(new Set(JSON.parse(stored)));
     } catch { /* ignore */ }
+  }, []);
+
+  // Live "recently played" — real metadata from Zeno.fm's stream, not invented.
+  // Weru FM is presenter-hosted rather than an automated music rotation, so
+  // this may legitimately stay empty if the station never tags a StreamTitle —
+  // that's the honest outcome, not a bug to work around with placeholder data.
+  useEffect(() => {
+    const source = new EventSource(METADATA_URL);
+    source.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const title: string | undefined = data?.streamTitle || data?.title;
+        if (!title || !title.trim()) return;
+        setRecentTracks((prev) => {
+          if (prev[0]?.title === title) return prev;
+          return [{ title, at: new Date() }, ...prev].slice(0, 5);
+        });
+      } catch { /* non-JSON keepalive event — ignore */ }
+    };
+    source.onerror = () => { /* browser auto-reconnects EventSource */ };
+    return () => source.close();
   }, []);
 
   // Initialise audio and attempt autoplay on mount
@@ -144,6 +172,27 @@ export default function RadioSection() {
     try {
       localStorage.setItem("radio_notifications", JSON.stringify([...next]));
     } catch { /* ignore */ }
+  };
+
+  const submitRequest = async () => {
+    const trimmed = requestText.trim();
+    if (trimmed.length < 2 || requestStatus === "sending") return;
+    setRequestStatus("sending");
+    try {
+      const res = await fetch("/api/radio-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ request: trimmed }),
+      });
+      if (!res.ok) throw new Error("failed");
+      setRequestStatus("sent");
+      setRequestText("");
+      setTimeout(() => setRequestStatus("idle"), 3000);
+    } catch {
+      setRequestStatus("idle");
+      setToast("Couldn't send your request — try again");
+      setTimeout(() => setToast(null), 3500);
+    }
   };
 
   const schedule = radioSchedule.find((d) => d.day === selectedDay);
@@ -282,6 +331,48 @@ export default function RadioSection() {
             {/* Gradient bar */}
             <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, #f97d00, #C8102E, #f97d00)" }} />
           </motion.div>
+
+          {/* Recently played + song requests */}
+          <div className="mt-4 rounded-2xl overflow-hidden" style={{ background: "#111111" }}>
+            <div className="px-5 pt-4 pb-1">
+              <span className="text-[10px] font-extrabold tracking-widest uppercase text-white/40">Recently Played</span>
+            </div>
+            {recentTracks.length > 0 ? (
+              <div className="px-5 pb-3">
+                {recentTracks.map((track, i) => (
+                  <div key={`${track.title}-${i}`} className="flex items-center justify-between gap-3 py-2" style={{ borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : undefined }}>
+                    <span className="text-white text-sm font-semibold truncate">{track.title}</span>
+                    <span className="text-white/35 text-xs shrink-0 tabular-nums">
+                      {track.at.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="px-5 pb-4 text-white/35 text-xs">Nothing tagged yet — check back while a show is live.</p>
+            )}
+
+            <div className="flex items-center gap-2 px-4 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <input
+                type="text"
+                value={requestText}
+                onChange={(e) => setRequestText(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && submitRequest()}
+                placeholder="Request a song or send a shoutout…"
+                maxLength={200}
+                className="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl text-sm text-white placeholder-white/35 outline-none"
+                style={{ background: "rgba(255,255,255,0.06)" }}
+              />
+              <button
+                onClick={submitRequest}
+                disabled={requestText.trim().length < 2 || requestStatus === "sending"}
+                className="shrink-0 px-4 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-40"
+                style={{ background: "#f97d00", color: "#111" }}
+              >
+                {requestStatus === "sent" ? "Sent ✓" : requestStatus === "sending" ? "…" : "Send"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
