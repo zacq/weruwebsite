@@ -6,6 +6,8 @@ import TVScheduleSection from "@/components/sections/TVScheduleSection";
 import ShowsCarousel from "@/components/sections/ShowsCarousel";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
+import AppGate from "@/components/layout/AppGate";
+import AppTV from "@/components/sections/AppTV";
 import { getNewsFeed, type Headline } from "@/lib/getNewsFeed";
 import { getStreamSource } from "@/lib/getStreamSource";
 import { getPresenters } from "@/lib/getPresenters";
@@ -58,35 +60,38 @@ export default async function TVPage() {
   const [feed, initialStream, presenters] = await Promise.all([getNewsFeed(), getStreamSource(), getPresenters()]);
 
   return (
-    <>
-      <ScrollToTop />
-      {/* Live stream hero */}
-      <LiveStream initialStream={initialStream} />
+    <AppGate
+      appContent={<AppTV />}
+      webContent={
+        <>
+          <ScrollToTop />
+          {/* Live stream hero */}
+          <LiveStream initialStream={initialStream} />
 
-      {/* Scrolling headlines ticker */}
-      <HeadlineTicker headlines={feed} />
+          {/* Scrolling headlines ticker */}
+          <HeadlineTicker headlines={feed} />
 
-      {/* Full program schedule */}
-      <TVScheduleSection />
+          {/* Full program schedule */}
+          <TVScheduleSection />
 
-      {/* TV Shows */}
-      <ShowsCarousel presenters={presenters} />
+          {/* TV Shows */}
+          <ShowsCarousel presenters={presenters} />
 
-      {/* Latest Videos */}
+          {/* Latest Headlines */}
+          <NewsGrid articles={toNewsArticles(feed)} />
 
-      {/* Latest Headlines */}
-      <NewsGrid articles={toNewsArticles(feed)} />
+          {/* Advertise on TV CTA */}
+          <div className="px-4 pt-12 pb-2 text-center" style={{ background: "#111111" }}>
+            <p className="text-white font-extrabold text-2xl mb-2">Advertise on Weru TV</p>
+            <p className="text-white/55 text-sm max-w-md mx-auto">
+              Reach millions of viewers across the Mount Kenya region and East Africa.
+            </p>
+          </div>
 
-      {/* Advertise on TV CTA */}
-      <div className="px-4 pt-12 pb-2 text-center" style={{ background: "#111111" }}>
-        <p className="text-white font-extrabold text-2xl mb-2">Advertise on Weru TV</p>
-        <p className="text-white/55 text-sm max-w-md mx-auto">
-          Reach millions of viewers across the Mount Kenya region and East Africa.
-        </p>
-      </div>
-
-      <RateCardForm />
-      <Footer />
-    </>
+          <RateCardForm />
+          <Footer />
+        </>
+      }
+    />
   );
 }

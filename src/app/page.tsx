@@ -1,8 +1,11 @@
 import lazyImport from "next/dynamic";
 import HomeHero from "@/components/sections/HomeHero";
+import AppGate from "@/components/layout/AppGate";
+import AppHome from "@/components/sections/AppHome";
 import { getHotMixes } from "@/lib/getHotMixes";
 import { getPresenters } from "@/lib/getPresenters";
 import { getPartners } from "@/lib/getPartners";
+import { getNewsFeed } from "@/lib/getNewsFeed";
 import { OG_LOGO_URL } from "@/lib/brandAssets";
 
 export const dynamic    = "force-static";
@@ -66,45 +69,52 @@ export default async function HomePage() {
   const hotMixes = await getHotMixes();
   const presenters = await getPresenters();
   const partners = await getPartners();
+  const feed = await getNewsFeed();
+
   return (
-    <>
-      <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} />
+    <AppGate
+      appContent={<AppHome feed={feed} />}
+      webContent={
+        <>
+          <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} />
 
-      {/* Quiz bar — desktop only; mobile version lives inside HomeHero */}
-      <div className="hidden sm:flex justify-center px-4 py-4" style={{ background: "#060608" }}>
-        <a
-          href="/quiz"
-          className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl"
-          style={{
-            background: "linear-gradient(145deg,#4A2000 0%,#7A3A00 55%,#5C2A00 100%)",
-            border: "1px solid rgba(250,180,50,0.28)",
-            boxShadow: "0 8px 28px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06)",
-          }}
-        >
-          <div className="shrink-0 w-8 h-8 rounded-full grid place-items-center text-base" style={{ background: "rgba(0,0,0,.35)" }}>
-            🎯
+          {/* Quiz bar — desktop only; mobile version lives inside HomeHero */}
+          <div className="hidden sm:flex justify-center px-4 py-4" style={{ background: "#060608" }}>
+            <a
+              href="/quiz"
+              className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl"
+              style={{
+                background: "linear-gradient(145deg,#4A2000 0%,#7A3A00 55%,#5C2A00 100%)",
+                border: "1px solid rgba(250,180,50,0.28)",
+                boxShadow: "0 8px 28px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06)",
+              }}
+            >
+              <div className="shrink-0 w-8 h-8 rounded-full grid place-items-center text-base" style={{ background: "rgba(0,0,0,.35)" }}>
+                🎯
+              </div>
+              <div className="min-w-0">
+                <p className="font-display font-bold text-white text-sm leading-snug">96+4 Quiz</p>
+                <p className="text-xs whitespace-nowrap" style={{ color: "rgba(244,241,236,.58)" }}>
+                  10 questions — win a KSh 5,000 shopping voucher + studio visit
+                </p>
+              </div>
+              <span className="shrink-0 px-4 py-1.5 rounded-full font-bold text-sm whitespace-nowrap" style={{ background: "#FACC15", color: "#1a1003" }}>
+                Start Quiz →
+              </span>
+            </a>
           </div>
-          <div className="min-w-0">
-            <p className="font-display font-bold text-white text-sm leading-snug">96+4 Quiz</p>
-            <p className="text-xs whitespace-nowrap" style={{ color: "rgba(244,241,236,.58)" }}>
-              10 questions — win a KSh 5,000 shopping voucher + studio visit
-            </p>
-          </div>
-          <span className="shrink-0 px-4 py-1.5 rounded-full font-bold text-sm whitespace-nowrap" style={{ background: "#FACC15", color: "#1a1003" }}>
-            Start Quiz →
-          </span>
-        </a>
-      </div>
 
-      <CultureSection presenters={presenters} />
-      <PlatformsSection />
-      <MultiStreamAdvantageSection />
-      <RadioPlatformsSection />
-      <HotMixesSection mixes={hotMixes} />
-      <OurBrandsSection />
-      <ReviewsCarousel />
-      <PartnersCarousel partners={partners} />
-      <Footer />
-    </>
+          <CultureSection presenters={presenters} />
+          <PlatformsSection />
+          <MultiStreamAdvantageSection />
+          <RadioPlatformsSection />
+          <HotMixesSection mixes={hotMixes} />
+          <OurBrandsSection />
+          <ReviewsCarousel />
+          <PartnersCarousel partners={partners} />
+          <Footer />
+        </>
+      }
+    />
   );
 }

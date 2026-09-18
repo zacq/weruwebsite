@@ -1,14 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { radioSchedule, type RadioDaySchedule } from "@/data/radioSchedule";
-
-const RADIO_STREAM_URL = "https://stream.zeno.fm/d4gvmydrosbuv";
-const RADIO_MOUNT_ID = RADIO_STREAM_URL.split("/").pop()!;
-const METADATA_URL = `https://api.zeno.fm/mounts/metadata/subscribe/${RADIO_MOUNT_ID}`;
-
-type PlayedTrack = { title: string; at: Date };
+import { useRadioPlayer } from "@/context/RadioPlayerContext";
 
 type Day = RadioDaySchedule["day"];
 
@@ -60,18 +55,13 @@ function BellIcon({ filled }: { filled: boolean }) {
 }
 
 export default function RadioSection() {
-  const [playing, setPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.8);
+  const { playing, volume, recentTracks, togglePlay, setVolume, autoplayOnce } = useRadioPlayer();
   const [selectedDay, setSelectedDay] = useState<Day>(todayName());
   const [expanded, setExpanded] = useState(false);
   const [notified, setNotified] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
-  const [recentTracks, setRecentTracks] = useState<PlayedTrack[]>([]);
   const [requestText, setRequestText] = useState("");
   const [requestStatus, setRequestStatus] = useState<"idle" | "sending" | "sent">("idle");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const playingRef = useRef(false);
-  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     try {
@@ -80,81 +70,15 @@ export default function RadioSection() {
     } catch { /* ignore */ }
   }, []);
 
-  // Live "recently played" — real metadata from Zeno.fm's stream, not invented.
-  // Weru FM is presenter-hosted rather than an automated music rotation, so
-  // this may legitimately stay empty if the station never tags a StreamTitle —
-  // that's the honest outcome, not a bug to work around with placeholder data.
+  // Attempt autoplay when the full Radio screen is visited — a no-op if the
+  // shared player already loaded elsewhere (e.g. started from the mini-player).
   useEffect(() => {
-    const source = new EventSource(METADATA_URL);
-    source.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        const title: string | undefined = data?.streamTitle || data?.title;
-        if (!title || !title.trim()) return;
-        setRecentTracks((prev) => {
-          if (prev[0]?.title === title) return prev;
-          return [{ title, at: new Date() }, ...prev].slice(0, 5);
-        });
-      } catch { /* non-JSON keepalive event — ignore */ }
-    };
-    source.onerror = () => { /* browser auto-reconnects EventSource */ };
-    return () => source.close();
-  }, []);
-
-  // Initialise audio and attempt autoplay on mount
-  useEffect(() => {
-    const audio = new Audio(RADIO_STREAM_URL);
-    audio.preload = "none";
-    audio.volume = 0.8;
-    audioRef.current = audio;
-
-    const scheduleReconnect = (delayMs: number) => {
-      if (!playingRef.current) return;
-      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
-      reconnectTimerRef.current = setTimeout(() => {
-        if (!playingRef.current || !audioRef.current) return;
-        audioRef.current.src = RADIO_STREAM_URL;
-        audioRef.current.load();
-        audioRef.current.play().catch(() => {});
-      }, delayMs);
-    };
-
-    audio.addEventListener("error",   () => scheduleReconnect(3000));
-    audio.addEventListener("stalled", () => scheduleReconnect(5000));
-    audio.addEventListener("ended",   () => scheduleReconnect(1000));
-
-    audio.play().then(() => {
-      playingRef.current = true;
-      setPlaying(true);
-    }).catch(() => {
-      // Browser blocked autoplay — user must press play
-    });
-
-    return () => {
-      audio.pause();
-      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
-    };
+    autoplayOnce();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-
-    if (playingRef.current) {
-      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
-      audioRef.current.pause();
-      playingRef.current = false;
-    } else {
-      audioRef.current.play().catch(() => {});
-      playingRef.current = true;
-    }
-    setPlaying(!playing);
-  };
-
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = parseFloat(e.target.value);
-    setVolume(v);
-    if (audioRef.current) audioRef.current.volume = v;
+    setVolume(parseFloat(e.target.value));
   };
 
   const volumeIcon = volume === 0 ? "🔇" : volume < 0.4 ? "🔈" : "🔊";

@@ -77,7 +77,11 @@ export default function AppTabBar() {
       }}
     >
       {TABS.map((tab) => {
-        const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
+        const active = tab.href === "/"
+          ? pathname === "/"
+          : tab.href === "/me"
+            ? pathname.startsWith("/me") || pathname.startsWith("/advertise")
+            : pathname.startsWith(tab.href);
         return (
           <Link
             key={tab.href}

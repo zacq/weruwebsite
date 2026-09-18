@@ -1,5 +1,8 @@
 import AdvertiseSection from "@/components/sections/AdvertiseSection";
+import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
+import AppGate from "@/components/layout/AppGate";
+import AppAdvertise from "@/components/sections/AppAdvertise";
 import { OG_LOGO_URL } from "@/lib/brandAssets";
 
 export const dynamic    = "force-static";
@@ -19,9 +22,19 @@ export const metadata = {
 
 export default function AdvertisePage() {
   return (
-    <>
-      <AdvertiseSection />
-      <Footer />
-    </>
+    <AppGate
+      appContent={
+        <>
+          <AppAdvertise />
+          <RateCardForm />
+        </>
+      }
+      webContent={
+        <>
+          <AdvertiseSection />
+          <Footer />
+        </>
+      }
+    />
   );
 }

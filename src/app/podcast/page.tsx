@@ -1,6 +1,9 @@
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
+import AppGate from "@/components/layout/AppGate";
+import AppShows from "@/components/sections/AppShows";
 import { PODCASTS } from "@/data/podcasts";
+import { getPresenters } from "@/lib/getPresenters";
 import type { Metadata } from "next";
 
 export const dynamic    = "force-static";
@@ -20,8 +23,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PodcastPage() {
+export default async function PodcastPage() {
+  const presenters = await getPresenters();
   return (
+    <AppGate
+      appContent={<AppShows presenters={presenters} />}
+      webContent={
     <>
       {/* Hero */}
       <section
@@ -123,5 +130,7 @@ export default function PodcastPage() {
 
       <Footer />
     </>
+      }
+    />
   );
 }

@@ -8,7 +8,7 @@ import { TV_LIVE_POSTER_URL } from "@/lib/brandAssets";
 
 const CHANNEL_ID = "UCKf9xsi0uL1mwdrq7PmZsQA";
 
-export default function LiveStream({ initialStream }: { initialStream?: StreamResponse }) {
+export default function LiveStream({ initialStream, compact = false }: { initialStream?: StreamResponse; compact?: boolean }) {
   const [stream, setStream] = useState<StreamResponse | null>(initialStream ?? null);
   const [showPoster, setShowPoster] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -63,6 +63,50 @@ export default function LiveStream({ initialStream }: { initialStream?: StreamRe
   const isStreamLive = true;
   const hasVideo    = true;
   const statusLabel = "Live from Weru Digital";
+
+  if (compact) {
+    return (
+      <div className="relative w-full overflow-hidden rounded-2xl" style={{ background: "#000", aspectRatio: "16/9" }}>
+        {stream === null && (
+          <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.7)" }}>
+            <div className="w-6 h-6 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+          </div>
+        )}
+        {stream?.type === "hls" && (
+          <video ref={videoRef} className="absolute inset-0 w-full h-full" style={{ objectFit: "cover" }} autoPlay muted playsInline />
+        )}
+        {embedSrc && (
+          <iframe
+            src={embedSrc}
+            title="Weru TV — Live Stream"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full"
+            style={{ border: "none", background: "#000" }}
+          />
+        )}
+        {embedSrc && (
+          <motion.div
+            className="absolute inset-0 z-10"
+            animate={{ opacity: showPoster ? 1 : 0 }}
+            transition={{ duration: 0.6 }}
+            style={{ pointerEvents: showPoster ? "auto" : "none" }}
+          >
+            <Image src={TV_LIVE_POSTER_URL} alt="Weru Digital — 100% Weru" fill priority className="object-cover" />
+          </motion.div>
+        )}
+        {isStreamLive && (
+          <span
+            className="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-widest uppercase text-white"
+            style={{ background: "#C8102E" }}
+          >
+            <span className="live-dot w-1.5 h-1.5 rounded-full bg-white" />
+            Live
+          </span>
+        )}
+      </div>
+    );
+  }
 
   return (
     <section

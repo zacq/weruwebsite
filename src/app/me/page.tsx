@@ -22,6 +22,16 @@ export default function MePage() {
 
           <MeNotificationToggle />
 
+          <p className="text-[11px] font-bold uppercase tracking-wider text-white/35 mt-8 mb-3">Business</p>
+          <a
+            href="/advertise"
+            className="flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-semibold text-white active:scale-[0.98] transition-transform"
+            style={{ background: "rgba(255,255,255,0.05)" }}
+          >
+            📢 Advertise with Weru TV
+            <span className="text-white/30">→</span>
+          </a>
+
           <p className="text-[11px] font-bold uppercase tracking-wider text-white/35 mt-8 mb-3">Contact</p>
           <div className="flex flex-col gap-2">
             <a
