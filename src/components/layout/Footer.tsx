@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
-import { SITE_LOGO_URL } from "@/lib/brandAssets";
 
 const footerLinks = [
   { label: "Home",       href: "/" },
@@ -22,37 +20,77 @@ const SOCIAL_PATHS: Record<string, string> = {
 const socials = [
   { label: "Facebook",  href: "https://facebook.com/werutv" },
   { label: "Instagram", href: "https://instagram.com/werutv" },
-  { label: "YouTube",   href: "https://youtube.com/@WeruTVOfficial" },
   { label: "X",         href: "https://x.com/werutv" },
+  { label: "YouTube",   href: "https://youtube.com/@WeruTVOfficial" },
   { label: "TikTok",    href: "https://tiktok.com/@werutv.fm96.4" },
 ];
 
-const FOOTER_BG = "#7A1010";
+const FOOTER_BG = "linear-gradient(160deg, #6E0E0E 0%, #4A0A0A 100%)";
+
+/* ── Icon set — simple outline glyphs, replacing emoji throughout the footer ── */
+function Icon({ path, className, style }: { path: string; className?: string; style?: React.CSSProperties }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} style={style} aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
+const PHONE_PATH  = "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.04 11.04 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z";
+const CHAT_PATH   = "M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z";
+const MAIL_PATH   = "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z";
+const TICKET_PATH = "M4 7a2 2 0 012-2h12a2 2 0 012 2v1.5a1.5 1.5 0 000 3V13a2 2 0 01-2 2H6a2 2 0 01-2-2v-1.5a1.5 1.5 0 000-3V7z";
+const DOC_PATH    = "M9 12h6m-6 4h4M7 21a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z";
+
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.112.552 4.158 1.601 5.973L0 24l6.179-1.621A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.472 14.864c-.298-.149-1.767-.872-2.041-.971-.274-.1-.474-.149-.673.15-.2.298-.773.97-.947 1.169-.174.2-.349.224-.647.075-.298-.15-1.258-.464-2.397-1.479-.886-.79-1.484-1.766-1.658-2.064-.174-.298-.019-.46.13-.608.134-.134.298-.348.447-.522.15-.174.2-.298.299-.497.1-.199.05-.373-.025-.522-.075-.149-.673-1.62-.922-2.219-.242-.58-.489-.502-.673-.512a12.9 12.9 0 00-.573-.011 1.1 1.1 0 00-.797.373c-.274.298-1.046 1.023-1.046 2.495 0 1.472 1.071 2.894 1.22 3.093.149.199 2.095 3.2 5.076 4.487.709.306 1.262.489 1.693.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.249-.694.249-1.289.174-1.413-.075-.124-.273-.199-.572-.348z" />
+    </svg>
+  );
+}
+
+function LogoMark({ size = 34 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
+      <defs>
+        <linearGradient id="werumark" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#FF9425" />
+          <stop offset="1" stopColor="#C8102E" />
+        </linearGradient>
+      </defs>
+      <path d="M2 10 L10 30 L16 16 L20 26 L24 16 L30 30 L38 10"
+            fill="none" stroke="url(#werumark)" strokeWidth="5.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 export default function Footer() {
   return (
     <footer style={{ background: FOOTER_BG, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
       <div className="max-w-6xl mx-auto px-4 py-6 md:py-10">
 
-        {/* Mobile: brand row + 2-col nav/contact — Desktop: 4-col grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+        {/* Mobile: brand row + 2-col nav/contact — Desktop: 3-col grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
 
           {/* Brand */}
           <div className="flex flex-col items-center md:items-start">
-            <Link href="/" className="inline-flex items-center">
-              <Image src={SITE_LOGO_URL} alt="Weru TV" width={90} height={30} className="object-contain" />
+            <Link href="/" className="inline-flex items-center gap-2">
+              <LogoMark />
+              <span className="leading-[1.05]">
+                <span className="block text-lg font-extrabold text-white tracking-tight">WERU</span>
+                <span className="block text-[10px] font-bold tracking-[0.2em]" style={{ color: "#FF9425" }}>DIGITAL</span>
+              </span>
             </Link>
-            <p className="text-xs mt-1.5 text-center md:text-left" style={{ color: "rgba(255,255,255,0.55)" }}>
+            <p className="text-xs mt-2 text-center md:text-left" style={{ color: "rgba(255,255,255,0.55)" }}>
               Kenya&apos;s premier broadcast experience.
             </p>
-            {/* Buttons — inline on mobile */}
             <div className="flex items-center gap-2 mt-3 flex-wrap justify-center md:justify-start">
               <a
                 href="#rate-card"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
                 style={{ background: "#f97d00" }}
               >
-                📋 Get Rate Card
+                <Icon path={DOC_PATH} className="w-3.5 h-3.5" /> Get Rate Card
               </a>
               <a
                 href="https://wa.me/254707065000?text=Weru%20TV%20Digital%20Hotline%20Number"
@@ -61,7 +99,7 @@ export default function Footer() {
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-bold"
                 style={{ background: "#25D366" }}
               >
-                💬 WhatsApp
+                <WhatsAppIcon className="w-3.5 h-3.5" /> WhatsApp
               </a>
             </div>
           </div>
@@ -86,10 +124,10 @@ export default function Footer() {
               ))}
               <Link
                 href="/quiz"
-                className="text-xs font-bold hover:opacity-80 transition-opacity mt-0.5"
+                className="inline-flex items-center gap-1.5 text-xs font-bold hover:opacity-80 transition-opacity mt-2"
                 style={{ color: "#FACC15" }}
               >
-                🎟️ 96+4 Quiz
+                <Icon path={TICKET_PATH} className="w-3.5 h-3.5" /> 96+4 Quiz
               </Link>
             </div>
 
@@ -100,69 +138,67 @@ export default function Footer() {
               </p>
 
               <p className="text-[9px] font-bold tracking-wider uppercase mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>Reception</p>
-              <a href="tel:+254700117026" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
-                📞 0700 117026
+              <a href="tel:+254700117026" className="inline-flex items-center gap-1.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                <Icon path={PHONE_PATH} className="w-3 h-3 shrink-0" style={{ color: "#f97d00" }} /> 0700 117026
               </a>
-              <a href="tel:+254738970438" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
-                📞 0738 970438
+              <a href="tel:+254738970438" className="inline-flex items-center gap-1.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                <Icon path={PHONE_PATH} className="w-3 h-3 shrink-0" style={{ color: "#f97d00" }} /> 0738 970438
               </a>
 
               <p className="text-[9px] font-bold tracking-wider uppercase mt-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>Commercials</p>
-              <a href="https://wa.me/254707065000" target="_blank" rel="noopener noreferrer" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
-                💬 0707 065000
+              <a href="https://wa.me/254707065000" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                <Icon path={CHAT_PATH} className="w-3 h-3 shrink-0" style={{ color: "#f97d00" }} /> 0707 065000
               </a>
 
               <p className="text-[9px] font-bold tracking-wider uppercase mt-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>News Hotline</p>
-              <a href="tel:+254703223363" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
-                📞 0703 223363
+              <a href="tel:+254703223363" className="inline-flex items-center gap-1.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                <Icon path={PHONE_PATH} className="w-3 h-3 shrink-0" style={{ color: "#f97d00" }} /> 0703 223363
               </a>
 
               <p className="text-[9px] font-bold tracking-wider uppercase mt-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>Email</p>
-              <a href="mailto:news@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ news@werutv.co.ke</a>
-              <a href="mailto:commercials@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ commercials@werutv.co.ke</a>
-              <a href="mailto:sales@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ sales@werutv.co.ke</a>
-              <a href="mailto:officeoftheceo@werutv.co.ke" className="hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>✉️ officeoftheceo@werutv.co.ke</a>
-            </div>
-          </div>
-
-          {/* Listener CTA */}
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <a
-              href="https://wa.me/254707065000"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-bold leading-snug hover:text-[#FACC15] transition-colors"
-              style={{ color: "rgba(255,255,255,0.85)" }}
-            >
-              Share your thoughts on<br />
-              <span style={{ color: "#FACC15" }}>0707 065000</span>
-            </a>
-            <div className="flex items-center gap-2 mt-1 flex-wrap justify-center md:justify-start">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 hover:brightness-125"
-                  style={{ background: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.75)" }}
-                >
-                  {SOCIAL_PATHS[s.label] && (
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d={SOCIAL_PATHS[s.label]} />
-                    </svg>
-                  )}
-                </a>
-              ))}
+              <a href="mailto:sales@werutv.co.ke" className="inline-flex items-center gap-1.5 hover:text-[#f97d00] transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>
+                <Icon path={MAIL_PATH} className="w-3 h-3 shrink-0" style={{ color: "#f97d00" }} /> sales@werutv.co.ke
+              </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar — socials + tagline */}
         <div
-          className="mt-5 pt-4 flex flex-col sm:flex-row items-center justify-between gap-1.5 text-[10px]"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.40)" }}
+          className="mt-6 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.10)" }}
+        >
+          <div className="flex items-center gap-2">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 hover:brightness-125"
+                style={{ background: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.75)" }}
+              >
+                {SOCIAL_PATHS[s.label] && (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d={SOCIAL_PATHS[s.label]} />
+                  </svg>
+                )}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 text-[10px]" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <span>Arts · Culture · Community</span>
+            <span style={{ width: 28, height: 1, background: "rgba(255,255,255,0.25)" }} />
+            <span className="font-bold tracking-wider uppercase" style={{ color: "#FACC15" }}>Every Voice Matters.</span>
+          </div>
+        </div>
+
+        {/* Legal line */}
+        <div
+          className="mt-4 pt-3 flex flex-col sm:flex-row items-center justify-between gap-1.5 text-[10px]"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" }}
         >
           <span>© {new Date().getFullYear()} Weru Digital. All rights reserved.</span>
           <div className="flex items-center gap-3">
