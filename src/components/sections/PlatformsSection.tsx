@@ -104,7 +104,7 @@ export default function PlatformsSection() {
             </span>
           </h2>
           <p className="text-white/45 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
-            From your living room in Nyeri to a lounge in Harare — Weru TV reaches you wherever you are.
+            From your living room in Meru to a lounge in Harare — Weru TV reaches you wherever you are.
           </p>
         </motion.div>
 
