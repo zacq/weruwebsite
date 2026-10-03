@@ -159,6 +159,14 @@ export default function DashboardPage() {
                 if (key === "quiz") {
                   const perfect = rows.filter((r) => r.fields.Score === 10).length;
                   subLabel = `${perfect} perfect score${perfect === 1 ? "" : "s"}`;
+                } else if (key === "cause-nominations") {
+                  const counts = rows.reduce<Record<string, number>>((acc, r) => {
+                    const cause = r.fields.Cause as string | undefined;
+                    if (cause) acc[cause] = (acc[cause] ?? 0) + 1;
+                    return acc;
+                  }, {});
+                  const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+                  subLabel = top ? `${top[0]} — ${top[1]}` : undefined;
                 } else {
                   const fresh = rows.filter((r) => r.fields.Status === "New").length;
                   subLabel = `${fresh} new`;

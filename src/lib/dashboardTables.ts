@@ -1,3 +1,5 @@
+import { CAUSES } from "@/data/causes";
+
 export type ColumnType = "text" | "date" | "datetime" | "array" | "number" | "select";
 
 export type ColumnConfig = {
@@ -155,6 +157,40 @@ export const DASHBOARD_TABLES: Record<string, DashboardTableConfig> = {
         editable: true,
         options: ["New", "Played", "Dismissed"],
       },
+    ],
+  },
+  "nice-messages": {
+    key: "nice-messages",
+    label: "Nice Messages",
+    tableId: "tblNd90qLZJDylUR5",
+    nameField: "Name",
+    dateField: "Submitted At",
+    detailField: "Message",
+    deletable: false,
+    columns: [
+      { key: "Name", label: "Name", type: "text" },
+      { key: "Phone", label: "Phone", type: "text" },
+      { key: "Message", label: "Message", type: "text" },
+      { key: "Submitted At", label: "Submitted", type: "datetime" },
+      {
+        key: "Status",
+        label: "Status",
+        type: "select",
+        editable: true,
+        options: ["New", "Shortlisted", "Invited", "Declined"],
+      },
+    ],
+  },
+  "cause-nominations": {
+    key: "cause-nominations",
+    label: "Cause Nominations",
+    tableId: "tblW0fenNcFlHDpbM",
+    nameField: "Cause",
+    dateField: "Submitted At",
+    deletable: false,
+    columns: [
+      { key: "Cause", label: "Cause", type: "select", options: [...CAUSES] },
+      { key: "Submitted At", label: "Submitted", type: "datetime" },
     ],
   },
 };

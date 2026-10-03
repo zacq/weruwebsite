@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QuizForm from "@/components/ui/QuizForm";
+import WeruExperience from "@/components/ui/WeruExperience";
 import { getActiveQuiz } from "@/lib/getActiveQuiz";
 
 export const dynamic    = "force-static";
@@ -10,10 +11,10 @@ const QUIZ_PAUSED = process.env.QUIZ_PAUSED === "true";
 
 export async function generateMetadata(): Promise<Metadata> {
   const quiz = QUIZ_PAUSED ? null : await getActiveQuiz();
-  const title = quiz ? `${quiz.title} — Weru TV` : "Quiz — Weru TV";
+  const title = quiz ? `${quiz.title} — Weru TV` : "Weru Website Experience — Weru TV";
   const description = quiz
     ? `Think you know Weru FM? Answer all 10 questions correctly and stand a chance to win a ${quiz.prize}.`
-    : "The Weru TV quiz is on hold — a new round is coming soon.";
+    : "The quiz is on hold, but tell us something nice, nominate a cause for Weru to support, and find out how you can donate.";
   return {
     title,
     description,
@@ -23,25 +24,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function QuizPage() {
   const quiz = QUIZ_PAUSED ? null : await getActiveQuiz();
-
-  if (!quiz) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#0A0A0A" }}>
-        <div className="text-center max-w-md">
-          <p className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-3" style={{ color: "rgba(255,255,255,0.25)" }}>
-            Quiz on hold
-          </p>
-          <h1 className="text-white font-bold text-3xl sm:text-4xl mb-4">A new quiz is coming soon.</h1>
-          <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Thank you to every Weru loyalist who played the 96+4 Quiz — your energy keeps this station going.
-          </p>
-          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-            We&apos;re putting together the next round now. Follow Weru TV &amp; FM to know the moment it drops.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div
@@ -67,28 +49,54 @@ export default async function QuizPage() {
 
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
 
-        {/* Page intro */}
-        <div className="mb-10 sm:mb-14">
-          <p
-            className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2 sm:mb-3"
-            style={{ color: "rgba(255,255,255,0.25)" }}
-          >
-            {quiz.title}
-          </p>
-          <h1
-            className="text-white font-bold leading-none mb-3 sm:mb-4"
-            style={{ fontSize: "clamp(2rem, 7vw, 4rem)", letterSpacing: "-0.02em" }}
-          >
-            {quiz.title}
-          </h1>
-          <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Answer all the questions correctly and stand a chance to win a{" "}
-            <span className="font-semibold" style={{ color: "#FACC15" }}>{quiz.prize}</span>!
-          </p>
-        </div>
+        {!quiz ? (
+          <>
+            {/* Page intro — quiz on hold */}
+            <div className="mb-10 sm:mb-14">
+              <p
+                className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2 sm:mb-3"
+                style={{ color: "rgba(255,255,255,0.25)" }}
+              >
+                Quiz on hold
+              </p>
+              <h1
+                className="text-white font-bold leading-none mb-3 sm:mb-4"
+                style={{ fontSize: "clamp(2rem, 7vw, 4rem)", letterSpacing: "-0.02em" }}
+              >
+                A new quiz is coming — but we still want to hear from you.
+              </h1>
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+                Thank you to every Weru loyalist who played the 96+4 Quiz — your energy keeps this station going.
+              </p>
+            </div>
 
-        {/* Quiz */}
-        <QuizForm questions={quiz.questions} prize={quiz.prize} />
+            <WeruExperience />
+          </>
+        ) : (
+          <>
+            {/* Page intro — active quiz */}
+            <div className="mb-10 sm:mb-14">
+              <p
+                className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2 sm:mb-3"
+                style={{ color: "rgba(255,255,255,0.25)" }}
+              >
+                {quiz.title}
+              </p>
+              <h1
+                className="text-white font-bold leading-none mb-3 sm:mb-4"
+                style={{ fontSize: "clamp(2rem, 7vw, 4rem)", letterSpacing: "-0.02em" }}
+              >
+                {quiz.title}
+              </h1>
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+                Answer all the questions correctly and stand a chance to win a{" "}
+                <span className="font-semibold" style={{ color: "#FACC15" }}>{quiz.prize}</span>!
+              </p>
+            </div>
+
+            <QuizForm questions={quiz.questions} prize={quiz.prize} />
+          </>
+        )}
 
       </div>
     </div>
