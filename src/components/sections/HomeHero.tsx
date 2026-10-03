@@ -4,7 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { tvSchedule } from "@/data/tvSchedule";
-import { HERO_BG_DESKTOP_URL } from "@/lib/brandAssets";
+import { HERO_BG_DESKTOP_URL, HERO_CAROUSEL_SLIDES } from "@/lib/brandAssets";
+
+const SLIDE_INTERVAL_MS = 7000;
+const FADE_DURATION_MS = 2000;
 
 /* ─── Platform chips ─────────────────────────────────────────────────────── */
 const PLATFORMS = [
@@ -268,12 +271,30 @@ function Headline({ fontSize }: { fontSize: string }) {
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
 export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
   const [liveShow, setLiveShow] = useState<ReturnType<typeof getCurrentShow>>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [slidesReady, setSlidesReady] = useState(false);
 
   useEffect(() => {
     setLiveShow(getCurrentShow());
     const t = setInterval(() => setLiveShow(getCurrentShow()), 60_000);
     return () => clearInterval(t);
   }, []);
+
+  // Mount only the first slide synchronously (keeps LCP fast); the rest start
+  // loading a tick after first paint, well ahead of the first transition.
+  useEffect(() => {
+    const t = setTimeout(() => setSlidesReady(true), 50);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (videoUrl) return;
+    const t = setInterval(
+      () => setActiveSlide((i) => (i + 1) % HERO_CAROUSEL_SLIDES.length),
+      SLIDE_INTERVAL_MS
+    );
+    return () => clearInterval(t);
+  }, [videoUrl]);
 
   return (
     <section className="relative w-full overflow-hidden" style={{ height: "100dvh" }}>
@@ -291,10 +312,23 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
           playsInline
         />
       ) : (
-        <>
-          <div className="sm:hidden absolute inset-0 hero-bg-mobile" style={{ zIndex: -3 }} />
-          <div className="hidden sm:block absolute inset-0 hero-bg" style={{ zIndex: -3 }} />
-        </>
+        HERO_CAROUSEL_SLIDES.map((slide, i) => {
+          if (i > 0 && !slidesReady) return null;
+          const style = (url: string): React.CSSProperties => ({
+            zIndex: -3,
+            backgroundImage: `url(${url})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+            opacity: i === activeSlide ? 1 : 0,
+            transition: `opacity ${FADE_DURATION_MS}ms ease-in-out`,
+          });
+          return (
+            <div key={i}>
+              <div className="sm:hidden absolute inset-0" style={style(slide.mobile)} />
+              <div className="hidden sm:block absolute inset-0" style={style(slide.desktop)} />
+            </div>
+          );
+        })
       )}
 
       {/* Scrim — mobile: heavy behind headline, deep dip over the empty spacer row, light behind self-opaque cards */}
