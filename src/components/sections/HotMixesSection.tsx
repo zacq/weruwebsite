@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import type { HotMix } from "@/data/hotMixes";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function MixCard({ title, dj, mixcloudFeed, i }: { title: string; dj: string; mixcloudFeed: string | null; i: number }) {
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
   return (
     <motion.div
       className="glass rounded-2xl p-4 sm:p-5 flex flex-col gap-3"
@@ -21,9 +24,9 @@ function MixCard({ title, dj, mixcloudFeed, i }: { title: string; dj: string; mi
       {mixcloudFeed ? (
         <iframe
           title={`${title} by ${dj}`}
-          src={`https://www.mixcloud.com/widget/iframe/?hide_cover=1&light=0&feed=${encodeURIComponent(mixcloudFeed)}`}
+          src={`https://www.mixcloud.com/widget/iframe/?hide_cover=1&light=0&mini=${isMobile ? 1 : 0}&feed=${encodeURIComponent(mixcloudFeed)}`}
           width="100%"
-          height="120"
+          height={isMobile ? 60 : 120}
           frameBorder="0"
           loading="lazy"
           className="rounded-lg"
