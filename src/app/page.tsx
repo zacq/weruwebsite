@@ -6,6 +6,7 @@ import { getHotMixes } from "@/lib/getHotMixes";
 import { getPresenters } from "@/lib/getPresenters";
 import { getPartners } from "@/lib/getPartners";
 import { getNewsFeed } from "@/lib/getNewsFeed";
+import { getAdTicker } from "@/lib/getAdTicker";
 import { OG_LOGO_URL } from "@/lib/brandAssets";
 
 export const dynamic    = "force-static";
@@ -70,13 +71,14 @@ export default async function HomePage() {
   const presenters = await getPresenters();
   const partners = await getPartners();
   const feed = await getNewsFeed();
+  const adTicker = await getAdTicker();
 
   return (
     <AppGate
       appContent={<AppHome feed={feed} />}
       webContent={
         <>
-          <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} />
+          <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} adTicker={adTicker} />
 
           {/* Quiz bar — desktop only; mobile version lives inside HomeHero */}
           <div className="hidden sm:flex justify-center px-4 py-4" style={{ background: "#060608" }}>

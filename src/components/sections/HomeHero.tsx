@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { tvSchedule } from "@/data/tvSchedule";
 import { HERO_BG_DESKTOP_URL, HERO_CAROUSEL_SLIDES } from "@/lib/brandAssets";
+import AdTicker from "./AdTicker";
+import type { AdTickerItem } from "@/lib/getAdTicker";
 
 const SLIDE_INTERVAL_MS = 7000;
 const FADE_DURATION_MS = 2000;
@@ -269,7 +271,7 @@ function Headline({ fontSize }: { fontSize: string }) {
 }
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
-export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
+export default function HomeHero({ videoUrl, adTicker }: { videoUrl?: string; adTicker: AdTickerItem[] }) {
   const [liveShow, setLiveShow] = useState<ReturnType<typeof getCurrentShow>>(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [slidesReady, setSlidesReady] = useState(false);
@@ -355,16 +357,21 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
 
       {/* ── MOBILE layout (< sm): LIVE pill → Title → [spacer] → TV → FM → Quiz ── */}
       <div
-        className="sm:hidden relative z-10 flex flex-col px-4"
+        className="sm:hidden relative z-10 flex flex-col"
         style={{ paddingTop: "3.5rem", height: "100dvh", paddingBottom: "18%" }}
       >
+        {/* Ad ticker */}
+        <div className="shrink-0">
+          <AdTicker items={adTicker} />
+        </div>
+
         {/* LIVE pill */}
-        <div className="pt-2 shrink-0">
+        <div className="pt-2 px-4 shrink-0">
           <LivePill liveShow={liveShow} />
         </div>
 
         {/* Title */}
-        <div className="shrink-0 mt-2">
+        <div className="shrink-0 mt-2 px-4">
           <Headline fontSize="clamp(24px, 6.2vw, 36px)" />
         </div>
 
@@ -372,17 +379,17 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
         <div className="flex-1" />
 
         {/* TV card — full width, compact */}
-        <div className="shrink-0">
+        <div className="shrink-0 px-4">
           <TVCard style={{ width: "100%" }} delay={0.2} compact />
         </div>
 
         {/* FM card — slightly narrower, tight gap above quiz */}
-        <div className="shrink-0 mt-2" style={{ width: "88%" }}>
+        <div className="shrink-0 mt-2 px-4" style={{ width: "calc(88% + 2rem)" }}>
           <FMCard style={{ width: "100%" }} delay={0.32} compact />
         </div>
 
         {/* Quiz bar — slightly smaller than FM card */}
-        <div className="shrink-0 mt-1.5" style={{ width: "82%" }}>
+        <div className="shrink-0 mt-1.5 px-4" style={{ width: "calc(82% + 2rem)" }}>
           <QuizBar compact />
         </div>
       </div>
@@ -392,6 +399,7 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
         className="hidden sm:flex relative z-10 flex-col"
         style={{ height: "100dvh", paddingTop: "3.5rem" }}
       >
+        <AdTicker items={adTicker} />
         <div className="flex-1 px-10 md:px-12 pt-14 pb-4 max-w-2xl">
           <div className="mb-5 sm:mb-6">
             <LivePill liveShow={liveShow} />

@@ -1,6 +1,8 @@
 import RadioSection from "@/components/sections/RadioSection";
 import RateCardForm from "@/components/sections/RateCardForm";
 import Footer from "@/components/layout/Footer";
+import AdTicker from "@/components/sections/AdTicker";
+import { getAdTicker } from "@/lib/getAdTicker";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
@@ -23,10 +25,12 @@ export const metadata = {
   },
 };
 
-export default function RadioPage() {
+export default async function RadioPage() {
+  const adTicker = await getAdTicker();
   return (
     <>
       <div className="h-20" />
+      <AdTicker items={adTicker} />
       <RadioSection />
 
       {/* Advertise on radio CTA */}
