@@ -13,21 +13,29 @@ export default function AdTicker({ items }: { items: AdTickerItem[] }) {
   return (
     <div
       className="w-full overflow-hidden flex items-stretch"
-      style={{ width: "100vw", marginLeft: "calc(50% - 50vw)", background: "#15120E", height: "2.25rem" }}
+      style={{
+        width: "100vw",
+        marginLeft: "calc(50% - 50vw)",
+        background: "#7A1010",
+        height: "3rem",
+        borderTop: "2px solid #f97d00",
+        borderBottom: "2px solid #f97d00",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.45)",
+      }}
     >
       <span
-        className="shrink-0 flex items-center px-3 text-[10px] font-extrabold tracking-widest uppercase"
-        style={{ background: "#0A0A0A", color: "#f97d00" }}
+        className="shrink-0 flex items-center gap-1.5 px-4 text-xs font-extrabold tracking-widest uppercase"
+        style={{ background: "#0A0A0A", color: "#FACC15" }}
       >
-        Ads
+        📢 Ads
       </span>
       <div className="flex-1 overflow-hidden">
-        <div className="scroll-right inline-flex items-center h-full gap-8 whitespace-nowrap">
+        <div className="scroll-right inline-flex items-center h-full gap-10 whitespace-nowrap">
           {track.map((item, i) => (
             <Link
               key={i}
               href="/quiz"
-              className="inline-flex items-center gap-2 shrink-0 text-xs font-medium text-white/75 hover:text-[#f97d00] transition-colors"
+              className="inline-flex items-center gap-2 shrink-0 text-sm font-bold text-white hover:text-[#FACC15] transition-colors"
             >
               {item.icon && <span aria-hidden="true">{item.icon}</span>}
               {item.message}
