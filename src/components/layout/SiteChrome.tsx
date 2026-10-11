@@ -9,11 +9,14 @@ import AppTabBar from "./AppTabBar";
 import RadioMiniPlayer from "./RadioMiniPlayer";
 import FloatingCTA from "@/components/ui/FloatingCTA";
 import ViewerCaptureModal from "@/components/ui/ViewerCaptureModal";
+import AdTicker from "@/components/sections/AdTicker";
+import type { AdTickerItem } from "@/lib/getAdTicker";
 import { RadioPlayerProvider, useRadioPlayer } from "@/context/RadioPlayerContext";
 
-function SiteChromeInner({ children }: { children: React.ReactNode }) {
+function SiteChromeInner({ children, adTicker }: { children: React.ReactNode; adTicker: AdTickerItem[] }) {
   const pathname = usePathname();
   const isDashboard = pathname?.startsWith("/dashboard");
+  const isTvPage = pathname?.startsWith("/tv");
   const [isNative, setIsNative] = useState(false);
   const { visible: playerVisible } = useRadioPlayer();
 
@@ -32,6 +35,11 @@ function SiteChromeInner({ children }: { children: React.ReactNode }) {
   return (
     <>
       {isNative ? <AppHeader /> : <Navbar />}
+      {!isNative && !isTvPage && (
+        <div className="fixed left-0 right-0 z-40" style={{ top: "3.5rem" }}>
+          <AdTicker items={adTicker} />
+        </div>
+      )}
       <main className="flex-1" style={bottomInset ? { paddingBottom: bottomInset } : undefined}>
         {children}
       </main>
@@ -43,10 +51,10 @@ function SiteChromeInner({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function SiteChrome({ children }: { children: React.ReactNode }) {
+export default function SiteChrome({ children, adTicker }: { children: React.ReactNode; adTicker: AdTickerItem[] }) {
   return (
     <RadioPlayerProvider>
-      <SiteChromeInner>{children}</SiteChromeInner>
+      <SiteChromeInner adTicker={adTicker}>{children}</SiteChromeInner>
     </RadioPlayerProvider>
   );
 }

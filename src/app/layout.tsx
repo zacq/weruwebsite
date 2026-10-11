@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Fraunces, Hanken_Grotesk } from "next/font/google"
 import "./globals.css";
 import SiteChrome from "@/components/layout/SiteChrome";
 import { SITE_LOGO_URL, HERO_BG_DESKTOP_URL } from "@/lib/brandAssets";
+import { getAdTicker } from "@/lib/getAdTicker";
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -109,9 +110,10 @@ const jsonLd = [
   },
 ];
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const adTicker = await getAdTicker();
   return (
     <html lang="en" className={`h-full ${display.variable} ${serif.variable} ${ui.variable}`}>
       <head>
@@ -126,7 +128,7 @@ export default function RootLayout({
         ))}
       </head>
       <body className="min-h-full flex flex-col">
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome adTicker={adTicker}>{children}</SiteChrome>
       </body>
     </html>
   );

@@ -5,8 +5,6 @@ import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { tvSchedule } from "@/data/tvSchedule";
 import { HERO_BG_DESKTOP_URL, HERO_CAROUSEL_SLIDES } from "@/lib/brandAssets";
-import AdTicker from "./AdTicker";
-import type { AdTickerItem } from "@/lib/getAdTicker";
 
 const SLIDE_INTERVAL_MS = 7000;
 const FADE_DURATION_MS = 2000;
@@ -271,7 +269,7 @@ function Headline({ fontSize }: { fontSize: string }) {
 }
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
-export default function HomeHero({ videoUrl, adTicker }: { videoUrl?: string; adTicker: AdTickerItem[] }) {
+export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
   const [liveShow, setLiveShow] = useState<ReturnType<typeof getCurrentShow>>(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [slidesReady, setSlidesReady] = useState(false);
@@ -360,13 +358,8 @@ export default function HomeHero({ videoUrl, adTicker }: { videoUrl?: string; ad
         className="sm:hidden relative z-10 flex flex-col"
         style={{ paddingTop: "3.5rem", height: "100dvh", paddingBottom: "18%" }}
       >
-        {/* Ad ticker */}
-        <div className="shrink-0">
-          <AdTicker items={adTicker} />
-        </div>
-
         {/* LIVE pill */}
-        <div className="pt-2 px-4 shrink-0">
+        <div className="pt-12 px-4 shrink-0">
           <LivePill liveShow={liveShow} />
         </div>
 
@@ -399,7 +392,6 @@ export default function HomeHero({ videoUrl, adTicker }: { videoUrl?: string; ad
         className="hidden sm:flex relative z-10 flex-col"
         style={{ height: "100dvh", paddingTop: "3.5rem" }}
       >
-        <AdTicker items={adTicker} />
         <div className="flex-1 px-10 md:px-12 pt-14 pb-4 max-w-2xl">
           <div className="mb-5 sm:mb-6">
             <LivePill liveShow={liveShow} />
