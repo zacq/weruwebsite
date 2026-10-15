@@ -17,6 +17,59 @@ function getRemaining() {
   };
 }
 
+function useCountdown() {
+  const [mounted, setMounted] = useState(false);
+  const [remaining, setRemaining] = useState<ReturnType<typeof getRemaining>>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    setRemaining(getRemaining());
+    const t = setInterval(() => setRemaining(getRemaining()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  return { live: mounted && remaining === null, remaining };
+}
+
+/* ─── Compact single-row pill — mobile hero ─────────────────────────────── */
+export function WeruYTChip({ delay = 0.3 }: { delay?: number }) {
+  const { live, remaining } = useCountdown();
+
+  return (
+    <motion.a
+      href={YOUTUBE_CHANNEL_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-full w-full"
+      style={{
+        border: "1px solid rgba(255,59,48,0.22)",
+        background: "rgba(40,6,6,0.70)",
+        backdropFilter: "blur(8px)",
+      }}
+      initial={{ opacity: 0, x: -16 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay, duration: 0.5 }}
+    >
+      <span style={{ color: "#FF3B30" }}>▶</span>
+      <span className="font-bold text-xs text-white whitespace-nowrap">WERU YT</span>
+      <span className="text-white/30">·</span>
+      {live ? (
+        <span className="font-bold text-xs whitespace-nowrap" style={{ color: "#FF3B30" }}>
+          🔴 Live now
+        </span>
+      ) : (
+        <span className="text-xs text-white/65 tabular-nums whitespace-nowrap">
+          {remaining ? `${remaining.days}d ${String(remaining.hours).padStart(2, "0")}h ${String(remaining.minutes).padStart(2, "0")}m` : "—"}
+        </span>
+      )}
+      <span className="ml-auto text-[10px] font-bold whitespace-nowrap" style={{ color: "#FACC15" }}>
+        Watch →
+      </span>
+    </motion.a>
+  );
+}
+
+/* ─── Full card — desktop hero ───────────────────────────────────────────── */
 export default function WeruYTCard({
   style,
   delay = 0.7,
@@ -27,15 +80,7 @@ export default function WeruYTCard({
   compact?: boolean;
 }) {
   const controls = useAnimation();
-  const [mounted, setMounted] = useState(false);
-  const [remaining, setRemaining] = useState<ReturnType<typeof getRemaining>>(null);
-
-  useEffect(() => {
-    setMounted(true);
-    setRemaining(getRemaining());
-    const t = setInterval(() => setRemaining(getRemaining()), 1000);
-    return () => clearInterval(t);
-  }, []);
+  const { live, remaining } = useCountdown();
 
   useEffect(() => {
     const run = async () => {
@@ -55,14 +100,12 @@ export default function WeruYTCard({
     run();
   }, [controls, delay]);
 
-  const live = mounted && remaining === null;
-
   return (
     <motion.a
       href={YOUTUBE_CHANNEL_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex flex-col items-center rounded-xl overflow-hidden w-full"
+      className="flex items-center gap-1.5 rounded-xl w-full px-3 py-2"
       style={{
         background: "rgba(40,6,6,0.88)",
         backdropFilter: "blur(16px)",
@@ -71,51 +114,25 @@ export default function WeruYTCard({
       }}
       initial={{ opacity: 0, y: 24 }}
       animate={controls}
-      whileHover={{ y: -4, boxShadow: "0 16px 40px rgba(255,59,48,0.25)" }}
+      whileHover={{ y: -2, boxShadow: "0 12px 30px rgba(255,59,48,0.22)" }}
     >
-      <div className={`flex items-center justify-center gap-1.5 px-3 ${compact ? "py-1.5" : "py-2.5"}`}>
-        <span style={{ color: "#FF3B30" }}>▶</span>
-        <span className={`font-display font-extrabold text-white tracking-wide ${compact ? "text-base" : "text-sm"}`}>
-          WERU YT
+      <span style={{ color: "#FF3B30" }}>▶</span>
+      <span className={`font-display font-extrabold text-white tracking-wide shrink-0 ${compact ? "text-xs" : "text-[11px]"}`}>
+        WERU YT
+      </span>
+      <span className="text-white/25 shrink-0">·</span>
+      {live ? (
+        <span className="font-bold text-xs whitespace-nowrap" style={{ color: "#FF3B30" }}>
+          🔴 Live now
         </span>
-      </div>
-      <div className={`px-3 w-full ${compact ? "pb-2 gap-1" : "pb-3 gap-1.5"} flex flex-col items-center`}>
-        {live ? (
-          <span
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs"
-            style={{ background: "#FF3B30", color: "#fff" }}
-          >
-            🔴 New episodes live
-          </span>
-        ) : (
-          <>
-            <p
-              className="text-[10px] font-semibold uppercase tracking-wider text-center"
-              style={{ color: "rgba(244,241,236,.55)" }}
-            >
-              New episodes premiere in
-            </p>
-            <div
-              className="flex items-center gap-1.5 font-display font-extrabold text-white tabular-nums"
-              style={{ fontSize: compact ? 14 : 16 }}
-            >
-              {remaining ? (
-                <>
-                  <span>{remaining.days}d</span>
-                  <span>{String(remaining.hours).padStart(2, "0")}h</span>
-                  <span>{String(remaining.minutes).padStart(2, "0")}m</span>
-                  <span>{String(remaining.seconds).padStart(2, "0")}s</span>
-                </>
-              ) : (
-                <span>&mdash;</span>
-              )}
-            </div>
-          </>
-        )}
-        <span className="mt-1 text-[10px] font-bold" style={{ color: "#FACC15" }}>
-          ▶ Watch on YouTube
+      ) : (
+        <span className="font-display font-bold text-white text-xs tabular-nums whitespace-nowrap">
+          {remaining ? `${remaining.days}d ${String(remaining.hours).padStart(2, "0")}h ${String(remaining.minutes).padStart(2, "0")}m` : "—"}
         </span>
-      </div>
+      )}
+      <span className="ml-auto text-[10px] font-bold whitespace-nowrap" style={{ color: "#FACC15" }}>
+        Watch →
+      </span>
     </motion.a>
   );
 }

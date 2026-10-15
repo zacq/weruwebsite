@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { tvSchedule } from "@/data/tvSchedule";
 import { HERO_BG_DESKTOP_URL, HERO_CAROUSEL_SLIDES } from "@/lib/brandAssets";
-import WeruYTCard from "./WeruYTCard";
+import WeruYTCard, { WeruYTChip } from "./WeruYTCard";
 
 const SLIDE_INTERVAL_MS = 7000;
 const FADE_DURATION_MS = 2000;
@@ -367,6 +367,11 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
         {/* Title */}
         <div className="shrink-0 mt-2 px-4">
           <Headline fontSize="clamp(24px, 6.2vw, 36px)" />
+        </div>
+
+        {/* YT premiere chip */}
+        <div className="shrink-0 mt-3 px-4">
+          <WeruYTChip delay={0.3} />
         </div>
 
         {/* Spacer — pushes cards toward bottom */}
