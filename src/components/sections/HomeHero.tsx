@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { tvSchedule } from "@/data/tvSchedule";
 import { HERO_BG_DESKTOP_URL, HERO_CAROUSEL_SLIDES } from "@/lib/brandAssets";
+import WeruYTCard from "./WeruYTCard";
 
 const SLIDE_INTERVAL_MS = 7000;
 const FADE_DURATION_MS = 2000;
@@ -405,11 +406,14 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
 
       {/* Desktop cards — absolute RHS */}
       <div
-        className="hidden sm:flex gap-3 absolute"
-        style={{ right: "4%", bottom: "24%", zIndex: 10 }}
+        className="hidden sm:flex flex-col gap-3 absolute"
+        style={{ right: "4%", bottom: "24%", zIndex: 10, width: "fit-content" }}
       >
-        <TVCard style={{ width: "clamp(200px, 22vw, 300px)" }} />
-        <FMCard style={{ width: "clamp(160px, 16vw, 240px)" }} />
+        <div className="flex gap-3">
+          <TVCard style={{ width: "clamp(200px, 22vw, 300px)" }} />
+          <FMCard style={{ width: "clamp(160px, 16vw, 240px)" }} />
+        </div>
+        <WeruYTCard delay={0.7} />
       </div>
 
     </section>
