@@ -2,9 +2,12 @@ import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import AppGate from "@/components/layout/AppGate";
 import AppShows from "@/components/sections/AppShows";
+import PodcastVideoCard from "@/components/sections/PodcastVideoCard";
 import { PODCASTS } from "@/data/podcasts";
 import { getPresenters } from "@/lib/getPresenters";
 import type { Metadata } from "next";
+
+const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@WeruDigitalOfficial";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
@@ -25,6 +28,7 @@ export const metadata: Metadata = {
 
 export default async function PodcastPage() {
   const presenters = await getPresenters();
+  const videoPodcasts = PODCASTS.filter((show) => show.youtubeId);
   return (
     <AppGate
       appContent={<AppShows presenters={presenters} />}
@@ -64,8 +68,47 @@ export default async function PodcastPage() {
           >
             📺 Watch Live
           </Link>
+          <a
+            href={YOUTUBE_CHANNEL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-opacity hover:opacity-80"
+            style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.15)" }}
+          >
+            ▶ More on YouTube
+          </a>
         </div>
       </section>
+
+      {/* Latest episodes — embedded YouTube, click to play */}
+      {videoPodcasts.length > 0 && (
+        <section className="px-4 py-16" style={{ background: "#0A0A0A" }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-white font-extrabold text-2xl">Latest episodes</h2>
+              <a
+                href={YOUTUBE_CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold hover:underline"
+                style={{ color: "#FACC15" }}
+              >
+                All episodes on YouTube →
+              </a>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videoPodcasts.map((show) => (
+                <PodcastVideoCard
+                  key={show.slug}
+                  youtubeId={show.youtubeId!}
+                  title={show.title}
+                  subtitle={show.episodeTitle}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Category grid */}
       <section
