@@ -105,7 +105,7 @@ export default function WeruYTCard({
       href={YOUTUBE_CHANNEL_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-1.5 rounded-xl w-full px-3 py-2"
+      className="flex flex-col items-center rounded-xl overflow-hidden w-full"
       style={{
         background: "rgba(40,6,6,0.88)",
         backdropFilter: "blur(16px)",
@@ -114,25 +114,51 @@ export default function WeruYTCard({
       }}
       initial={{ opacity: 0, y: 24 }}
       animate={controls}
-      whileHover={{ y: -2, boxShadow: "0 12px 30px rgba(255,59,48,0.22)" }}
+      whileHover={{ y: -4, boxShadow: "0 16px 40px rgba(255,59,48,0.25)" }}
     >
-      <span style={{ color: "#FF3B30" }}>▶</span>
-      <span className={`font-display font-extrabold text-white tracking-wide shrink-0 ${compact ? "text-xs" : "text-[11px]"}`}>
-        WERU YT
-      </span>
-      <span className="text-white/25 shrink-0">·</span>
-      {live ? (
-        <span className="font-bold text-xs whitespace-nowrap" style={{ color: "#FF3B30" }}>
-          🔴 Live now
+      <div className={`flex items-center justify-center gap-1.5 px-3 ${compact ? "py-1.5" : "py-2.5"}`}>
+        <span style={{ color: "#FF3B30" }}>▶</span>
+        <span className={`font-display font-extrabold text-white tracking-wide ${compact ? "text-base" : "text-sm"}`}>
+          WERU YT
         </span>
-      ) : (
-        <span className="font-display font-bold text-white text-xs tabular-nums whitespace-nowrap">
-          {remaining ? `${remaining.days}d ${String(remaining.hours).padStart(2, "0")}h ${String(remaining.minutes).padStart(2, "0")}m` : "—"}
+      </div>
+      <div className={`px-3 w-full ${compact ? "pb-2 gap-1" : "pb-3 gap-1.5"} flex flex-col items-center`}>
+        {live ? (
+          <span
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs"
+            style={{ background: "#FF3B30", color: "#fff" }}
+          >
+            🔴 New episodes live
+          </span>
+        ) : (
+          <>
+            <p
+              className="text-[10px] font-semibold uppercase tracking-wider text-center"
+              style={{ color: "rgba(244,241,236,.55)" }}
+            >
+              New episodes premiere in
+            </p>
+            <div
+              className="flex items-center gap-1.5 font-display font-extrabold text-white tabular-nums"
+              style={{ fontSize: compact ? 14 : 16 }}
+            >
+              {remaining ? (
+                <>
+                  <span>{remaining.days}d</span>
+                  <span>{String(remaining.hours).padStart(2, "0")}h</span>
+                  <span>{String(remaining.minutes).padStart(2, "0")}m</span>
+                  <span>{String(remaining.seconds).padStart(2, "0")}s</span>
+                </>
+              ) : (
+                <span>&mdash;</span>
+              )}
+            </div>
+          </>
+        )}
+        <span className="mt-1 text-[10px] font-bold" style={{ color: "#FACC15" }}>
+          ▶ Watch on YouTube
         </span>
-      )}
-      <span className="ml-auto text-[10px] font-bold whitespace-nowrap" style={{ color: "#FACC15" }}>
-        Watch →
-      </span>
+      </div>
     </motion.a>
   );
 }
