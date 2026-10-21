@@ -28,7 +28,7 @@ export const presenters: Presenter[] = [
     show: "Murimi Caruruku",
     role: "Host & Producer",
     category: "Program Presenters",
-    imageSrc: "/Presenters/nelly-githinji.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "The voice that wakes up Central Kenya every morning.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -54,7 +54,7 @@ export const presenters: Presenter[] = [
     show: "Gichunki Gia Ciaca",
     role: "Host",
     category: "Program Presenters",
-    imageSrc: "/Presenters/martin-gichunge.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Entertainment, community, and the stories that matter.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -80,7 +80,7 @@ export const presenters: Presenter[] = [
     show: "Tuburuke na Tash",
     role: "Host & Entertainer",
     category: "Program Presenters",
-    imageSrc: "/Presenters/mc-tash.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Afternoon energy, non-stop vibes.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -107,7 +107,7 @@ export const presenters: Presenter[] = [
     show: "Nkatha Cietu & Tutharimwe",
     role: "Host & Producer",
     category: "Program Presenters",
-    imageSrc: "/Presenters/makena-wa-matiri.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Celebrating the women who build our communities.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -133,7 +133,7 @@ export const presenters: Presenter[] = [
     show: "Gaaru E Ciaca",
     role: "Host",
     category: "Program Presenters",
-    imageSrc: "/Presenters/edward-mutembei.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "The conversation your family needs to have.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -158,7 +158,7 @@ export const presenters: Presenter[] = [
     show: "Tiira Muuru & Tuthunkume",
     role: "Host & Agricultural Expert",
     category: "Program Presenters",
-    imageSrc: "/Presenters/munene-wa-kagwi.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Farming knowledge that grows communities.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -184,7 +184,7 @@ export const presenters: Presenter[] = [
     show: "Nyontoka",
     role: "Host",
     category: "Program Presenters",
-    imageSrc: "/Presenters/mwenda-h-pilot.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Nyontoka — where culture and performance collide.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -210,7 +210,7 @@ export const presenters: Presenter[] = [
     show: "Mantu Kimenchu",
     role: "Host",
     category: "Program Presenters",
-    imageSrc: "/Presenters/mc-kithumba.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Adult conversations, honestly told.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -233,7 +233,7 @@ export const presenters: Presenter[] = [
     show: "Gikaro na Kaunty",
     role: "Host & Political Analyst",
     category: "Program Presenters",
-    imageSrc: "/Presenters/stella-karimi.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Holding power to account — one question at a time.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -259,7 +259,7 @@ export const presenters: Presenter[] = [
     show: "ReggaeMania",
     role: "Empress Ritta and Empress Natty",
     category: "Program Presenters",
-    imageSrc: "/Presenters/empress-rita-natty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Roots, culture, and the rhythms that unite us.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -286,7 +286,7 @@ export const presenters: Presenter[] = [
     show: "Ugima Ni Utonga",
     role: "Host",
     category: "Program Presenters",
-    imageSrc: "/Presenters/Betty%20-Ugima%20Ni%20Utonga.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Bringing health, wellness, and community conversations to Central Kenya.",
     socialLinks: {
       facebook: "https://facebook.com",
@@ -336,7 +336,7 @@ export const presenters: Presenter[] = [
     show: "Njumaa Sacco",
     role: "Hosts",
     category: "Program Presenters",
-    imageSrc: "/Presenters/Njumaa%20sacco.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Celebrating the pulse of Central Kenya — every week.",
     socialLinks: {
       facebook: "https://facebook.com/werutv",
@@ -365,7 +365,7 @@ export const presenters: Presenter[] = [
     show: "Weru Njumaa",
     role: "News Anchor",
     category: "News Anchors",
-    imageSrc: "/Presenters/News%20Anchors/Betty%20Ntinyari%20-Weru%20Njumaa.jpeg",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Delivering the week's closing news with clarity and authority.",
     socialLinks: {},
     bio: [
@@ -387,7 +387,7 @@ export const presenters: Presenter[] = [
     show: "Nteto Cia Weru",
     role: "News Anchor",
     category: "News Anchors",
-    imageSrc: "/Presenters/News%20Anchors/Dorcas%20wa%20Kaaria%20-%20Nteto%20cia%20Weru%20Wednesday.jpeg",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Midweek news — clear, accurate, and on time.",
     socialLinks: {},
     bio: [
@@ -409,7 +409,7 @@ export const presenters: Presenter[] = [
     show: "Weru Wikendi",
     role: "News Anchor",
     category: "News Anchors",
-    imageSrc: "/Presenters/News%20Anchors/Maureen%20Kinya%20-%20Weru%20Wikendi(Sat).jpeg",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Keeping Central Kenya informed through the weekend.",
     socialLinks: {},
     bio: [
@@ -431,7 +431,7 @@ export const presenters: Presenter[] = [
     show: "Weru Wikendi",
     role: "News Anchor",
     category: "News Anchors",
-    imageSrc: "/Presenters/News%20Anchors/Nelly%20wa%20Githinji%20-%20Weru%20Wikendi%20(Sunday).jpeg",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Closing the weekend with the news that matters.",
     socialLinks: {},
     bio: [
@@ -453,7 +453,7 @@ export const presenters: Presenter[] = [
     show: "Nteto Cia Weru",
     role: "News Anchor & Presenter",
     category: "News Anchors",
-    imageSrc: "/Presenters/News%20Anchors/Phineas%20Imaana%20-%20Nteto%20cia%20Weru%20Monday.jpeg",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Setting the week's news tone — every Monday.",
     socialLinks: {},
     bio: [
@@ -475,7 +475,7 @@ export const presenters: Presenter[] = [
     show: "Nteto Cia Weru",
     role: "News Anchor",
     category: "News Anchors",
-    imageSrc: "/Presenters/News%20Anchors/Win%20Shiro%20King%27eru%20%20-%20Nteto%20Cia%20Weru%20(Tues%20).jpeg",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Tuesday's news — delivered with confidence and precision.",
     socialLinks: {},
     bio: [
@@ -500,7 +500,7 @@ export const presenters: Presenter[] = [
     show: "Nairobi County Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Anthony%20Kathenya%20%20Nairobi%20County.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Weru TV's eyes and ears in the capital.",
     socialLinks: {},
     bio: [
@@ -521,7 +521,7 @@ export const presenters: Presenter[] = [
     show: "Isiolo County Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Bantam%20Murangiri-%20Isiolo%20County.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Reporting from the gateway to Northern Kenya.",
     socialLinks: {},
     bio: [
@@ -542,7 +542,7 @@ export const presenters: Presenter[] = [
     show: "Tigania Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Brian%20Kimathi%20%20Tigania%20Central%20%26East.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Ground-level reporting from Tigania Central and East.",
     socialLinks: {},
     bio: [
@@ -563,7 +563,7 @@ export const presenters: Presenter[] = [
     show: "Igembe Central Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Dancan%20Mwathi%20%20Igembe%20Central%20Subcounty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Telling the stories of Igembe Central with accuracy.",
     socialLinks: {},
     bio: [
@@ -584,7 +584,7 @@ export const presenters: Presenter[] = [
     show: "Igembe South Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Dennis%20Mugendi%20_%20Igembe%20South%20subcounty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Reporting from the heart of Igembe South.",
     socialLinks: {},
     bio: [
@@ -605,7 +605,7 @@ export const presenters: Presenter[] = [
     show: "Igembe North Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Edwin%20Gatobu%20%20Igembe%20North%20Subcounty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "On the ground in Igembe North — every story counts.",
     socialLinks: {},
     bio: [
@@ -626,7 +626,7 @@ export const presenters: Presenter[] = [
     show: "Buuri Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Elsie%20Gakii%20-%20Buuri%20Subcounty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Giving Buuri Subcounty a strong broadcast voice.",
     socialLinks: {},
     bio: [
@@ -647,7 +647,7 @@ export const presenters: Presenter[] = [
     show: "Tigania West & East Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/John%20Nthiga%20Tigania%20West%20%26Tigania%20East%20%20Subcounties.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Comprehensive coverage across Tigania West and East.",
     socialLinks: {},
     bio: [
@@ -668,7 +668,7 @@ export const presenters: Presenter[] = [
     show: "Tharaka Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Makena%20Mbaabu%20%20Tharaka%20Subcounty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Amplifying the voices of Tharaka Subcounty.",
     socialLinks: {},
     bio: [
@@ -689,7 +689,7 @@ export const presenters: Presenter[] = [
     show: "Maara Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Martin%20Mugambi-%20Maara%20Subcounty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "On the ground in Maara — news from the tea belt.",
     socialLinks: {},
     bio: [
@@ -710,7 +710,7 @@ export const presenters: Presenter[] = [
     show: "South & Central Imenti Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Mutugi%20Karee%20%20South%20Imenti%20%26%20Central%20Imenti%20subcounties.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Covering the commercial heartland of Meru County.",
     socialLinks: {},
     bio: [
@@ -731,7 +731,7 @@ export const presenters: Presenter[] = [
     show: "Chuka / Igambang'ombe Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Nicholas%20Chabari%20%20Chuka%20%20Igambang%27ombe%20Subcounty.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Reporting from Chuka and Igambang'ombe for Weru TV.",
     socialLinks: {},
     bio: [
@@ -752,7 +752,7 @@ export const presenters: Presenter[] = [
     show: "Imenti North Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Reporters%20%20Muthuri%20Muriuki%20-Imenti%20North.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Keeping Imenti North on the Weru TV map.",
     socialLinks: {},
     bio: [
@@ -773,7 +773,7 @@ export const presenters: Presenter[] = [
     show: "Embu County Correspondent",
     role: "Reporter",
     category: "Reporters",
-    imageSrc: "/Presenters/Reporters/Rita%20Mwaniki%20%20Embu%20County.png",
+    imageSrc: "/placeholder-presenter.svg",
     tagline: "Weru TV's link to Embu and the lower Mount Kenya region.",
     socialLinks: {},
     bio: [
