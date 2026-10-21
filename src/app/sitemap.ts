@@ -8,7 +8,7 @@ const PRESENTER_SLUGS = [
   "edward-mutembei", "munene-wa-kagwi", "mwenda-h-pilot", "mc-kithumba",
   "stella-karimi", "empress-rita-natty", "betty", "ntinyari-kinyua", "njumaa-sacco-squad",
   // News Anchors
-  "betty-ntinyari", "dorcas-wa-kaaria", "maureen-kinya", "nelly-wa-githinji",
+  "dorcas-wa-kaaria", "maureen-kinya", "nelly-wa-githinji",
   "phineas-imaana", "win-shiro-kingeru",
   // Reporters
   "anthony-kathenya", "bantam-murangiri", "brian-kimathi", "dancan-mwathi",

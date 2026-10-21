@@ -360,28 +360,6 @@ export const presenters: Presenter[] = [
   // ── NEWS ANCHORS ──────────────────────────────────────────────────────────
 
   {
-    slug: "betty-ntinyari",
-    name: "Betty Ntinyari",
-    show: "Weru Njumaa",
-    role: "News Anchor",
-    category: "News Anchors",
-    imageSrc: "/placeholder-presenter.svg",
-    tagline: "Delivering the week's closing news with clarity and authority.",
-    socialLinks: {},
-    bio: [
-      "Betty Ntinyari anchors Weru Njumaa, the station's flagship Friday night bulletin. With a composed on-screen presence and meticulous preparation, she closes out the week's news cycle for Central Kenya audiences — covering politics, community developments, and breaking stories with the precision that prime-time viewers expect.",
-    ],
-    programHistory: [
-      "Betty joined Weru TV's news team as the anchor of the Friday bulletin, a timeslot that demands both breadth and depth — viewers expect a comprehensive wrap of the week's biggest stories alongside fresh developments. She has consistently delivered, building a loyal Friday-night audience that trusts her to put the week's events in clear perspective.",
-      "Her anchoring style balances authority with accessibility, making complex stories digestible without losing their weight. She has covered county elections, regional security developments, and major public health events from the desk, coordinating seamlessly with field reporters across the Mount Kenya region.",
-    ],
-    stats: [
-      { value: "Friday", label: "Prime bulletin" },
-      { value: "News", label: "Specialisation" },
-      { value: "Weru Njumaa", label: "Show" },
-    ],
-  },
-  {
     slug: "dorcas-wa-kaaria",
     name: "Dorcas wa Kaaria",
     show: "Nteto Cia Weru",
