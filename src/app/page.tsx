@@ -80,7 +80,7 @@ export default async function HomePage() {
   const quizPromo: QuizPromo | null = activeQuiz
     ? {
         title: activeQuiz.title,
-        subtitle: `${activeQuiz.questions.length} questions — win a ${activeQuiz.prize}`,
+        subtitle: `${activeQuiz.questions.length} questions — win ${activeQuiz.prize}`,
       }
     : null;
 

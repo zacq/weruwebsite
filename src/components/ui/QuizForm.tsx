@@ -239,7 +239,7 @@ export default function QuizForm({
             You got all {total} questions correct!
           </h2>
           <p className="text-sm mb-8 sm:mb-10" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Fantastic! You&apos;ve qualified for the prize draw and stand a chance to win a {prize}. Complete the registration form below to confirm your entry.
+            Fantastic! You&apos;ve qualified for the prize draw and stand a chance to win {prize}. Complete the registration form below to confirm your entry.
           </p>
 
           <div className="flex flex-col gap-4 sm:gap-5 mb-6">
@@ -377,7 +377,7 @@ export default function QuizForm({
               <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
                 {duplicate
                   ? "This phone number has already entered. Only one entry per person is allowed."
-                  : `Thanks for playing! You scored ${total}/${total}, so you're in line for a ${prize}. Winners will be contacted directly and announced on Weru TV & FM. Good luck!`}
+                  : `Thanks for playing! You scored ${total}/${total}, so you're in line for ${prize}. Winners will be contacted directly and announced on Weru TV & FM. Good luck!`}
               </p>
 
               {!duplicate && promoSection}

@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const quiz = QUIZ_PAUSED ? null : await getActiveQuiz();
   const title = quiz ? `${quiz.title} — Weru TV` : "Weru Website Experience — Weru TV";
   const description = quiz
-    ? `Answer all ${quiz.questions.length} questions correctly and stand a chance to win a ${quiz.prize}.`
+    ? `Stand a chance to win ${quiz.prize}.`
     : "The quiz is on hold, but tell us something nice, nominate a cause for Weru to support, and find out how you can donate.";
   return {
     title,
@@ -90,7 +90,7 @@ export default async function QuizPage() {
                 {quiz.title}
               </h1>
               <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-                Answer all the questions correctly and stand a chance to win a{" "}
+                Stand a chance to win{" "}
                 <span className="font-semibold" style={{ color: "#FACC15" }}>{quiz.prize}</span>!
               </p>
             </div>
