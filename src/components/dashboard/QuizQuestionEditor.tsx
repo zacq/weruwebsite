@@ -47,7 +47,7 @@ export default function QuizQuestionEditor({ quizId, questions, onChange, onErro
   };
 
   const handleAddQuestion = async () => {
-    if (sorted.length >= 10) return;
+    if (sorted.length >= 20) return;
     const nextOrder = (sorted[sorted.length - 1]?.fields.Order ?? 0) + 1;
     setBusy("new");
     try {
@@ -134,11 +134,11 @@ export default function QuizQuestionEditor({ quizId, questions, onChange, onErro
 
       <button
         onClick={handleAddQuestion}
-        disabled={sorted.length >= 10 || busy === "new"}
+        disabled={sorted.length >= 20 || busy === "new"}
         className="self-start text-xs font-semibold px-3.5 py-2 rounded-lg text-white disabled:opacity-30"
         style={{ background: "#0A0A0A" }}
       >
-        {sorted.length >= 10 ? "10/10 questions — full" : "+ Add question"}
+        {sorted.length >= 20 ? "20/20 questions — full" : "+ Add question"}
       </button>
     </div>
   );

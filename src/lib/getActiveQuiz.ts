@@ -92,8 +92,8 @@ export async function getActiveQuiz(): Promise<ActiveQuiz | null> {
       .map(mapQuestion)
       .filter((q): q is QuizQuestion => q !== null);
 
-    if (questions.length !== 10) {
-      console.warn(`[getActiveQuiz] Active quiz "${title}" has ${questions.length}/10 valid questions — falling back.`);
+    if (questions.length < 2) {
+      console.warn(`[getActiveQuiz] Active quiz "${title}" has ${questions.length} valid questions — falling back.`);
       return FALLBACK_QUIZ;
     }
 

@@ -152,7 +152,7 @@ export default function QuizManagementPanel() {
         const qs = questionsFor(quiz.id);
         const status = quiz.fields.Status ?? "Draft";
         const style = STATUS_STYLE[status];
-        const isComplete = qs.length === 10;
+        const isComplete = qs.length >= 2;
         const isExpanded = expanded === quiz.id;
 
         return (
@@ -163,7 +163,7 @@ export default function QuizManagementPanel() {
                   <span className="font-bold text-sm" style={{ color: "#0A0A0A" }}>{quiz.fields.Title || "Untitled quiz"}</span>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={style}>{status}</span>
                   <span className="text-[10px] font-semibold tabular-nums" style={{ color: isComplete ? "#15803d" : "#c2650a" }}>
-                    {qs.length}/10 questions
+                    {qs.length} question{qs.length === 1 ? "" : "s"}
                   </span>
                 </div>
                 <p className="text-xs text-black/40 truncate">{quiz.fields.Prize}</p>
@@ -181,7 +181,7 @@ export default function QuizManagementPanel() {
                   <button
                     onClick={() => handleStatusChange(quiz.id, "Active")}
                     disabled={!isComplete}
-                    title={isComplete ? "Make this the live quiz" : "Needs exactly 10 questions to activate"}
+                    title={isComplete ? "Make this the live quiz" : "Needs at least 2 questions to activate"}
                     className="text-xs font-semibold px-3 py-2 rounded-lg text-white disabled:opacity-30"
                     style={{ background: "#15803d" }}
                   >

@@ -35,7 +35,10 @@ export const DASHBOARD_TABLES: Record<string, DashboardTableConfig> = {
     columns: [
       { key: "Name", label: "Name", type: "text" },
       { key: "Phone", label: "Phone", type: "text" },
+      { key: "Email", label: "Email", type: "text" },
+      { key: "County/Town", label: "County/Town", type: "text" },
       { key: "Score", label: "Score", type: "number", editable: true },
+      { key: "Total Questions", label: "Out of", type: "number" },
       { key: "Eligible for Draw", label: "Eligible", type: "text" },
       {
         key: "Draw Status",

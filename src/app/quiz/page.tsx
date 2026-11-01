@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import QuizForm from "@/components/ui/QuizForm";
 import WeruExperience from "@/components/ui/WeruExperience";
+import KisimaniPromoSection from "@/components/ui/KisimaniPromoSection";
 import { getActiveQuiz } from "@/lib/getActiveQuiz";
 
 export const dynamic    = "force-static";
@@ -13,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const quiz = QUIZ_PAUSED ? null : await getActiveQuiz();
   const title = quiz ? `${quiz.title} — Weru TV` : "Weru Website Experience — Weru TV";
   const description = quiz
-    ? `Think you know Weru FM? Answer all 10 questions correctly and stand a chance to win a ${quiz.prize}.`
+    ? `Answer all ${quiz.questions.length} questions correctly and stand a chance to win a ${quiz.prize}.`
     : "The quiz is on hold, but tell us something nice, nominate a cause for Weru to support, and find out how you can donate.";
   return {
     title,
@@ -94,7 +95,7 @@ export default async function QuizPage() {
               </p>
             </div>
 
-            <QuizForm questions={quiz.questions} prize={quiz.prize} />
+            <QuizForm questions={quiz.questions} prize={quiz.prize} promoSection={<KisimaniPromoSection />} />
           </>
         )}
 

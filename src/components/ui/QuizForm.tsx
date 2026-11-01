@@ -1,17 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { QuizQuestion } from "@/lib/getActiveQuiz";
 
 type Phase = "quiz" | "contact" | "done";
 
-export default function QuizForm({ questions: QUESTIONS, prize }: { questions: QuizQuestion[]; prize: string }) {
+export default function QuizForm({
+  questions: QUESTIONS,
+  prize,
+  promoSection,
+}: {
+  questions: QuizQuestion[];
+  prize: string;
+  promoSection?: ReactNode;
+}) {
+  const total = QUESTIONS.length;
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<(number | null)[]>(Array(10).fill(null));
+  const [answers, setAnswers] = useState<(number | null)[]>(Array(total).fill(null));
   const [phase, setPhase] = useState<Phase>("quiz");
+  const [failed, setFailed] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [county, setCounty] = useState("");
+  const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [duplicate, setDuplicate] = useState(false);
   const [error, setError] = useState("");
@@ -19,13 +32,29 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
   const selectAnswer = (i: number) =>
     setAnswers((prev) => { const n = [...prev]; n[step] = i; return n; });
 
-  const handleNext = () => step < 9 ? setStep((s) => s + 1) : setPhase("contact");
-  const handleBack = () => step > 0 && setStep((s) => s - 1);
-
   const score = answers.filter((a, i) => a === QUESTIONS[i].correct).length;
 
+  const handleNext = () => {
+    if (step < total - 1) {
+      setStep((s) => s + 1);
+    } else if (score === total) {
+      setPhase("contact");
+    } else {
+      setFailed(true);
+      setPhase("done");
+    }
+  };
+  const handleBack = () => step > 0 && setStep((s) => s - 1);
+
+  const handleRetry = () => {
+    setStep(0);
+    setAnswers(Array(total).fill(null));
+    setFailed(false);
+    setPhase("quiz");
+  };
+
   const handleSubmit = async () => {
-    if (!name.trim() || !phone.trim()) return;
+    if (!name.trim() || !phone.trim() || !email.trim() || !county.trim() || !consent) return;
     setSubmitting(true);
     setError("");
     try {
@@ -35,12 +64,13 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
         body: JSON.stringify({
           name: name.trim(),
           phone: phone.trim(),
+          email: email.trim(),
+          county: county.trim(),
           answers: answers.map((a, i) => ({
             question: QUESTIONS[i].q,
             selected: a !== null ? QUESTIONS[i].options[a] : null,
             correct: a === QUESTIONS[i].correct,
           })),
-          score,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -78,10 +108,10 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
           {/* Top bar */}
           <div className="flex items-center justify-between mb-4 sm:mb-5">
             <span className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase" style={{ color: "#FACC15" }}>
-              96+4 Quiz
+              Quiz
             </span>
             <span className="text-xs sm:text-sm font-semibold tabular-nums" style={{ color: "rgba(255,255,255,0.35)" }}>
-              {step + 1}&thinsp;/&thinsp;10
+              {step + 1}&thinsp;/&thinsp;{total}
             </span>
           </div>
 
@@ -91,7 +121,7 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
               className="h-full"
               style={{ background: "#FACC15" }}
               initial={false}
-              animate={{ width: `${((step + 1) / 10) * 100}%` }}
+              animate={{ width: `${((step + 1) / total) * 100}%` }}
               transition={{ type: "spring", stiffness: 180, damping: 26 }}
             />
           </div>
@@ -123,7 +153,7 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
                       : "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.20)",
                   }}
                 >
-                  {/* Number circle */}
+                  {/* Letter circle */}
                   <span
                     className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-150"
                     style={{
@@ -132,7 +162,7 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
                       background: selected ? "rgba(250,204,21,0.12)" : "transparent",
                     }}
                   >
-                    {i + 1}
+                    {String.fromCharCode(65 + i)}
                   </span>
 
                   {/* Option text */}
@@ -179,13 +209,13 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
               className="ml-auto px-6 sm:px-8 py-3.5 rounded-2xl text-black font-bold text-sm transition-all disabled:opacity-25 disabled:cursor-not-allowed"
               style={{ background: "#FACC15" }}
             >
-              {step < 9 ? "Next →" : "Finish →"}
+              {step < total - 1 ? "Next →" : "Submit Answers"}
             </button>
           </div>
         </motion.div>
       )}
 
-      {/* ── Contact phase ── */}
+      {/* ── Contact phase (only reached with a perfect score) ── */}
       {phase === "contact" && (
         <motion.div
           key="contact"
@@ -196,10 +226,7 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
         >
           <div className="flex items-center justify-between mb-4 sm:mb-5">
             <span className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase" style={{ color: "#FACC15" }}>
-              Almost there
-            </span>
-            <span className="text-xs sm:text-sm font-semibold tabular-nums" style={{ color: "rgba(255,255,255,0.35)" }}>
-              10&thinsp;/&thinsp;10 ✓
+              Congratulations!
             </span>
           </div>
 
@@ -209,13 +236,13 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
             className="text-white font-bold leading-tight mb-3 sm:mb-4"
             style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
           >
-            Enter your details to complete your entry.
+            You got all {total} questions correct!
           </h2>
           <p className="text-sm mb-8 sm:mb-10" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Score 10/10 to win a {prize}.
+            Fantastic! You&apos;ve qualified for the prize draw and stand a chance to win a {prize}. Complete the registration form below to confirm your entry.
           </p>
 
-          <div className="flex flex-col gap-4 sm:gap-5 mb-7 sm:mb-8">
+          <div className="flex flex-col gap-4 sm:gap-5 mb-6">
             <div>
               <label className="block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
                 Full Name
@@ -242,7 +269,45 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
                 autoComplete="tel"
               />
             </div>
+            <div>
+              <label className="block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="form-input w-full"
+                autoComplete="email"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
+                County / Town of Residence
+              </label>
+              <input
+                type="text"
+                value={county}
+                onChange={(e) => setCounty(e.target.value)}
+                placeholder="e.g. Meru"
+                className="form-input w-full"
+                autoComplete="address-level2"
+              />
+            </div>
           </div>
+
+          <label className="flex items-start gap-3 mb-6 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              className="mt-0.5 flex-shrink-0"
+            />
+            <span className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+              I agree to the campaign Terms and Conditions and consent to WERU TV using my contact details to administer this competition and contact me regarding my entry.
+            </span>
+          </label>
 
           {error && (
             <p className="text-xs text-center mb-3" style={{ color: "#f97d00" }}>{error}</p>
@@ -250,16 +315,12 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
 
           <button
             onClick={handleSubmit}
-            disabled={!name.trim() || !phone.trim() || submitting}
+            disabled={!name.trim() || !phone.trim() || !email.trim() || !county.trim() || !consent || submitting}
             className="w-full py-4 rounded-2xl text-black font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             style={{ background: "#FACC15" }}
           >
             {submitting ? "Submitting…" : "Submit My Entry"}
           </button>
-
-          <p className="text-xs text-center mt-4" style={{ color: "rgba(255,255,255,0.22)" }}>
-            Score 10/10 to win a {prize}.
-          </p>
         </motion.div>
       )}
 
@@ -271,31 +332,57 @@ export default function QuizForm({ questions: QUESTIONS, prize }: { questions: Q
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28 }}
         >
-          <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "#FACC15" }} />
+          {failed ? (
+            <>
+              <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "rgba(255,255,255,0.10)" }} />
 
-          <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-5 sm:mb-6" style={{ color: "#FACC15" }}>
-            {duplicate ? "Already entered" : "Entry received"}
-          </p>
+              <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-5 sm:mb-6" style={{ color: "#FACC15" }}>
+                Good try!
+              </p>
 
-          <h2
-            className="text-white font-bold leading-tight mb-4"
-            style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
-          >
-            {duplicate ? "You've already entered." : "You're in the draw!"}
-          </h2>
+              <h2
+                className="text-white font-bold leading-tight mb-4"
+                style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
+              >
+                You didn&apos;t get all the answers correct this time.
+              </h2>
 
-          {!duplicate && (
-            <p className="text-sm sm:text-base mb-3" style={{ color: "rgba(255,255,255,0.50)" }}>
-              You scored{" "}
-              <span className="font-bold" style={{ color: "#FACC15" }}>{score} out of 10</span>.
-            </p>
+              <p className="text-sm leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.40)" }}>
+                Don&apos;t give up! Explore more about WERU DIGITAL and Kisimani Eco Resort &amp; Spa, then try again.
+              </p>
+
+              <button
+                onClick={handleRetry}
+                className="px-6 sm:px-8 py-3.5 rounded-2xl text-black font-bold text-sm transition-all"
+                style={{ background: "#FACC15" }}
+              >
+                Try Again
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "#FACC15" }} />
+
+              <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-5 sm:mb-6" style={{ color: "#FACC15" }}>
+                {duplicate ? "Already entered" : "Entry received"}
+              </p>
+
+              <h2
+                className="text-white font-bold leading-tight mb-4"
+                style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
+              >
+                {duplicate ? "You've already entered." : "You're in the draw!"}
+              </h2>
+
+              <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+                {duplicate
+                  ? "This phone number has already entered. Only one entry per person is allowed."
+                  : `Thanks for playing! You scored ${total}/${total}, so you're in line for a ${prize}. Winners will be contacted directly and announced on Weru TV & FM. Good luck!`}
+              </p>
+
+              {!duplicate && promoSection}
+            </>
           )}
-
-          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-            {duplicate
-              ? "This phone number has already entered the 96+4 Quiz. Only one entry per person is allowed."
-              : `Thanks for playing! If you scored 10/10 you're in line for a ${prize}. Winners will be contacted directly and announced on Weru TV & FM. Good luck!`}
-          </p>
         </motion.div>
       )}
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isValidFullName, isValidKenyanPhone } from "@/lib/validateLead";
+import { isValidFullName, isValidKenyanPhone, isValidEmail } from "@/lib/validateLead";
 
 const BASE_ID  = "appXyMV3O6ycSVRAi";
 const TABLE_ID = "tblukJS1pCXs85ydk";
@@ -12,11 +12,23 @@ function normalizePhone(phone: string): string {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, phone, answers, score } = body;
+    const { name, phone, email, county, answers } = body;
 
-    if (!isValidFullName(name) || !isValidKenyanPhone(phone)) {
+    if (!isValidFullName(name) || !isValidKenyanPhone(phone) || !isValidEmail(email) || !(typeof county === "string" && county.trim().length > 0)) {
       return NextResponse.json(
-        { success: false, error: "Please enter your full name and a valid Kenyan phone number." },
+        { success: false, error: "Please fill in your full name, phone, email and county/town." },
+        { status: 400 }
+      );
+    }
+
+    // Only a perfect score qualifies for the prize draw — recompute from the answers
+    // the client sent rather than trusting a separate score field.
+    const answerList = Array.isArray(answers) ? answers : [];
+    const score = answerList.filter((a) => a?.correct === true).length;
+    const totalQuestions = answerList.length;
+    if (totalQuestions === 0 || score !== totalQuestions) {
+      return NextResponse.json(
+        { success: false, error: "Only a perfect score qualifies for the prize draw." },
         { status: 400 }
       );
     }
@@ -57,8 +69,11 @@ export async function POST(req: NextRequest) {
         fields: {
           Name: name,
           Phone: phone,
-          Score: typeof score === "number" ? score : 0,
-          "Answers (JSON)": JSON.stringify(answers ?? []),
+          Email: email,
+          "County/Town": county.trim(),
+          Score: score,
+          "Total Questions": totalQuestions,
+          "Answers (JSON)": JSON.stringify(answerList),
           "Submitted At": new Date().toISOString(),
           "Draw Status": "Pending",
         },
