@@ -6,6 +6,7 @@ import { motion, useAnimation } from "framer-motion";
 import { tvSchedule } from "@/data/tvSchedule";
 import { HERO_BG_DESKTOP_URL, HERO_CAROUSEL_SLIDES } from "@/lib/brandAssets";
 import WeruYTCard, { WeruYTChip } from "./WeruYTCard";
+import QuizPromoBar, { type QuizPromo } from "@/components/ui/QuizPromoBar";
 
 const SLIDE_INTERVAL_MS = 7000;
 const FADE_DURATION_MS = 2000;
@@ -163,35 +164,6 @@ function FMCard({ style, delay = 0.55, compact = false }: { style?: React.CSSPro
   );
 }
 
-/* ─── Quiz bar (shared JSX) ───────────────────────────────────────────────── */
-function QuizBar({ compact = false }: { compact?: boolean }) {
-  return (
-    <a
-      href="/quiz"
-      className={`inline-flex items-center gap-2 rounded-2xl w-full ${compact ? "px-3 py-1.5" : "px-4 py-2.5"}`}
-      style={{
-        background: "linear-gradient(145deg,#4A2000 0%,#7A3A00 55%,#5C2A00 100%)",
-        border: "1px solid rgba(250,180,50,0.28)",
-        boxShadow: "0 8px 28px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06)",
-      }}
-    >
-      <div className={`shrink-0 rounded-full grid place-items-center ${compact ? "w-6 h-6 text-sm" : "w-8 h-8 text-base"}`} style={{ background: "rgba(0,0,0,.35)" }}>
-        🎯
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className={`font-display font-bold text-white leading-snug ${compact ? "text-xs" : "text-sm"}`}>96+4 Quiz</p>
-        {!compact && (
-          <p className="text-xs" style={{ color: "rgba(244,241,236,.58)" }}>
-            10 questions — win a KSh 5,000 shopping voucher + studio visit
-          </p>
-        )}
-      </div>
-      <span className={`shrink-0 rounded-full font-bold whitespace-nowrap ${compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs"}`} style={{ background: "#FACC15", color: "#1a1003" }}>
-        Start →
-      </span>
-    </a>
-  );
-}
 
 /* ─── Schedule helpers ────────────────────────────────────────────────────── */
 function parseMinutes(time: string): number {
@@ -270,7 +242,7 @@ function Headline({ fontSize }: { fontSize: string }) {
 }
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
-export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
+export default function HomeHero({ videoUrl, quizPromo }: { videoUrl?: string; quizPromo?: QuizPromo | null }) {
   const [liveShow, setLiveShow] = useState<ReturnType<typeof getCurrentShow>>(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [slidesReady, setSlidesReady] = useState(false);
@@ -388,9 +360,11 @@ export default function HomeHero({ videoUrl }: { videoUrl?: string }) {
         </div>
 
         {/* Quiz bar — slightly smaller than FM card */}
-        <div className="shrink-0 mt-1.5 px-4" style={{ width: "calc(82% + 2rem)" }}>
-          <QuizBar compact />
-        </div>
+        {quizPromo && (
+          <div className="shrink-0 mt-1.5 px-4" style={{ width: "calc(82% + 2rem)" }}>
+            <QuizPromoBar title={quizPromo.title} subtitle={quizPromo.subtitle} compact />
+          </div>
+        )}
       </div>
 
       {/* ── DESKTOP layout (sm+): title LHS, cards absolute RHS ──────────── */}

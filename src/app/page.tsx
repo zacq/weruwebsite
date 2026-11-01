@@ -6,7 +6,12 @@ import { getHotMixes } from "@/lib/getHotMixes";
 import { getPresenters } from "@/lib/getPresenters";
 import { getPartners } from "@/lib/getPartners";
 import { getNewsFeed } from "@/lib/getNewsFeed";
+import { getActiveQuiz } from "@/lib/getActiveQuiz";
+import QuizPromoBar, { type QuizPromo } from "@/components/ui/QuizPromoBar";
 import { OG_LOGO_URL } from "@/lib/brandAssets";
+
+// Mirrors the kill-switch in src/app/quiz/page.tsx — hides quiz promos sitewide when paused.
+const QUIZ_PAUSED = process.env.QUIZ_PAUSED === "true";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
@@ -71,40 +76,31 @@ export default async function HomePage() {
   const partners = await getPartners();
   const feed = await getNewsFeed();
 
+  const activeQuiz = QUIZ_PAUSED ? null : await getActiveQuiz();
+  const quizPromo: QuizPromo | null = activeQuiz
+    ? {
+        title: activeQuiz.title,
+        subtitle: `${activeQuiz.questions.length} questions — win a ${activeQuiz.prize}`,
+      }
+    : null;
+
   return (
     <AppGate
-      appContent={<AppHome feed={feed} />}
+      appContent={<AppHome feed={feed} quizPromo={quizPromo} />}
       webContent={
         <>
-          <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} />
+          <HomeHero videoUrl={process.env.HOME_HERO_VIDEO_URL} quizPromo={quizPromo} />
 
           {/* Quiz bar — desktop only; mobile version lives inside HomeHero */}
-          <div className="hidden sm:flex justify-center px-4 py-4" style={{ background: "#060608" }}>
-            <a
-              href="/quiz"
-              className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl"
-              style={{
-                background: "linear-gradient(145deg,#4A2000 0%,#7A3A00 55%,#5C2A00 100%)",
-                border: "1px solid rgba(250,180,50,0.28)",
-                boxShadow: "0 8px 28px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06)",
-              }}
-            >
-              <div className="shrink-0 w-8 h-8 rounded-full grid place-items-center text-base" style={{ background: "rgba(0,0,0,.35)" }}>
-                🎯
+          {quizPromo && (
+            <div className="hidden sm:flex justify-center px-4 py-4" style={{ background: "#060608" }}>
+              <div className="max-w-md w-full">
+                <QuizPromoBar title={quizPromo.title} subtitle={quizPromo.subtitle} />
               </div>
-              <div className="min-w-0">
-                <p className="font-display font-bold text-white text-sm leading-snug">96+4 Quiz</p>
-                <p className="text-xs whitespace-nowrap" style={{ color: "rgba(244,241,236,.58)" }}>
-                  10 questions — win a KSh 5,000 shopping voucher + studio visit
-                </p>
-              </div>
-              <span className="shrink-0 px-4 py-1.5 rounded-full font-bold text-sm whitespace-nowrap" style={{ background: "#FACC15", color: "#1a1003" }}>
-                Start Quiz →
-              </span>
-            </a>
-          </div>
+            </div>
+          )}
 
-          <CultureSection presenters={presenters} />
+          <CultureSection presenters={presenters} quizPromo={quizPromo} />
           <PlatformsSection />
           <MultiStreamAdvantageSection />
           <RadioPlatformsSection />

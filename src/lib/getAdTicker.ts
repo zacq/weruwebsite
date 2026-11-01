@@ -7,7 +7,7 @@ export type AdTickerItem = {
 };
 
 const FALLBACK_ITEMS: AdTickerItem[] = [
-  { message: "Play the 96+4 Quiz — win a KSh 5,000 shopping voucher plus a visit to the Weru Studios.", icon: "🎯" },
+  { message: "Play The Kisimani Experience quiz — score 11/11 to win an exciting experience at Kisimani Eco Resort & Spa!", icon: "🎯" },
   { message: "Want your brand in this spot? Advertise with Weru TV & FM — get your rate card today.", icon: "📋" },
   { message: "Weru FM 96.4 is live right now — tune in across Central Kenya.", icon: "📻" },
 ];

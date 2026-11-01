@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { getActiveQuiz } from "@/lib/getActiveQuiz";
+
+// Mirrors the kill-switch in src/app/quiz/page.tsx — hides the quiz link sitewide when paused.
+const QUIZ_PAUSED = process.env.QUIZ_PAUSED === "true";
 
 const footerLinks = [
   { label: "Home",       href: "/" },
@@ -64,7 +68,8 @@ function LogoMark({ size = 34 }: { size?: number }) {
   );
 }
 
-export default function Footer() {
+export default async function Footer() {
+  const activeQuiz = QUIZ_PAUSED ? null : await getActiveQuiz();
   return (
     <footer style={{ background: FOOTER_BG, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
       <div className="max-w-6xl mx-auto px-4 py-6 md:py-10">
@@ -122,13 +127,15 @@ export default function Footer() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/quiz"
-                className="inline-flex items-center gap-1.5 text-xs font-bold hover:opacity-80 transition-opacity mt-2"
-                style={{ color: "#FACC15" }}
-              >
-                <Icon path={TICKET_PATH} className="w-3.5 h-3.5" /> 96+4 Quiz
-              </Link>
+              {activeQuiz && (
+                <Link
+                  href="/quiz"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold hover:opacity-80 transition-opacity mt-2"
+                  style={{ color: "#FACC15" }}
+                >
+                  <Icon path={TICKET_PATH} className="w-3.5 h-3.5" /> {activeQuiz.title}
+                </Link>
+              )}
             </div>
 
             {/* Contact */}

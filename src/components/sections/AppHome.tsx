@@ -4,6 +4,7 @@ import Link from "next/link";
 import LiveStream from "@/components/sections/LiveStream";
 import HeadlineTicker from "@/components/sections/HeadlineTicker";
 import { type Headline } from "@/lib/getNewsFeed";
+import QuizPromoBar, { type QuizPromo } from "@/components/ui/QuizPromoBar";
 import { tvSchedule } from "@/data/tvSchedule";
 import { radioSchedule, type RadioDaySchedule } from "@/data/radioSchedule";
 
@@ -41,7 +42,7 @@ function initials(name: string): string {
 
 const AVATAR_COLORS = ["#f97d00", "#C8102E", "#7A1010", "#FACC15"];
 
-export default function AppHome({ feed }: { feed: Headline[] }) {
+export default function AppHome({ feed, quizPromo }: { feed: Headline[]; quizPromo?: QuizPromo | null }) {
   const current = getCurrentTvShow();
   const radioToday = radioSchedule.find((d) => d.day === todayName())?.programs ?? [];
   const upcomingRadio = radioToday.slice(0, 3);
@@ -108,21 +109,7 @@ export default function AppHome({ feed }: { feed: Headline[] }) {
         </div>
 
         {/* Quiz promo */}
-        <a
-          href="/quiz"
-          className="flex items-center gap-3 rounded-2xl px-4 py-3"
-          style={{
-            background: "linear-gradient(145deg,#4A2000 0%,#7A3A00 55%,#5C2A00 100%)",
-            border: "1px solid rgba(250,180,50,0.28)",
-          }}
-        >
-          <div className="shrink-0 w-9 h-9 rounded-full grid place-items-center text-base" style={{ background: "rgba(0,0,0,.35)" }}>🎯</div>
-          <div className="min-w-0 flex-1">
-            <p className="text-white font-bold text-sm">96+4 Quiz</p>
-            <p className="text-white/55 text-[11px]">Win a KSh 5,000 shopping voucher</p>
-          </div>
-          <span className="shrink-0 px-3 py-1.5 rounded-full font-bold text-xs" style={{ background: "#FACC15", color: "#1a1003" }}>Start →</span>
-        </a>
+        {quizPromo && <QuizPromoBar title={quizPromo.title} subtitle={quizPromo.subtitle} />}
       </div>
     </div>
   );
