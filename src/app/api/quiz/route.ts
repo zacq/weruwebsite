@@ -1,13 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { isValidFullName, isValidKenyanPhone, isValidEmail } from "@/lib/validateLead";
-
-const BASE_ID  = "appXyMV3O6ycSVRAi";
-const TABLE_ID = "tblukJS1pCXs85ydk";
-
-// Kenyan numbers vary in stored format (0712345678 vs +254712345678) — compare on the last 9 digits.
-function normalizePhone(phone: string): string {
-  return phone.replace(/\D/g, "").slice(-9);
-}
+import { writeQuizEntryToAirtable, type QuizEntryPayload } from "@/lib/writeQuizEntryToAirtable";
+import { savePendingEntry, deletePendingEntry, findPendingEntryByPhone } from "@/lib/quizPendingEntries";
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,56 +28,55 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const pat = process.env.AIRTABLE_PAT;
-    if (!pat) {
-      console.error("[QUIZ ENTRY] AIRTABLE_PAT env var not set");
-      return NextResponse.json({ success: true });
-    }
+    const entry: QuizEntryPayload = {
+      name,
+      phone,
+      email,
+      county: county.trim(),
+      score,
+      totalQuestions,
+      answers: answerList,
+      submittedAt: new Date().toISOString(),
+    };
 
-    const normalized = normalizePhone(phone);
-    if (normalized.length === 9) {
-      const filterFormula = `RIGHT(REGEX_REPLACE({Phone}, "[^0-9]", ""), 9) = "${normalized}"`;
-      const dupRes = await fetch(
-        `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${encodeURIComponent(filterFormula)}&maxRecords=1`,
-        { headers: { Authorization: `Bearer ${pat}` } }
+    // Catches a duplicate submission made while an earlier entry for the same
+    // phone is still sitting in the pending buffer (not yet synced to Airtable,
+    // so Airtable's own duplicate check can't see it yet).
+    if (await findPendingEntryByPhone(phone)) {
+      return NextResponse.json(
+        { success: false, duplicate: true, error: "This phone number has already entered." },
+        { status: 409 }
       );
-      if (dupRes.ok) {
-        const dupData = await dupRes.json();
-        if (dupData.records?.length > 0) {
-          return NextResponse.json(
-            { success: false, duplicate: true, error: "This phone number has already entered." },
-            { status: 409 }
-          );
-        }
-      } else {
-        console.error("[QUIZ ENTRY] Duplicate-check error:", await dupRes.text());
-      }
     }
 
-    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${pat}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: {
-          Name: name,
-          Phone: phone,
-          Email: email,
-          "County/Town": county.trim(),
-          Score: score,
-          "Total Questions": totalQuestions,
-          "Answers (JSON)": JSON.stringify(answerList),
-          "Submitted At": new Date().toISOString(),
-          "Draw Status": "Pending",
-        },
-      }),
-    });
-
-    if (!res.ok) {
-      console.error("[QUIZ ENTRY] Airtable error:", await res.text());
+    // Write to the durable buffer FIRST — this is the step that must succeed for the
+    // entry to be safe. Airtable is written best-effort below; if that fails (quota,
+    // outage, network), the entry stays here and a scheduled sync retries it later.
+    // This means "success" to the visitor is only ever claimed once the lead is
+    // actually captured somewhere durable, never just attempted.
+    const entryId = randomUUID();
+    const buffered = await savePendingEntry(entryId, entry);
+    if (!buffered) {
+      return NextResponse.json(
+        { success: false, error: "Something went wrong. Please try again." },
+        { status: 500 }
+      );
     }
+
+    const result = await writeQuizEntryToAirtable(entry);
+    if (result.ok) {
+      await deletePendingEntry(entryId);
+    } else if (result.duplicate) {
+      // Someone else's entry for this phone landed in Airtable between our buffer
+      // check and now — drop our buffered copy rather than double-entering them.
+      await deletePendingEntry(entryId);
+      return NextResponse.json(
+        { success: false, duplicate: true, error: "This phone number has already entered." },
+        { status: 409 }
+      );
+    }
+    // On any other failure the entry simply stays in the pending buffer — already
+    // logged inside writeQuizEntryToAirtable — to be retried by the sync job.
 
     return NextResponse.json({ success: true });
   } catch (err) {

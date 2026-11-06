@@ -12,6 +12,7 @@
     "@capacitor/android": "^8.5.2",
     "@capacitor/cli": "^8.5.2",
     "@capacitor/core": "^8.5.2",
+    "@netlify/blobs": "^11.1.7",
     "framer-motion": "^12.38.0",
     "hls.js": "^1.6.16",
     "next": "^15.0.0",

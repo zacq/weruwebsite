@@ -20,6 +20,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [quizPendingCount, setQuizPendingCount] = useState(0);
 
   const fetchAll = useCallback(async () => {
     setError(null);
@@ -38,6 +39,16 @@ export default function DashboardPage() {
       setError(err instanceof Error ? err.message : "Failed to load dashboard data");
     } finally {
       setLoading(false);
+    }
+
+    // Quiz entries stuck in the Netlify Blobs buffer, waiting to sync to Airtable —
+    // see src/lib/quizPendingEntries.ts. Fetched separately so a hiccup here never
+    // blocks the main dashboard data from loading.
+    try {
+      const res = await fetch("/api/dashboard/quiz-pending-count", { cache: "no-store" });
+      if (res.ok) setQuizPendingCount((await res.json()).count ?? 0);
+    } catch {
+      // Non-critical — leave the last known count displayed.
     }
   }, []);
 
@@ -157,8 +168,11 @@ export default function DashboardPage() {
                 const rows = records[key] ?? [];
                 let subLabel: string | undefined;
                 if (key === "quiz") {
-                  const perfect = rows.filter((r) => r.fields.Score === 10).length;
+                  const perfect = rows.filter((r) => r.fields["Eligible for Draw"] === "Yes").length;
                   subLabel = `${perfect} perfect score${perfect === 1 ? "" : "s"}`;
+                  if (quizPendingCount > 0) {
+                    subLabel += ` · ${quizPendingCount} pending sync`;
+                  }
                 } else if (key === "cause-nominations") {
                   const counts = rows.reduce<Record<string, number>>((acc, r) => {
                     const cause = r.fields.Cause as string | undefined;
