@@ -3,6 +3,29 @@ import { NextRequest, NextResponse } from "next/server";
 const COOKIE_NAME = "weru_dashboard_auth";
 const AUTH_MESSAGE = "weru-dashboard-auth";
 
+// Generic internet-wide bot/scanner probes for paths that don't exist in this app
+// (WordPress, login-page hunting, RSS discovery, etc.). None of these are real
+// routes — confirmed no src/app directory matches any of them. Answered here, at
+// the edge, before a request reaches the root layout — which fetches from Airtable
+// on every render, so letting bot noise fall through to a full page render was
+// burning API quota for traffic that was never a real visitor.
+const BOT_PROBE_PATHS = new Set([
+  "/login",
+  "/signin",
+  "/signup",
+  "/register",
+  "/feed",
+  "/feed/",
+  "/ads.txt",
+  "/.well-known/assetlinks.json",
+]);
+const BOT_PROBE_PREFIXES = ["/wp-json/", "/api/auth/"];
+
+function isBotProbe(pathname: string): boolean {
+  if (BOT_PROBE_PATHS.has(pathname)) return true;
+  return BOT_PROBE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
 async function expectedToken(password: string): Promise<string> {
   const key = await crypto.subtle.importKey(
     "raw",
@@ -19,6 +42,10 @@ async function expectedToken(password: string): Promise<string> {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  if (isBotProbe(pathname)) {
+    return new NextResponse(null, { status: 404 });
+  }
 
   // The login/logout routes must stay reachable, or nobody could ever authenticate.
   if (pathname === "/dashboard/login" || pathname === "/api/dashboard/login" || pathname === "/api/dashboard/logout") {
@@ -47,5 +74,18 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/dashboard/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/api/dashboard/:path*",
+    "/login",
+    "/signin",
+    "/signup",
+    "/register",
+    "/feed",
+    "/feed/",
+    "/ads.txt",
+    "/.well-known/assetlinks.json",
+    "/wp-json/:path*",
+    "/api/auth/:path*",
+  ],
 };

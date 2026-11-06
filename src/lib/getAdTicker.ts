@@ -1,6 +1,11 @@
 const BASE_ID  = "appXyMV3O6ycSVRAi";
 const TABLE_ID = process.env.AIRTABLE_AD_TICKER_TABLE_ID ?? "tblRtKS9ZxKx4Ursz";
 
+// This fetch runs in the root layout, on every single page render — ticker messages
+// are admin-driven and change rarely, so an hour of staleness isn't worth the
+// Airtable quota it costs across every route on the site.
+const REVALIDATE_SECONDS = 21600; // 6 hours
+
 export type AdTickerItem = {
   message: string;
   icon?: string;
@@ -32,7 +37,7 @@ export async function getAdTicker(): Promise<AdTickerItem[]> {
   try {
     const res = await fetch(
       `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?pageSize=100&view=Grid%20view`,
-      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: 3600 } }
+      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: REVALIDATE_SECONDS } }
     );
 
     if (!res.ok) {

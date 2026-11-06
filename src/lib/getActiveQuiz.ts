@@ -2,6 +2,11 @@ const BASE_ID = "appXyMV3O6ycSVRAi";
 const QUIZZES_TABLE_ID   = process.env.AIRTABLE_QUIZZES_TABLE_ID ?? "tbldtDg3hJU0ME5iZ";
 const QUESTIONS_TABLE_ID = process.env.AIRTABLE_QUIZ_QUESTIONS_TABLE_ID ?? "tblBY4sjWC3gztd4V";
 
+// This fetch runs on every page via the Footer component (13+ templates, including
+// every presenter sub-page), not just /quiz — campaigns change rarely and are
+// admin-driven, so an hour of staleness isn't worth the Airtable quota it costs.
+const REVALIDATE_SECONDS = 21600; // 6 hours
+
 export type QuizQuestion = {
   q: string;
   options: string[];
@@ -65,7 +70,7 @@ export async function getActiveQuiz(): Promise<ActiveQuiz | null> {
       `https://api.airtable.com/v0/${BASE_ID}/${QUIZZES_TABLE_ID}?filterByFormula=${encodeURIComponent(
         "{Status}='Active'"
       )}&maxRecords=1`,
-      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: 3600 } }
+      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: REVALIDATE_SECONDS } }
     );
 
     if (!quizRes.ok) {
@@ -85,7 +90,7 @@ export async function getActiveQuiz(): Promise<ActiveQuiz | null> {
     // the records API returns, rather than via filterByFormula.
     const questionsRes = await fetch(
       `https://api.airtable.com/v0/${BASE_ID}/${QUESTIONS_TABLE_ID}?pageSize=100&sort[0][field]=Order&sort[0][direction]=asc`,
-      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: 3600 } }
+      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: REVALIDATE_SECONDS } }
     );
 
     if (!questionsRes.ok) {
