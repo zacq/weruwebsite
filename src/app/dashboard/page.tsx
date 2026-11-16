@@ -43,22 +43,26 @@ export default function DashboardPage() {
   const fetchAll = useCallback(async () => {
     if (!role) return;
     setError(null);
-    try {
-      const results = await Promise.all(
-        tableKeys.map(async (key) => {
-          const res = await fetch(`/api/dashboard/${key}`, { cache: "no-store" });
-          if (!res.ok) throw new Error(`Failed to load ${key}`);
-          const data = await res.json();
-          return [key, data.records as AirtableRecord[]] as const;
-        })
+    // allSettled: one table failing (e.g. Airtable over quota) must not blank the others.
+    const results = await Promise.allSettled(
+      tableKeys.map(async (key) => {
+        const res = await fetch(`/api/dashboard/${key}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(key);
+        const data = await res.json();
+        return [key, data.records as AirtableRecord[]] as const;
+      })
+    );
+    const loaded = results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
+    const failed = tableKeys.filter((_, i) => results[i].status === "rejected");
+    setRecords((prev) => ({ ...prev, ...Object.fromEntries(loaded) }));
+    setLastUpdated(new Date());
+    if (failed.length) {
+      setError(
+        `Couldn't load ${failed.map((k) => DASHBOARD_TABLES[k]?.label ?? k).join(", ")}. ` +
+          (failed.includes("quiz") ? "Try refreshing." : "Airtable may be over its monthly request limit.")
       );
-      setRecords(Object.fromEntries(results));
-      setLastUpdated(new Date());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load dashboard data");
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
 
     // Quiz entries stuck in the Netlify Blobs buffer, waiting to sync to the database —
     // see src/lib/quizPendingEntries.ts. Fetched separately so a hiccup here never
@@ -139,7 +143,7 @@ export default function DashboardPage() {
     <div className="min-h-screen flex flex-col sm:flex-row" style={{ background: "#F5F5F4" }}>
       <Sidebar active={active} onSelect={setActive} role={role} />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0" style={{ color: "#0A0A0A" }}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6">
           <h1 className="text-xl sm:text-2xl font-bold" style={{ color: "#0A0A0A" }}>
             {active === "overview" ? "Overview" : active === "quiz-management" ? "Quiz Management" : active === "users" ? "Users" : activeConfig?.label}
@@ -161,7 +165,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {error && (
+        {error && active !== "quiz-management" && active !== "users" && (
           <div className="mb-4 px-4 py-3 rounded-xl text-sm" style={{ background: "rgba(220,38,38,0.08)", color: "#b91c1c" }}>
             {error}
           </div>
