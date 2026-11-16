@@ -40,13 +40,15 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   if (typeof values === "string") return NextResponse.json({ error: values }, { status: 400 });
   if (Object.keys(values).length === 0) return NextResponse.json({ error: "Nothing to update" }, { status: 400 });
 
+  const startsAt = values.startsAt ?? existing.startsAt;
+  const endsAt = values.endsAt !== undefined ? values.endsAt : existing.endsAt;
+  if (endsAt && endsAt <= startsAt) {
+    return NextResponse.json({ error: "Closing time must be after the opening time" }, { status: 400 });
+  }
+
   const nextStatus = values.status ?? existing.status;
   if (nextStatus === "published") {
-    const problem = await publishProblem(
-      id,
-      values.startsAt ?? existing.startsAt,
-      values.endsAt !== undefined ? values.endsAt : existing.endsAt
-    );
+    const problem = await publishProblem(id, startsAt, endsAt);
     if (problem) return NextResponse.json({ error: problem }, { status: 409 });
   }
 

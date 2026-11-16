@@ -13,10 +13,11 @@ export async function GET() {
   const rows = await getDb()
     .select({
       quiz: q,
-      questionCount: sql<number>`(select count(*)::int from ${schema.quizQuestions} where ${schema.quizQuestions.quizId} = ${q.id})`,
-      entryCount: sql<number>`(select count(*)::int from ${schema.quizEntries} where ${schema.quizEntries.quizId} = ${q.id})`,
-      unreviewedCount: sql<number>`(select count(*)::int from ${schema.quizEntries} where ${schema.quizEntries.quizId} = ${q.id} and not ${schema.quizEntries.reviewed})`,
-      winnerCount: sql<number>`(select count(*)::int from ${schema.quizEntries} where ${schema.quizEntries.quizId} = ${q.id} and ${schema.quizEntries.drawStatus} = 'winner')`,
+      // Raw, aliased SQL: interpolated drizzle columns render unqualified here, so "id" would bind to the inner table.
+      questionCount: sql<number>`(select count(*)::int from quiz_questions qq where qq.quiz_id = "quizzes"."id")`,
+      entryCount: sql<number>`(select count(*)::int from quiz_entries qe where qe.quiz_id = "quizzes"."id")`,
+      unreviewedCount: sql<number>`(select count(*)::int from quiz_entries qe where qe.quiz_id = "quizzes"."id" and not qe.reviewed)`,
+      winnerCount: sql<number>`(select count(*)::int from quiz_entries qe where qe.quiz_id = "quizzes"."id" and qe.draw_status = 'winner')`,
     })
     .from(q)
     .orderBy(desc(q.startsAt));
