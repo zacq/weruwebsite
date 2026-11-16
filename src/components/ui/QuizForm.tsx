@@ -4,86 +4,81 @@ import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { QuizQuestion } from "@/lib/getActiveQuiz";
 
-type Phase = "quiz" | "contact" | "done";
+const MAX_SCREENSHOTS = 3;
+const MAX_EDGE = 1600;
+
+// Screenshots straight off a phone can be 5MB+. Downscale and re-encode on the
+// device so uploads are fast on mobile data and fit the server's request limit.
+async function compressImage(file: File): Promise<File> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.8));
+  if (!blob) throw new Error("compress failed");
+  return new File([blob], file.name.replace(/\.\w+$/, "") + ".jpg", { type: "image/jpeg" });
+}
+
+const labelClass = "block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2";
+const labelStyle = { color: "rgba(255,255,255,0.40)" };
 
 export default function QuizForm({
-  questions: QUESTIONS,
+  quizId,
+  questions,
   prize,
   promoSection,
 }: {
+  quizId: string;
   questions: QuizQuestion[];
-  prize: string;
+  prize: string | null;
   promoSection?: ReactNode;
 }) {
-  const total = QUESTIONS.length;
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<(number | null)[]>(Array(total).fill(null));
-  const [phase, setPhase] = useState<Phase>("quiz");
-  const [failed, setFailed] = useState(false);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [county, setCounty] = useState("");
+  const [files, setFiles] = useState<{ file: File; url: string }[]>([]);
   const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [duplicate, setDuplicate] = useState(false);
+  const [done, setDone] = useState<"entered" | "duplicate" | null>(null);
   const [error, setError] = useState("");
 
-  const selectAnswer = (i: number) =>
-    setAnswers((prev) => { const n = [...prev]; n[step] = i; return n; });
+  const allAnswered = questions.every((q) => answers[q.id]?.trim());
+  const canSubmit = allAnswered && name.trim() && phone.trim() && consent && !submitting;
 
-  const score = answers.filter((a, i) => a === QUESTIONS[i].correct).length;
-
-  const handleNext = () => {
-    if (step < total - 1) {
-      setStep((s) => s + 1);
-    } else if (score === total) {
-      setPhase("contact");
-    } else {
-      setFailed(true);
-      setPhase("done");
+  const addFiles = async (list: FileList | null) => {
+    if (!list) return;
+    setError("");
+    const picked = Array.from(list).filter((f) => f.type.startsWith("image/")).slice(0, MAX_SCREENSHOTS - files.length);
+    try {
+      const compressed = await Promise.all(picked.map(compressImage));
+      setFiles((prev) => [...prev, ...compressed.map((file) => ({ file, url: URL.createObjectURL(file) }))].slice(0, MAX_SCREENSHOTS));
+    } catch {
+      setError("Couldn't read one of those images — try a different screenshot.");
     }
-  };
-  const handleBack = () => step > 0 && setStep((s) => s - 1);
-
-  const handleRetry = () => {
-    setStep(0);
-    setAnswers(Array(total).fill(null));
-    setFailed(false);
-    setPhase("quiz");
   };
 
   const handleSubmit = async () => {
-    if (!name.trim() || !phone.trim() || !email.trim() || !county.trim() || !consent) return;
+    if (!canSubmit) return;
     setSubmitting(true);
     setError("");
+    const body = new FormData();
+    body.set("quizId", quizId);
+    body.set("name", name.trim());
+    body.set("phone", phone.trim());
+    body.set("email", email.trim());
+    body.set("county", county.trim());
+    body.set("answers", JSON.stringify(questions.map((q) => ({ questionId: q.id, answer: answers[q.id] ?? "" }))));
+    files.forEach((f) => body.append("screenshots", f.file));
     try {
-      const res = await fetch("/api/quiz", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          phone: phone.trim(),
-          email: email.trim(),
-          county: county.trim(),
-          answers: answers.map((a, i) => ({
-            question: QUESTIONS[i].q,
-            selected: a !== null ? QUESTIONS[i].options[a] : null,
-            correct: a === QUESTIONS[i].correct,
-          })),
-        }),
-      });
+      const res = await fetch("/api/quiz", { method: "POST", body });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        if (data?.duplicate) {
-          setDuplicate(true);
-          setPhase("done");
-        } else {
-          setError(data?.error || "Something went wrong. Please check your details and try again.");
-        }
-      } else {
-        setPhase("done");
-      }
+      if (res.ok) setDone("entered");
+      else if (data?.duplicate) setDone("duplicate");
+      else setError(data?.error || "Something went wrong. Please check your details and try again.");
     } catch {
       setError("Connection failed. Please try again.");
     } finally {
@@ -91,301 +86,129 @@ export default function QuizForm({
     }
   };
 
-  const current = QUESTIONS[step];
-
   return (
     <AnimatePresence mode="wait">
-
-      {/* ── Quiz phase ── */}
-      {phase === "quiz" && (
-        <motion.div
-          key={step}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.22 }}
-        >
-          {/* Top bar */}
-          <div className="flex items-center justify-between mb-4 sm:mb-5">
-            <span className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase" style={{ color: "#FACC15" }}>
-              Quiz
-            </span>
-            <span className="text-xs sm:text-sm font-semibold tabular-nums" style={{ color: "rgba(255,255,255,0.35)" }}>
-              {step + 1}&thinsp;/&thinsp;{total}
-            </span>
-          </div>
-
-          {/* Progress bar */}
-          <div className="h-px w-full mb-8 sm:mb-10 overflow-hidden" style={{ background: "rgba(255,255,255,0.10)" }}>
-            <motion.div
-              className="h-full"
-              style={{ background: "#FACC15" }}
-              initial={false}
-              animate={{ width: `${((step + 1) / total) * 100}%` }}
-              transition={{ type: "spring", stiffness: 180, damping: 26 }}
-            />
-          </div>
-
-          {/* Question */}
-          <h2
-            className="text-white font-bold leading-tight mb-7 sm:mb-10"
-            style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
-          >
-            {current.q}
-          </h2>
-
-          {/* Options — glass treatment per CLAUDE.md pattern */}
-          <div className="flex flex-col gap-2.5 sm:gap-3 mb-8 sm:mb-12">
-            {current.options.map((opt, i) => {
-              const selected = answers[step] === i;
-              return (
-                <button
-                  key={i}
-                  onClick={() => selectAnswer(i)}
-                  className="flex items-center gap-3 sm:gap-5 w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl text-left transition-all duration-150"
-                  style={{
-                    background: selected ? "rgba(250,204,21,0.08)" : "rgba(255,255,255,0.04)",
-                    backdropFilter: "blur(8px)",
-                    WebkitBackdropFilter: "blur(8px)",
-                    border: selected ? "1px solid #FACC15" : "1px solid rgba(255,255,255,0.09)",
-                    boxShadow: selected
-                      ? "inset 0 1px 0 rgba(250,204,21,0.15), 0 0 24px rgba(250,204,21,0.10), 0 4px 16px rgba(0,0,0,0.25)"
-                      : "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.20)",
-                  }}
-                >
-                  {/* Letter circle */}
-                  <span
-                    className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-150"
-                    style={{
-                      border: selected ? "1.5px solid #FACC15" : "1.5px solid rgba(255,255,255,0.18)",
-                      color: selected ? "#FACC15" : "rgba(255,255,255,0.35)",
-                      background: selected ? "rgba(250,204,21,0.12)" : "transparent",
-                    }}
-                  >
-                    {String.fromCharCode(65 + i)}
-                  </span>
-
-                  {/* Option text */}
-                  <span
-                    className="text-sm sm:text-base font-medium transition-colors duration-150 flex-1"
-                    style={{ color: selected ? "#FACC15" : "rgba(255,255,255,0.75)" }}
-                  >
-                    {opt}
-                  </span>
-
-                  {/* Checkmark */}
-                  {selected && (
-                    <motion.span
-                      className="ml-auto text-sm font-bold flex-shrink-0"
-                      style={{ color: "#FACC15" }}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    >
-                      ✓
-                    </motion.span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center gap-4">
-            {step > 0 && (
-              <button
-                onClick={handleBack}
-                className="text-sm font-semibold py-3 px-2 transition-colors duration-150"
-                style={{ color: "rgba(255,255,255,0.35)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
+      {!done ? (
+        <motion.div key="form" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.22 }}>
+          <div className="flex flex-col gap-4 sm:gap-5 mb-10">
+            {questions.map((q, i) => (
+              <div
+                key={q.id}
+                className="rounded-2xl p-4 sm:p-5"
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
+                  border: answers[q.id]?.trim() ? "1px solid rgba(250,204,21,0.45)" : "1px solid rgba(255,255,255,0.09)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.20)",
+                }}
               >
-                ← Back
-              </button>
-            )}
-            <button
-              onClick={handleNext}
-              disabled={answers[step] === null}
-              className="ml-auto px-6 sm:px-8 py-3.5 rounded-2xl text-black font-bold text-sm transition-all disabled:opacity-25 disabled:cursor-not-allowed"
-              style={{ background: "#FACC15" }}
-            >
-              {step < total - 1 ? "Next →" : "Submit Answers"}
-            </button>
-          </div>
-        </motion.div>
-      )}
-
-      {/* ── Contact phase (only reached with a perfect score) ── */}
-      {phase === "contact" && (
-        <motion.div
-          key="contact"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.22 }}
-        >
-          <div className="flex items-center justify-between mb-4 sm:mb-5">
-            <span className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase" style={{ color: "#FACC15" }}>
-              Congratulations!
-            </span>
+                <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-2" style={{ color: "#FACC15" }}>
+                  Question {i + 1}{q.label ? ` — ${q.label}` : ""}
+                </p>
+                <p className="text-white font-semibold leading-snug mb-3" style={{ fontSize: "clamp(1rem, 2.6vw, 1.2rem)" }}>
+                  {q.q}
+                </p>
+                <textarea
+                  value={answers[q.id] ?? ""}
+                  onChange={(e) => setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                  rows={2}
+                  maxLength={500}
+                  placeholder="Your answer"
+                  className="form-input w-full resize-y"
+                />
+              </div>
+            ))}
           </div>
 
-          <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "#FACC15" }} />
-
-          <h2
-            className="text-white font-bold leading-tight mb-3 sm:mb-4"
-            style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
-          >
-            You got all {total} questions correct!
+          <h2 className="text-white font-bold leading-tight mb-5" style={{ fontSize: "clamp(1.2rem, 3.5vw, 1.8rem)" }}>
+            Your details
           </h2>
-          <p className="text-sm mb-8 sm:mb-10" style={{ color: "rgba(255,255,255,0.40)" }}>
-            Fantastic! You&apos;ve qualified for the prize draw and stand a chance to win {prize}. Complete the registration form below to confirm your entry.
-          </p>
 
-          <div className="flex flex-col gap-4 sm:gap-5 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mb-6">
             <div>
-              <label className="block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-                className="form-input w-full"
-                autoComplete="name"
-              />
+              <label className={labelClass} style={labelStyle}>Full name</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className="form-input w-full" autoComplete="name" />
             </div>
             <div>
-              <label className="block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="e.g. 0712 345 678"
-                className="form-input w-full"
-                autoComplete="tel"
-              />
+              <label className={labelClass} style={labelStyle}>Phone number</label>
+              <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. 0712 345 678" className="form-input w-full" autoComplete="tel" />
             </div>
             <div>
-              <label className="block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="form-input w-full"
-                autoComplete="email"
-              />
+              <label className={labelClass} style={labelStyle}>Email (optional)</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="form-input w-full" autoComplete="email" />
             </div>
             <div>
-              <label className="block text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
-                County / Town of Residence
-              </label>
-              <input
-                type="text"
-                value={county}
-                onChange={(e) => setCounty(e.target.value)}
-                placeholder="e.g. Meru"
-                className="form-input w-full"
-                autoComplete="address-level2"
-              />
+              <label className={labelClass} style={labelStyle}>County / town (optional)</label>
+              <input type="text" value={county} onChange={(e) => setCounty(e.target.value)} placeholder="e.g. Meru" className="form-input w-full" autoComplete="address-level2" />
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <label className={labelClass} style={labelStyle}>Screenshots of your findings (optional, up to {MAX_SCREENSHOTS})</label>
+            <div className="flex flex-wrap gap-2.5">
+              {files.map((f, i) => (
+                <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.15)" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={f.url} alt={`Screenshot ${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
+                    className="absolute top-1 right-1 w-5 h-5 rounded-full text-[10px] font-bold"
+                    style={{ background: "rgba(0,0,0,0.7)", color: "#fff" }}
+                    aria-label="Remove screenshot"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+              {files.length < MAX_SCREENSHOTS && (
+                <label
+                  className="w-20 h-20 rounded-xl flex items-center justify-center text-2xl cursor-pointer transition-colors hover:border-[#FACC15]"
+                  style={{ border: "1px dashed rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.45)" }}
+                >
+                  +
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
+                </label>
+              )}
             </div>
           </div>
 
           <label className="flex items-start gap-3 mb-6 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-              className="mt-0.5 flex-shrink-0"
-            />
+            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 flex-shrink-0" />
             <span className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-              I agree to the campaign Terms and Conditions and consent to WERU TV using my contact details to administer this competition and contact me regarding my entry.
+              I agree to the campaign Terms and Conditions and consent to WERU DIGITAL using my contact details to administer this competition and contact me regarding my entry.
             </span>
           </label>
 
-          {error && (
-            <p className="text-xs text-center mb-3" style={{ color: "#f97d00" }}>{error}</p>
-          )}
+          {error && <p className="text-xs text-center mb-3" style={{ color: "#f97d00" }}>{error}</p>}
+          {!allAnswered && <p className="text-xs text-center mb-3" style={{ color: "rgba(255,255,255,0.35)" }}>Answer all {questions.length} questions to submit.</p>}
 
           <button
             onClick={handleSubmit}
-            disabled={!name.trim() || !phone.trim() || !email.trim() || !county.trim() || !consent || submitting}
-            className="w-full py-4 rounded-2xl text-black font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            disabled={!canSubmit}
+            className="w-full py-4 rounded-2xl text-black font-bold text-sm transition-all active:scale-[0.99] disabled:opacity-30 disabled:cursor-not-allowed"
             style={{ background: "#FACC15" }}
           >
-            {submitting ? "Submitting…" : "Submit My Entry"}
+            {submitting ? "Submitting…" : "Submit my answers"}
           </button>
         </motion.div>
-      )}
-
-      {/* ── Done phase ── */}
-      {phase === "done" && (
-        <motion.div
-          key="done"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.28 }}
-        >
-          {failed ? (
-            <>
-              <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "rgba(255,255,255,0.10)" }} />
-
-              <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-5 sm:mb-6" style={{ color: "#FACC15" }}>
-                Good try!
-              </p>
-
-              <h2
-                className="text-white font-bold leading-tight mb-4"
-                style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
-              >
-                You didn&apos;t get all the answers correct this time.
-              </h2>
-
-              <p className="text-sm leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.40)" }}>
-                Don&apos;t give up! Explore more about WERU DIGITAL and Kisimani Eco Resort &amp; Spa, then try again.
-              </p>
-
-              <button
-                onClick={handleRetry}
-                className="px-6 sm:px-8 py-3.5 rounded-2xl text-black font-bold text-sm transition-all"
-                style={{ background: "#FACC15" }}
-              >
-                Try Again
-              </button>
-            </>
-          ) : (
-            <>
-              <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "#FACC15" }} />
-
-              <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-5 sm:mb-6" style={{ color: "#FACC15" }}>
-                {duplicate ? "Already entered" : "Entry received"}
-              </p>
-
-              <h2
-                className="text-white font-bold leading-tight mb-4"
-                style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}
-              >
-                {duplicate ? "You've already entered." : "You're in the draw!"}
-              </h2>
-
-              <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-                {duplicate
-                  ? "This phone number has already entered. Only one entry per person is allowed."
-                  : `Thanks for playing! You scored ${total}/${total}, so you're in line for ${prize}. Winners will be contacted directly and announced on Weru TV & FM. Good luck!`}
-              </p>
-
-              {!duplicate && promoSection}
-            </>
-          )}
+      ) : (
+        <motion.div key="done" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.28 }}>
+          <div className="h-px w-full mb-8 sm:mb-10" style={{ background: "#FACC15" }} />
+          <p className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase mb-5 sm:mb-6" style={{ color: "#FACC15" }}>
+            {done === "duplicate" ? "Already entered" : "Entry received"}
+          </p>
+          <h2 className="text-white font-bold leading-tight mb-4" style={{ fontSize: "clamp(1.35rem, 4vw, 2.4rem)" }}>
+            {done === "duplicate" ? "You've already entered this week." : "Your answers are in!"}
+          </h2>
+          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+            {done === "duplicate"
+              ? "Only one entry per phone number per quiz. Come back for next week's quiz!"
+              : `Thanks for playing! Our team will check your answers after the quiz closes. Get every answer right and you're in the draw${prize ? ` for ${prize}` : ""}. Winners will be contacted directly and announced on WERU DIGITAL.`}
+          </p>
+          {done === "entered" && promoSection}
         </motion.div>
       )}
-
     </AnimatePresence>
   );
 }

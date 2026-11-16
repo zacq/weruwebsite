@@ -1,54 +1,79 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { asc, count, eq } from "drizzle-orm";
+import { getDb, schema } from "@/db";
+import { QUIZ_ROLES, audit, requireRole } from "@/lib/auth";
+import { QUIZ_CACHE_TAG, effectiveQuizStatus } from "@/lib/quizStatus";
+import { publishProblem, toQuizValues, type QuizInput } from "@/lib/quizAdmin";
 
-const BASE_ID  = "appXyMV3O6ycSVRAi";
-const TABLE_ID = "tbldtDg3hJU0ME5iZ";
+type Params = { params: Promise<{ id: string }> };
 
-type AirtableRecord = { id: string; fields: Record<string, unknown> };
-
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_req: NextRequest, { params }: Params) {
+  const auth = await requireRole(QUIZ_ROLES);
+  if (auth instanceof NextResponse) return auth;
   const { id } = await params;
-  const pat = process.env.AIRTABLE_PAT;
-  if (!pat) return NextResponse.json({ error: "AIRTABLE_PAT not set" }, { status: 500 });
 
-  const body = await req.json();
-  const { title, prize, status } = body as { title?: string; prize?: string; status?: string };
+  const db = getDb();
+  const [quiz] = await db.select().from(schema.quizzes).where(eq(schema.quizzes.id, id)).limit(1);
+  if (!quiz) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const fields: Record<string, unknown> = {};
-  if (title !== undefined) fields.Title = title;
-  if (prize !== undefined) fields.Prize = prize;
-  if (status !== undefined) fields.Status = status;
+  const questions = await db
+    .select()
+    .from(schema.quizQuestions)
+    .where(eq(schema.quizQuestions.quizId, id))
+    .orderBy(asc(schema.quizQuestions.position));
 
-  if (Object.keys(fields).length === 0) {
-    return NextResponse.json({ error: "Nothing to update" }, { status: 400 });
-  }
+  return NextResponse.json({ quiz: { ...quiz, effectiveStatus: effectiveQuizStatus(quiz) }, questions });
+}
 
-  const updates: { id: string; fields: Record<string, unknown> }[] = [{ id, fields }];
+export async function PATCH(req: NextRequest, { params }: Params) {
+  const auth = await requireRole(QUIZ_ROLES);
+  if (auth instanceof NextResponse) return auth;
+  const { id } = await params;
 
-  // Activating this quiz? Auto-archive any other quiz currently marked Active,
-  // so the live site never has to guess which one to serve.
-  if (status === "Active") {
-    const activeRes = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${encodeURIComponent("{Status}='Active'")}`,
-      { headers: { Authorization: `Bearer ${pat}` }, cache: "no-store" }
+  const db = getDb();
+  const [existing] = await db.select().from(schema.quizzes).where(eq(schema.quizzes.id, id)).limit(1);
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  const input = (await req.json().catch(() => ({}))) as QuizInput;
+  const values = toQuizValues(input);
+  if (typeof values === "string") return NextResponse.json({ error: values }, { status: 400 });
+  if (Object.keys(values).length === 0) return NextResponse.json({ error: "Nothing to update" }, { status: 400 });
+
+  const nextStatus = values.status ?? existing.status;
+  if (nextStatus === "published") {
+    const problem = await publishProblem(
+      id,
+      values.startsAt ?? existing.startsAt,
+      values.endsAt !== undefined ? values.endsAt : existing.endsAt
     );
-    if (activeRes.ok) {
-      const activeData = (await activeRes.json()) as { records: AirtableRecord[] };
-      for (const record of activeData.records) {
-        if (record.id !== id) updates.push({ id: record.id, fields: { Status: "Archived" } });
-      }
-    }
+    if (problem) return NextResponse.json({ error: problem }, { status: 409 });
   }
 
-  const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
-    method: "PATCH",
-    headers: { Authorization: `Bearer ${pat}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ records: updates.slice(0, 10) }),
-  });
-  if (!res.ok) return NextResponse.json({ error: await res.text() }, { status: res.status });
+  const [quiz] = await db
+    .update(schema.quizzes)
+    .set({ ...values, updatedAt: new Date() })
+    .where(eq(schema.quizzes.id, id))
+    .returning();
 
-  const updated = await res.json();
-  return NextResponse.json(updated);
+  revalidateTag(QUIZ_CACHE_TAG);
+  await audit(auth, values.status && values.status !== existing.status ? `status:${values.status}` : "update", "quiz", id, input);
+  return NextResponse.json({ quiz: { ...quiz, effectiveStatus: effectiveQuizStatus(quiz) } });
+}
+
+export async function DELETE(_req: NextRequest, { params }: Params) {
+  const auth = await requireRole(QUIZ_ROLES);
+  if (auth instanceof NextResponse) return auth;
+  const { id } = await params;
+
+  const db = getDb();
+  const [{ n }] = await db.select({ n: count() }).from(schema.quizEntries).where(eq(schema.quizEntries.quizId, id));
+  if (n > 0) {
+    return NextResponse.json({ error: "This quiz has entries — archive it instead of deleting" }, { status: 409 });
+  }
+
+  await db.delete(schema.quizzes).where(eq(schema.quizzes.id, id));
+  revalidateTag(QUIZ_CACHE_TAG);
+  await audit(auth, "delete", "quiz", id);
+  return NextResponse.json({ success: true });
 }

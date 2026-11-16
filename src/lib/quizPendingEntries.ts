@@ -1,28 +1,26 @@
 import { getStore } from "@netlify/blobs";
+import type { QuizAnswer } from "@/db/schema";
+import { normalizePhone } from "@/lib/quizStatus";
 
-// Durable buffer for quiz entries that couldn't be written to Airtable immediately
-// (quota exceeded, network error, etc). Netlify Blobs lives on the same platform as
-// the site, so it needs no new account/signup and survives Airtable outages of any
-// length. Entries here are the source of truth until they're synced to Airtable.
+// Durable buffer for quiz entries that couldn't be written to the database
+// immediately (outage, network error). Netlify Blobs lives on the same platform
+// as the site, so entries survive a DB outage of any length and are retried by
+// /api/quiz/sync-pending on a 5-minute schedule.
 const STORE_NAME = "quiz-pending-entries";
 
 export type PendingQuizEntry = {
+  quizId: string;
   name: string;
   phone: string;
-  email: string;
-  county: string;
-  score: number;
-  totalQuestions: number;
-  answers: unknown[];
+  email: string | null;
+  county: string | null;
+  answers: QuizAnswer[];
+  screenshots: string[];
   submittedAt: string;
 };
 
 function store() {
   return getStore(STORE_NAME);
-}
-
-function normalizePhone(phone: string): string {
-  return phone.replace(/\D/g, "").slice(-9);
 }
 
 export async function savePendingEntry(id: string, entry: PendingQuizEntry): Promise<boolean> {
@@ -69,11 +67,11 @@ export async function countPendingEntries(): Promise<number> {
   }
 }
 
-// Closes the race where the same phone submits twice while the first entry is
-// still waiting to sync (Airtable's own duplicate check can't see it yet).
-export async function findPendingEntryByPhone(phone: string): Promise<boolean> {
+// Closes the race where the same phone submits twice for the same quiz while the
+// first entry is still waiting to sync (the DB unique constraint can't see it yet).
+export async function findPendingEntryByPhone(quizId: string, phone: string): Promise<boolean> {
   const normalized = normalizePhone(phone);
   if (normalized.length !== 9) return false;
   const pending = await listPendingEntries();
-  return pending.some((p) => normalizePhone(p.entry.phone) === normalized);
+  return pending.some((p) => p.entry.quizId === quizId && normalizePhone(p.entry.phone) === normalized);
 }

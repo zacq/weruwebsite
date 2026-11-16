@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -18,11 +19,11 @@ function LoginForm() {
       const res = await fetch("/api/dashboard/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setError(data?.error || "Incorrect password.");
+        setError(data?.error || "Incorrect email or password.");
         return;
       }
       const dest = searchParams.get("from") || "/dashboard";
@@ -47,15 +48,25 @@ function LoginForm() {
           <span className="font-bold text-lg text-white"> Command Center</span>
         </div>
         <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
-          Enter the dashboard password to continue.
+          Sign in with your staff account.
         </p>
 
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          autoComplete="username"
+          autoFocus
+          className="text-sm px-3.5 py-3 rounded-xl text-white"
+          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)" }}
+        />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          autoFocus
+          autoComplete="current-password"
           className="text-sm px-3.5 py-3 rounded-xl text-white"
           style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)" }}
         />
@@ -64,7 +75,7 @@ function LoginForm() {
 
         <button
           type="submit"
-          disabled={!password || submitting}
+          disabled={!email || !password || submitting}
           className="text-sm font-bold py-3 rounded-xl text-white transition-all disabled:opacity-40"
           style={{ background: "#f97d00" }}
         >

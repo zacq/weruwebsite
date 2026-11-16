@@ -8,13 +8,22 @@ import TrendChart from "@/components/dashboard/TrendChart";
 import DataTable from "@/components/dashboard/DataTable";
 import ExportCsvButton from "@/components/dashboard/ExportCsvButton";
 import QuizManagementPanel from "@/components/dashboard/QuizManagementPanel";
+import UsersPanel from "@/components/dashboard/UsersPanel";
 import type { AirtableRecord } from "@/components/dashboard/types";
 
 type RecordsState = Record<string, AirtableRecord[]>;
+type Role = "admin" | "editor" | "quiz_manager";
 
 const AUTO_REFRESH_MS = 60_000;
 
+function tableKeysFor(role: Role): string[] {
+  if (role === "admin") return DASHBOARD_TABLE_KEYS;
+  if (role === "quiz_manager") return DASHBOARD_TABLE_KEYS.filter((k) => k === "quiz");
+  return DASHBOARD_TABLE_KEYS.filter((k) => k !== "quiz");
+}
+
 export default function DashboardPage() {
+  const [role, setRole] = useState<Role | null>(null);
   const [active, setActive] = useState("overview");
   const [records, setRecords] = useState<RecordsState>({});
   const [loading, setLoading] = useState(true);
@@ -22,11 +31,21 @@ export default function DashboardPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [quizPendingCount, setQuizPendingCount] = useState(0);
 
+  const tableKeys = useMemo(() => (role ? tableKeysFor(role) : []), [role]);
+
+  useEffect(() => {
+    fetch("/api/dashboard/me", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((me) => setRole(me.role))
+      .catch(() => setError("Your session has expired — please log in again."));
+  }, []);
+
   const fetchAll = useCallback(async () => {
+    if (!role) return;
     setError(null);
     try {
       const results = await Promise.all(
-        DASHBOARD_TABLE_KEYS.map(async (key) => {
+        tableKeys.map(async (key) => {
           const res = await fetch(`/api/dashboard/${key}`, { cache: "no-store" });
           if (!res.ok) throw new Error(`Failed to load ${key}`);
           const data = await res.json();
@@ -41,16 +60,17 @@ export default function DashboardPage() {
       setLoading(false);
     }
 
-    // Quiz entries stuck in the Netlify Blobs buffer, waiting to sync to Airtable —
+    // Quiz entries stuck in the Netlify Blobs buffer, waiting to sync to the database —
     // see src/lib/quizPendingEntries.ts. Fetched separately so a hiccup here never
     // blocks the main dashboard data from loading.
+    if (!tableKeys.includes("quiz")) return;
     try {
       const res = await fetch("/api/dashboard/quiz-pending-count", { cache: "no-store" });
       if (res.ok) setQuizPendingCount((await res.json()).count ?? 0);
     } catch {
       // Non-critical — leave the last known count displayed.
     }
-  }, []);
+  }, [role, tableKeys]);
 
   useEffect(() => {
     fetchAll();
@@ -99,7 +119,7 @@ export default function DashboardPage() {
 
   const recentActivity = useMemo(() => {
     const all: { tableKey: string; record: AirtableRecord }[] = [];
-    for (const key of DASHBOARD_TABLE_KEYS) {
+    for (const key of tableKeys) {
       for (const record of records[key] ?? []) all.push({ tableKey: key, record });
     }
     return all
@@ -109,7 +129,7 @@ export default function DashboardPage() {
         return new Date(dateB).getTime() - new Date(dateA).getTime();
       })
       .slice(0, 15);
-  }, [records]);
+  }, [records, tableKeys]);
 
   const activeConfig = active !== "overview" ? DASHBOARD_TABLES[active] : null;
 
@@ -117,12 +137,12 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col sm:flex-row" style={{ background: "#F5F5F4" }}>
-      <Sidebar active={active} onSelect={setActive} />
+      <Sidebar active={active} onSelect={setActive} role={role} />
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6">
           <h1 className="text-xl sm:text-2xl font-bold" style={{ color: "#0A0A0A" }}>
-            {active === "overview" ? "Overview" : active === "quiz-management" ? "Quiz Management" : activeConfig?.label}
+            {active === "overview" ? "Overview" : active === "quiz-management" ? "Quiz Management" : active === "users" ? "Users" : activeConfig?.label}
           </h1>
           <div className="flex items-center justify-between sm:justify-end gap-3">
             {lastUpdated && (
@@ -150,7 +170,7 @@ export default function DashboardPage() {
         {isInitialLoad ? (
           <div className="flex flex-col gap-6">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-              {DASHBOARD_TABLE_KEYS.map((key) => (
+              {tableKeys.map((key) => (
                 <div
                   key={key}
                   className="h-24 rounded-2xl bg-white animate-pulse"
@@ -163,7 +183,7 @@ export default function DashboardPage() {
         ) : active === "overview" ? (
           <div className="flex flex-col gap-6">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-              {DASHBOARD_TABLE_KEYS.map((key) => {
+              {tableKeys.map((key) => {
                 const config = DASHBOARD_TABLES[key];
                 const rows = records[key] ?? [];
                 let subLabel: string | undefined;
@@ -228,6 +248,8 @@ export default function DashboardPage() {
           </div>
         ) : active === "quiz-management" ? (
           <QuizManagementPanel />
+        ) : active === "users" ? (
+          <UsersPanel />
         ) : activeConfig ? (
           <div className="flex flex-col gap-6">
             <div className="rounded-2xl bg-white p-4 sm:p-5" style={{ border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 1px 3px rgba(249,125,0,0.05), 0 1px 2px rgba(0,0,0,0.03)" }}>

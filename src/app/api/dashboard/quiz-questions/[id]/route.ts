@@ -1,62 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { eq } from "drizzle-orm";
+import { getDb, schema } from "@/db";
+import { QUIZ_ROLES, audit, requireRole } from "@/lib/auth";
+import { QUIZ_CACHE_TAG } from "@/lib/quizStatus";
 
-const BASE_ID  = "appXyMV3O6ycSVRAi";
-const TABLE_ID = "tblBY4sjWC3gztd4V";
+type Params = { params: Promise<{ id: string }> };
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest, { params }: Params) {
+  const auth = await requireRole(QUIZ_ROLES);
+  if (auth instanceof NextResponse) return auth;
   const { id } = await params;
-  const pat = process.env.AIRTABLE_PAT;
-  if (!pat) return NextResponse.json({ error: "AIRTABLE_PAT not set" }, { status: 500 });
 
-  const body = await req.json();
-  const { question, options, correctAnswer, order } = body as {
-    question?: string;
-    options?: string[];
-    correctAnswer?: string;
-    order?: number;
+  const { label, question, answerKey } = (await req.json().catch(() => ({}))) as {
+    label?: string; question?: string; answerKey?: string;
   };
 
-  const fields: Record<string, unknown> = {};
-  if (question !== undefined) fields.Question = question.trim();
-  if (options !== undefined) fields.Options = options.map((o) => o.trim()).filter(Boolean).join("\n");
-  if (correctAnswer !== undefined) fields["Correct Answer"] = correctAnswer.trim();
-  if (order !== undefined) fields.Order = order;
-
-  if (options !== undefined && correctAnswer !== undefined && !options.includes(correctAnswer)) {
-    return NextResponse.json({ error: "correctAnswer must match one of the options exactly" }, { status: 400 });
+  const set: Partial<typeof schema.quizQuestions.$inferInsert> = { updatedAt: new Date() };
+  if (label !== undefined) set.label = label.trim() || null;
+  if (question !== undefined) {
+    if (!question.trim()) return NextResponse.json({ error: "Question text is required" }, { status: 400 });
+    set.question = question.trim();
   }
+  if (answerKey !== undefined) set.answerKey = answerKey.trim() || null;
 
-  if (Object.keys(fields).length === 0) {
-    return NextResponse.json({ error: "Nothing to update" }, { status: 400 });
-  }
+  const [updated] = await getDb().update(schema.quizQuestions).set(set).where(eq(schema.quizQuestions.id, id)).returning();
+  if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${id}`, {
-    method: "PATCH",
-    headers: { Authorization: `Bearer ${pat}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ fields }),
-  });
-  if (!res.ok) return NextResponse.json({ error: await res.text() }, { status: res.status });
-
-  const updated = await res.json();
-  return NextResponse.json(updated);
+  revalidateTag(QUIZ_CACHE_TAG);
+  await audit(auth, "update", "quiz_question", id, { label, question, answerKey });
+  return NextResponse.json({ question: updated });
 }
 
-export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_req: NextRequest, { params }: Params) {
+  const auth = await requireRole(QUIZ_ROLES);
+  if (auth instanceof NextResponse) return auth;
   const { id } = await params;
-  const pat = process.env.AIRTABLE_PAT;
-  if (!pat) return NextResponse.json({ error: "AIRTABLE_PAT not set" }, { status: 500 });
 
-  const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?records[]=${id}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${pat}` },
-  });
-  if (!res.ok) return NextResponse.json({ error: await res.text() }, { status: res.status });
-
+  await getDb().delete(schema.quizQuestions).where(eq(schema.quizQuestions.id, id));
+  revalidateTag(QUIZ_CACHE_TAG);
+  await audit(auth, "delete", "quiz_question", id);
   return NextResponse.json({ success: true });
 }

@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
 import QuizForm from "@/components/ui/QuizForm";
 import WeruExperience from "@/components/ui/WeruExperience";
-import KisimaniPromoSection from "@/components/ui/KisimaniPromoSection";
+import QuizPromoSection from "@/components/ui/QuizPromoSection";
 import { getActiveQuiz } from "@/lib/getActiveQuiz";
 
 export const dynamic    = "force-static";
 export const revalidate = 3600;
 
-// Forces the "on hold" page below without calling Airtable — flip off once a new quiz is ready.
+// Emergency switch: forces the "on hold" page below regardless of the dashboard.
 const QUIZ_PAUSED = process.env.QUIZ_PAUSED === "true";
 
 export async function generateMetadata(): Promise<Metadata> {
   const quiz = QUIZ_PAUSED ? null : await getActiveQuiz();
   const title = quiz ? `${quiz.title} — Weru TV` : "Weru Website Experience — Weru TV";
   const description = quiz
-    ? `Stand a chance to win ${quiz.prize}.`
+    ? quiz.prize
+      ? `Stand a chance to win ${quiz.prize}.`
+      : quiz.tagline ?? quiz.description ?? `Answer ${quiz.questions.length} questions and stand a chance to win.`
     : "The quiz is on hold, but tell us something nice, nominate a cause for Weru to support, and find out how you can donate.";
   return {
     title,
@@ -67,7 +69,7 @@ export default async function QuizPage() {
                 A new quiz is coming — but we still want to hear from you.
               </h1>
               <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-                Thank you to every Weru loyalist who played the 96+4 Quiz — your energy keeps this station going.
+                Thank you to every Weru loyalist who played our last quiz — your energy keeps this station going.
               </p>
             </div>
 
@@ -81,7 +83,7 @@ export default async function QuizPage() {
                 className="text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2 sm:mb-3"
                 style={{ color: "rgba(255,255,255,0.25)" }}
               >
-                {quiz.title}
+                {quiz.campaign ?? "Weru Digital quiz"}
               </p>
               <h1
                 className="text-white font-bold leading-none mb-3 sm:mb-4"
@@ -89,13 +91,59 @@ export default async function QuizPage() {
               >
                 {quiz.title}
               </h1>
-              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
-                Stand a chance to win{" "}
-                <span className="font-semibold" style={{ color: "#FACC15" }}>{quiz.prize}</span>!
-              </p>
+              {quiz.description && (
+                <p className="text-sm sm:text-base leading-relaxed mb-3" style={{ color: "rgba(255,255,255,0.60)" }}>
+                  {quiz.description}
+                </p>
+              )}
+              {quiz.prize && (
+                <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+                  Stand a chance to win{" "}
+                  <span className="font-semibold" style={{ color: "#FACC15" }}>{quiz.prize}</span>!
+                </p>
+              )}
+
+              {quiz.steps.length > 0 && (
+                <ol className="mt-6 flex flex-col gap-2.5">
+                  {quiz.steps.map((step, i) => (
+                    <li key={i} className="flex gap-3 text-sm" style={{ color: "rgba(255,255,255,0.70)" }}>
+                      <span
+                        className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold tabular-nums"
+                        style={{ background: "rgba(250,204,21,0.12)", color: "#FACC15", border: "1px solid rgba(250,204,21,0.35)" }}
+                      >
+                        {i + 1}
+                      </span>
+                      <span className="pt-0.5">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
+
+              {quiz.promoCopy?.primaryCta && (
+                <a
+                  href={quiz.promoCopy.primaryCta.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center mt-6 px-5 py-3 rounded-2xl font-bold text-sm transition-all hover:-translate-y-0.5 active:scale-95"
+                  style={{ background: "#f97d00", color: "#1a1003", boxShadow: "0 6px 20px rgba(249,125,0,0.30)" }}
+                >
+                  {quiz.promoCopy.primaryCta.label} →
+                </a>
+              )}
+
+              {quiz.tagline && (
+                <p className="mt-6 text-[11px] sm:text-xs font-extrabold tracking-[0.2em] uppercase" style={{ color: "#FACC15" }}>
+                  {quiz.tagline}
+                </p>
+              )}
             </div>
 
-            <QuizForm questions={quiz.questions} prize={quiz.prize} promoSection={<KisimaniPromoSection />} />
+            <QuizForm
+              quizId={quiz.id}
+              questions={quiz.questions}
+              prize={quiz.prize}
+              promoSection={quiz.promoCopy ? <QuizPromoSection promo={quiz.promoCopy} /> : undefined}
+            />
           </>
         )}
 

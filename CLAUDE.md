@@ -74,12 +74,25 @@ src/components/
 src/app/api/
   rate-card/route.ts   # POST — advertising enquiry form
   viewer/route.ts      # POST — viewer lead capture modal
-  quiz/route.ts        # POST — quiz lead capture (Airtable stub)
+  quiz/route.ts        # POST — quiz entry (server-side scoring → Neon, Netlify Blobs buffer on failure)
+  quiz/tick/route.ts   # POST — revalidates the quiz cache when a quiz opens/closes (5-min Netlify schedule)
   news-feed/route.ts   # GET  — live Kenyan headlines from RSS (10-min cache)
   youtube-live/route.ts# GET  — resolves stream source (HLS → embed → YouTube cascade, 30-min cache)
 ```
 
-`rate-card`, `viewer`, and `quiz` currently `console.log` submissions. Supabase, Resend, and Airtable integrations are stubbed in comments — uncomment and add env vars when ready.
+Other lead forms (`rate-card`, `viewer`, etc.) still write to Airtable until Phase 3 of the CMS migration.
+
+### Database (Neon Postgres + Drizzle) — migration in progress
+
+The site is moving off Airtable onto Neon (plan: `~/.claude/plans/i-need-you-tocome-crispy-harbor.md`). Done: auth + quiz. Pending: lead forms (Phase 3), content + Cloudinary media library (Phase 4), Airtable removal (Phase 5).
+
+- Schema: `src/db/schema.ts`. Client: `getDb()` from `src/db/index.ts` (lazy, Neon HTTP driver — no interactive transactions; use `db.batch`).
+- Migrations: edit schema → `npm run db:generate` → `npm run db:migrate`. SQL lives in `drizzle/`.
+- Reads go through the existing `src/lib/get*.ts` functions wrapped in `unstable_cache` with a tag; dashboard writes call `revalidateTag(tag)` so changes show immediately.
+- **Dashboard auth:** named accounts in `users` (roles `admin`, `editor`, `quiz_manager`), JWT session cookie (`src/lib/session.ts`, edge-safe for middleware). Every dashboard route calls `requireRole()` from `src/lib/auth.ts` and logs changes with `audit()`. First admin: `npm run db:seed-admin -- email "Name" "password"`.
+- **Quiz (weekly "WERU DIGITAL Watch, Like & Win" format):** open-text questions with a staff-only `answer_key` (never sent to the public page). Participants submit typed answers + up to 3 optional screenshots (compressed client-side, stored in the Netlify Blobs `quiz-screenshots` store, served only via `/api/dashboard/quiz-screenshots`). Staff mark each answer ✓/✗ in the dashboard; an entry is `eligible` when every answer is marked correct, and the random draw is blocked until every entry is marked.
+- A quiz is stored as `draft | published | archived`; live/scheduled/closed is derived from `starts_at`/`ends_at` (`src/lib/quizStatus.ts`). Only one published quiz may cover any time window. Entries are unique per `(quiz_id, phone)`. All campaign copy (campaign name, intro, how-to-win steps, tagline, YouTube button, sponsor promo) lives on the quiz row — never hardcode campaign text in components.
+- Env vars: `DATABASE_URL`, `SESSION_SECRET` (32+ chars), `QUIZ_SYNC_SECRET`; optional `AT_USERNAME`/`AT_API_KEY`/`AT_SENDER_ID` (Africa's Talking SMS), `RESEND_API_KEY`/`RESEND_FROM` (email).
 
 ### Live news feed (RSS integration)
 

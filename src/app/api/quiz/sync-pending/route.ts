@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { listPendingEntries, deletePendingEntry } from "@/lib/quizPendingEntries";
-import { writeQuizEntryToAirtable } from "@/lib/writeQuizEntryToAirtable";
+import { writeQuizEntry } from "@/lib/writeQuizEntry";
 
-// Retries quiz entries stuck in the pending buffer (saved there because Airtable was
-// unreachable at submission time) against Airtable, clearing each one once it lands.
+// Retries quiz entries stuck in the pending buffer (saved there because the
+// database was unreachable at submission time), clearing each one once it lands.
 // Called on a schedule by netlify/functions/sync-pending-quiz-entries.ts, and can be
 // triggered manually with the same header for testing or an on-demand nudge.
 export async function POST(req: NextRequest) {
@@ -18,9 +18,15 @@ export async function POST(req: NextRequest) {
   const errors: string[] = [];
 
   for (const { id, entry } of pending) {
-    const result = await writeQuizEntryToAirtable(entry);
+    if (!entry.quizId) {
+      // Buffered by the pre-database (Airtable) version of this route — can't be
+      // attributed to a quiz automatically. Left in place for manual review.
+      stillPending++;
+      errors.push(`${id}: missing quizId (legacy entry)`);
+      continue;
+    }
+    const result = await writeQuizEntry(entry);
     if (result.ok || result.duplicate) {
-      // Already in Airtable (freshly synced, or it landed there some other way) — clear it.
       await deletePendingEntry(id);
       synced++;
     } else {

@@ -3,19 +3,27 @@
 import { useRouter } from "next/navigation";
 import { DASHBOARD_TABLES } from "@/lib/dashboardTables";
 
+type Role = "admin" | "editor" | "quiz_manager";
+
 type SidebarProps = {
   active: string;
   onSelect: (key: string) => void;
+  role: Role | null;
 };
 
-const NAV_ITEMS = [
-  { key: "overview", label: "Overview" },
-  { key: "quiz-management", label: "Quiz Management" },
-  ...Object.values(DASHBOARD_TABLES).map((t) => ({ key: t.key, label: t.label })),
+const QUIZ: Role[] = ["admin", "quiz_manager"];
+const CONTENT: Role[] = ["admin", "editor"];
+
+const ALL_NAV_ITEMS: { key: string; label: string; roles: Role[] }[] = [
+  { key: "overview", label: "Overview", roles: ["admin", "editor", "quiz_manager"] },
+  { key: "quiz-management", label: "Quiz Management", roles: QUIZ },
+  ...Object.values(DASHBOARD_TABLES).map((t) => ({ key: t.key, label: t.label, roles: t.key === "quiz" ? QUIZ : CONTENT })),
+  { key: "users", label: "Users", roles: ["admin"] },
 ];
 
-export default function Sidebar({ active, onSelect }: SidebarProps) {
+export default function Sidebar({ active, onSelect, role }: SidebarProps) {
   const router = useRouter();
+  const NAV_ITEMS = ALL_NAV_ITEMS.filter((item) => role && item.roles.includes(role));
 
   const handleLogout = async () => {
     await fetch("/api/dashboard/logout", { method: "POST" });

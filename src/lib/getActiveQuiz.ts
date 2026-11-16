@@ -1,117 +1,94 @@
-const BASE_ID = "appXyMV3O6ycSVRAi";
-const QUIZZES_TABLE_ID   = process.env.AIRTABLE_QUIZZES_TABLE_ID ?? "tbldtDg3hJU0ME5iZ";
-const QUESTIONS_TABLE_ID = process.env.AIRTABLE_QUIZ_QUESTIONS_TABLE_ID ?? "tblBY4sjWC3gztd4V";
+import { unstable_cache } from "next/cache";
+import { and, asc, desc, eq, gt, isNull, lte, or } from "drizzle-orm";
+import { getDb, schema } from "@/db";
+import type { QuizPromoCopy } from "@/db/schema";
+import { QUIZ_CACHE_TAG } from "@/lib/quizStatus";
 
-// This fetch runs on every page via the Footer component (13+ templates, including
-// every presenter sub-page), not just /quiz — campaigns change rarely and are
-// admin-driven, so an hour of staleness isn't worth the Airtable quota it costs.
-const REVALIDATE_SECONDS = 21600; // 6 hours
-
+// Public shape — deliberately excludes the staff-only answer key.
 export type QuizQuestion = {
+  id: string;
+  label: string | null;
   q: string;
-  options: string[];
-  correct: number;
 };
 
 export type ActiveQuiz = {
+  id: string;
+  campaign: string | null;
   title: string;
-  prize: string;
+  tagline: string | null;
+  steps: string[];
+  prize: string | null;
+  description: string | null;
+  sponsor: string | null;
+  prizeImageUrl: string | null;
+  promoCopy: QuizPromoCopy | null;
+  endsAt: string | null;
   questions: QuizQuestion[];
 };
 
-// Mirrors whatever quiz campaign is currently live in Airtable (Quizzes table, "The Kisimani
-// Experience Quiz Challenge" record) — this is the safety net for when Airtable is unreachable
-// (rate-limited, billing-limit exceeded, network error), so it must be kept in sync by hand
-// whenever the active campaign changes. It must NEVER be a stale/retired quiz: during an active
-// marketing campaign, showing the wrong quiz here is worse than showing a generic "come back
-// soon" message, since visitors scanning the campaign QR code would see unrelated content.
-const FALLBACK_QUIZ: ActiveQuiz = {
-  title: "The Kisimani Experience Quiz Challenge",
-  prize: "amazing resort experiences at Kisimani Eco Resort & Spa",
-  questions: [
-    { q: "Which experience at Kisimani gives visitors the thrill of soaring through treetops while enjoying the natural surroundings?", options: ["Nature Walk", "Archery Session", "Ziplining Experience", "Farm Tour"], correct: 2 },
-    { q: "What is one of the main benefits of staying at an eco-resort?", options: ["Conserving natural resources and protecting biodiversity", "Increasing waste production", "Excessive water and energy consumption", "Replacing local products with imported products"], correct: 0 },
-    { q: "What is the name of the digital platform that brings WERU TV and WERU FM content together?", options: ["Weru Media Hub", "WERU DIGITAL", "Weru Online", "Weru Network"], correct: 1 },
-    { q: "Which language is primarily used in WERU TV broadcasts?", options: ["English", "Kiswahili", "Kimeru", "Kikuyu"], correct: 2 },
-    { q: "Which of the following correctly identifies five types of farming practised at Kisimani?", options: ["Organic farming, dairy farming, poultry farming, fish farming and beekeeping", "Tea, coffee, wheat, cotton and sugarcane farming", "Flower, tobacco, rice, tea and coffee farming", "Maize, wheat, barley, cotton and sugarcane farming"], correct: 0 },
-    { q: "Which experience allows visitors to explore the natural surroundings at Kisimani?", options: ["Spa Treatment", "Nature Walk", "Farm-to-Table Dining", "Archery"], correct: 1 },
-    { q: "What does Farm-to-Table dining mean?", options: ["Preparing meals using fresh produce sourced directly from the farm", "Preparing meals using imported ingredients only", "Serving traditional meals only", "Preparing meals using products sourced exclusively from supermarkets"], correct: 0 },
-    { q: "What is the frequency of WERU FM?", options: ["96.4 FM", "98.4 FM", "94.6 FM", "102.4 FM"], correct: 0 },
-    { q: "Which combination features five experiences available at Kisimani?", options: ["Swimming, ziplining, nature walks, archery and spa", "Golf, skiing, snowboarding, surfing and skating", "Horse racing, motor racing, skiing, surfing and golf", "Mountain climbing, scuba diving, skiing, skating and surfing"], correct: 0 },
-    { q: "Which website should audiences visit to access WERU DIGITAL content?", options: ["www.werutv.co.ke", "www.werufm.co.ke", "www.werudigital.co.ke", "www.werumedia.co.ke"], correct: 2 },
-    { q: "After an exciting day of adventure at Kisimani, which experience would be ideal for relaxation?", options: ["Ziplining", "Archery", "Spa Treatment", "Farm Tour"], correct: 2 },
-  ],
-};
+// Dashboard writes call revalidateTag("quiz") so edits show immediately; the
+// 5-minute scheduled tick (/api/quiz/tick) does the same when a quiz crosses
+// its start/end time. The 10-minute revalidate is only a backstop.
+const loadLiveQuiz = unstable_cache(
+  async (): Promise<ActiveQuiz | null> => {
+    const db = getDb();
+    const now = new Date();
 
-type AirtableRecord = { id: string; fields: Record<string, unknown> };
+    const [quiz] = await db
+      .select()
+      .from(schema.quizzes)
+      .where(
+        and(
+          eq(schema.quizzes.status, "published"),
+          lte(schema.quizzes.startsAt, now),
+          or(isNull(schema.quizzes.endsAt), gt(schema.quizzes.endsAt, now))
+        )
+      )
+      .orderBy(desc(schema.quizzes.startsAt))
+      .limit(1);
 
-function mapQuestion(record: AirtableRecord): QuizQuestion | null {
-  const f = record.fields;
-  const q = (f.Question as string | undefined)?.trim();
-  const optionsRaw = (f.Options as string | undefined) ?? "";
-  const options = optionsRaw.split("\n").map((o) => o.trim()).filter(Boolean);
-  const correctAnswer = (f["Correct Answer"] as string | undefined)?.trim();
-  const correct = correctAnswer ? options.indexOf(correctAnswer) : -1;
+    if (!quiz) return null;
 
-  if (!q || options.length < 2 || correct === -1) {
-    console.warn("[getActiveQuiz] Skipping malformed question record:", q ?? "(unnamed)");
-    return null;
-  }
+    const questions = await db
+      .select({ id: schema.quizQuestions.id, label: schema.quizQuestions.label, q: schema.quizQuestions.question })
+      .from(schema.quizQuestions)
+      .where(eq(schema.quizQuestions.quizId, quiz.id))
+      .orderBy(asc(schema.quizQuestions.position));
 
-  return { q, options, correct };
-}
+    const valid = questions.filter((q) => q.q.trim());
+    if (valid.length === 0) {
+      console.warn(`[getActiveQuiz] Live quiz "${quiz.title}" has no questions — not showing it.`);
+      return null;
+    }
+
+    return {
+      id: quiz.id,
+      campaign: quiz.campaign,
+      title: quiz.title,
+      tagline: quiz.tagline,
+      steps: quiz.steps,
+      prize: quiz.prize,
+      description: quiz.description,
+      sponsor: quiz.sponsor,
+      prizeImageUrl: quiz.prizeImageUrl,
+      promoCopy: quiz.promoCopy,
+      endsAt: quiz.endsAt?.toISOString() ?? null,
+      questions: valid,
+    };
+  },
+  ["active-quiz"],
+  { tags: [QUIZ_CACHE_TAG], revalidate: 600 }
+);
 
 export async function getActiveQuiz(): Promise<ActiveQuiz | null> {
-  const pat = process.env.AIRTABLE_PAT;
-  if (!pat) return FALLBACK_QUIZ;
-
   try {
-    const quizRes = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${QUIZZES_TABLE_ID}?filterByFormula=${encodeURIComponent(
-        "{Status}='Active'"
-      )}&maxRecords=1`,
-      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: REVALIDATE_SECONDS } }
-    );
-
-    if (!quizRes.ok) {
-      console.error("[getActiveQuiz] Airtable error (quiz):", await quizRes.text());
-      return FALLBACK_QUIZ;
-    }
-
-    const quizData = (await quizRes.json()) as { records: AirtableRecord[] };
-    const quizRecord = quizData.records[0];
-    if (!quizRecord) return null; // No active quiz — a deliberate "quiz paused" state, not an error.
-
-    const title = (quizRecord.fields.Title as string | undefined)?.trim() || FALLBACK_QUIZ.title;
-    const prize = (quizRecord.fields.Prize as string | undefined)?.trim() || FALLBACK_QUIZ.prize;
-
-    // Linked-record fields resolve to display values (not IDs) inside Airtable formulas,
-    // so filtering by quiz ID has to happen client-side against the raw `Quiz` ID array
-    // the records API returns, rather than via filterByFormula.
-    const questionsRes = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${QUESTIONS_TABLE_ID}?pageSize=100&sort[0][field]=Order&sort[0][direction]=asc`,
-      { headers: { Authorization: `Bearer ${pat}` }, next: { revalidate: REVALIDATE_SECONDS } }
-    );
-
-    if (!questionsRes.ok) {
-      console.error("[getActiveQuiz] Airtable error (questions):", await questionsRes.text());
-      return FALLBACK_QUIZ;
-    }
-
-    const questionsData = (await questionsRes.json()) as { records: AirtableRecord[] };
-    const questions = questionsData.records
-      .filter((r) => (r.fields.Quiz as string[] | undefined)?.includes(quizRecord.id))
-      .map(mapQuestion)
-      .filter((q): q is QuizQuestion => q !== null);
-
-    if (questions.length < 2) {
-      console.warn(`[getActiveQuiz] Active quiz "${title}" has ${questions.length} valid questions — falling back.`);
-      return FALLBACK_QUIZ;
-    }
-
-    return { title, prize, questions };
+    const quiz = await loadLiveQuiz();
+    // The cached copy may outlive the quiz's end time by up to one tick.
+    if (quiz?.endsAt && new Date(quiz.endsAt) <= new Date()) return null;
+    return quiz;
   } catch (err) {
-    console.error("[getActiveQuiz] Fetch failed:", err);
-    return FALLBACK_QUIZ;
+    // Showing "quiz on hold" beats serving a stale or wrong campaign.
+    console.error("[getActiveQuiz] Database read failed:", err);
+    return null;
   }
 }

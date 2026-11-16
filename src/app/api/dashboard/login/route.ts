@@ -1,32 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHmac } from "crypto";
+import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
+import { getDb, schema } from "@/db";
+import { SESSION_COOKIE, SESSION_MAX_AGE, signSession } from "@/lib/session";
 
-const COOKIE_NAME = "weru_dashboard_auth";
-const AUTH_MESSAGE = "weru-dashboard-auth";
-const THIRTY_DAYS = 60 * 60 * 24 * 30;
+let DUMMY_HASH: string | undefined;
 
 export async function POST(req: NextRequest) {
-  const password = process.env.DASHBOARD_PASSWORD;
-  if (!password) {
-    return NextResponse.json({ error: "Dashboard password not configured" }, { status: 500 });
+  if (!process.env.SESSION_SECRET || !process.env.DATABASE_URL) {
+    return NextResponse.json({ error: "Dashboard login is not configured" }, { status: 500 });
   }
 
   const body = await req.json().catch(() => ({}));
-  const { password: submitted } = body as { password?: string };
-
-  if (submitted !== password) {
-    return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
+  const { email, password } = body as { email?: string; password?: string };
+  if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
+    return NextResponse.json({ error: "Enter your email and password" }, { status: 400 });
   }
 
-  const token = createHmac("sha256", password).update(AUTH_MESSAGE).digest("hex");
+  const db = getDb();
+  const [user] = await db
+    .select()
+    .from(schema.users)
+    .where(eq(schema.users.email, email.trim().toLowerCase()))
+    .limit(1);
 
+  // Compare even when the user doesn't exist so response timing doesn't reveal which emails are registered.
+  const hash = user?.passwordHash ?? (DUMMY_HASH ??= bcrypt.hashSync("not-a-real-password", 10));
+  const ok = await bcrypt.compare(password, hash);
+  if (!user || !ok || !user.active) {
+    return NextResponse.json({ error: "Incorrect email or password" }, { status: 401 });
+  }
+
+  await db.update(schema.users).set({ lastLoginAt: new Date() }).where(eq(schema.users.id, user.id));
+
+  const token = await signSession({ userId: user.id, email: user.email, name: user.name, role: user.role });
   const res = NextResponse.json({ success: true });
-  res.cookies.set(COOKIE_NAME, token, {
+  res.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: THIRTY_DAYS,
+    maxAge: SESSION_MAX_AGE,
   });
   return res;
 }

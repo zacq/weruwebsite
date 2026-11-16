@@ -1,41 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const BASE_ID  = "appXyMV3O6ycSVRAi";
-const TABLE_ID = "tbldtDg3hJU0ME5iZ";
+import { desc, sql } from "drizzle-orm";
+import { getDb, schema } from "@/db";
+import { QUIZ_ROLES, audit, requireRole } from "@/lib/auth";
+import { effectiveQuizStatus } from "@/lib/quizStatus";
+import { toQuizValues, uniqueSlug, type QuizInput } from "@/lib/quizAdmin";
 
 export async function GET() {
-  const pat = process.env.AIRTABLE_PAT;
-  if (!pat) return NextResponse.json({ error: "AIRTABLE_PAT not set" }, { status: 500 });
+  const auth = await requireRole(QUIZ_ROLES);
+  if (auth instanceof NextResponse) return auth;
 
-  const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?pageSize=100`, {
-    headers: { Authorization: `Bearer ${pat}` },
-    cache: "no-store",
+  const q = schema.quizzes;
+  const rows = await getDb()
+    .select({
+      quiz: q,
+      questionCount: sql<number>`(select count(*)::int from ${schema.quizQuestions} where ${schema.quizQuestions.quizId} = ${q.id})`,
+      entryCount: sql<number>`(select count(*)::int from ${schema.quizEntries} where ${schema.quizEntries.quizId} = ${q.id})`,
+      unreviewedCount: sql<number>`(select count(*)::int from ${schema.quizEntries} where ${schema.quizEntries.quizId} = ${q.id} and not ${schema.quizEntries.reviewed})`,
+      winnerCount: sql<number>`(select count(*)::int from ${schema.quizEntries} where ${schema.quizEntries.quizId} = ${q.id} and ${schema.quizEntries.drawStatus} = 'winner')`,
+    })
+    .from(q)
+    .orderBy(desc(q.startsAt));
+
+  return NextResponse.json({
+    quizzes: rows.map(({ quiz, ...counts }) => ({
+      ...quiz,
+      ...counts,
+      effectiveStatus: effectiveQuizStatus(quiz),
+    })),
   });
-  if (!res.ok) return NextResponse.json({ error: await res.text() }, { status: res.status });
-
-  const data = await res.json();
-  return NextResponse.json(data);
 }
 
 export async function POST(req: NextRequest) {
-  const pat = process.env.AIRTABLE_PAT;
-  if (!pat) return NextResponse.json({ error: "AIRTABLE_PAT not set" }, { status: 500 });
+  const auth = await requireRole(QUIZ_ROLES);
+  if (auth instanceof NextResponse) return auth;
 
-  const body = await req.json();
-  const { title, prize } = body as { title?: string; prize?: string };
-  if (!title?.trim() || !prize?.trim()) {
-    return NextResponse.json({ error: "title and prize are required" }, { status: 400 });
+  const input = (await req.json().catch(() => ({}))) as QuizInput;
+  if (!input.title?.trim()) {
+    return NextResponse.json({ error: "Title is required" }, { status: 400 });
   }
+  const values = toQuizValues({ ...input, status: "draft" });
+  if (typeof values === "string") return NextResponse.json({ error: values }, { status: 400 });
 
-  const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${pat}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      fields: { Title: title.trim(), Prize: prize.trim(), Status: "Draft" },
-    }),
-  });
-  if (!res.ok) return NextResponse.json({ error: await res.text() }, { status: res.status });
+  const [quiz] = await getDb()
+    .insert(schema.quizzes)
+    .values({
+      ...values,
+      title: values.title!,
+      slug: await uniqueSlug(values.title!),
+      startsAt: values.startsAt ?? new Date(),
+      createdBy: auth.userId,
+    })
+    .returning();
 
-  const created = await res.json();
-  return NextResponse.json(created);
+  await audit(auth, "create", "quiz", quiz.id, { title: quiz.title });
+  return NextResponse.json({ quiz: { ...quiz, questionCount: 0, entryCount: 0, unreviewedCount: 0, winnerCount: 0, effectiveStatus: "draft" } });
 }
